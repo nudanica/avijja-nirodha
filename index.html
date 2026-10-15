@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=Sarabun:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=20261015zg">
+<link rel="stylesheet" href="assets/style.css?v=20261015zj">
 </head>
 <body>
 <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
@@ -130,6 +130,21 @@
 
 
 
+<div id="personv" class="view" hidden>
+  <section class="perhead"><div class="col pad" id="pphead"></div></section>
+  <main><div class="col pad">
+  <section class="sec reccard" id="pbio" hidden>
+    <h2>ชีวประวัติย่อ</h2>
+    <div class="biotext" id="pbioText"></div>
+    <button class="addbtn" id="editBio" type="button" hidden></button>
+  </section>
+  <section class="sec reccard">
+    <h2 id="ptitle"></h2>
+    <div class="recs" id="plist2"></div>
+    <button class="addbtn" id="addRec" type="button" hidden>+ เพิ่มบันทึกการบรรลุธรรม</button>
+  </section></div></main>
+</div>
+
 <div id="pendingv" class="view" hidden>
   <section class="roomhead"><div class="col pad"><h1>ข้อเสนอที่รอตรวจ</h1></div></section>
   <main><div class="col pad"><section class="sec"><div class="notes" id="plist"></div></section></div></main>
@@ -155,6 +170,6 @@
 </dialog>
 <input type="file" id="picker" accept="image/*" hidden>
 
-<script src="assets/app.js?v=20261015zg"></script>
+<script src="assets/app.js?v=20261015zj"></script>
 </body>
 </html>

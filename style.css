@@ -1,0 +1,630 @@
+/* base reset */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+/* Layout: phone-first single column; the group's lotus photo as the opening banner, leaf-green bars, lotus-pink accents on light leaf-tinted paper */
+:root{
+  --sky:#24502f; --sky2:#2f6a3c; --gold:#d6457a; --paper:#f5f9f3; --card:#ffffff;
+  --ink:#1d2a20; --muted:#58685c; --line:#dfe8dc; --slot:#fbeef3; --petal:#fde7ef;
+  --display:"Noto Serif Thai","Sarabun",serif; --body:"Sarabun","Thonburi",sans-serif; --script:"Charm","Noto Serif Thai",serif;
+  --fs:19px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --sky:#173621; --sky2:#21492c; --gold:#f07aa5; --paper:#0f1611; --card:#18221a;
+  --ink:#ecf3ec; --muted:#a3b5a6; --line:#2a382c; --slot:#2a1d24; --petal:#3a2430; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --sky:#173621; --sky2:#21492c; --gold:#f07aa5; --paper:#0f1611; --card:#18221a;
+  --ink:#ecf3ec; --muted:#a3b5a6; --line:#2a382c; --slot:#2a1d24; --petal:#3a2430; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:var(--fs);line-height:1.7}
+.pad{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.col{max-width:680px;margin:0 auto}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--sky);color:#fff}
+.bar .col{display:flex;align-items:center;gap:10px;min-height:60px}
+.back{background:none;border:0;color:#fff;font-size:1em;min-height:48px;padding:0 6px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.brand{font-family:var(--display);font-weight:700;font-size:1.05em;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.size{display:flex;gap:6px}
+.size button{min-width:46px;min-height:44px;border-radius:10px;border:1.5px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-weight:600;font-size:.8em;cursor:pointer}
+
+/* hero */
+.hero{background:var(--sky)}
+.hero .col{padding-block:0 24px;display:flex;flex-direction:column;gap:0}
+.banner{display:block;width:100%;max-width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0 0 22px 22px}
+.bwrap{position:relative}
+.corner{position:absolute;top:5%;right:5%;text-align:right;font-family:var(--script);font-weight:700;color:#fff;font-size:clamp(16px,4.6vw,30px);line-height:1.3;text-shadow:0 2px 8px rgba(10,40,10,.6)}
+.art{position:relative;width:100%;max-width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:0 0 26px 26px}
+@media (min-width:560px){.art{aspect-ratio:16/9}}
+.art svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.art span{position:absolute;font-family:var(--script);font-weight:700;color:#fff;line-height:1.2;text-shadow:0 2px 10px rgba(20,50,20,.55),0 0 2px rgba(0,0,0,.35)}
+.t1{top:6%;left:6%;font-size:clamp(34px,9.5vw,58px)}
+.t2{bottom:9%;right:6%;font-size:clamp(30px,8.5vw,52px)}
+.hero .col.pad{padding-left:0;padding-right:0}
+.hero .inner{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:10px;color:#fff;text-align:center;margin-top:18px}
+.hero p{margin:0;opacity:.92;font-size:.92em}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.search{width:100%;display:flex;align-items:stretch;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.25);margin-bottom:6px}
+.search input{flex:1;min-width:0;border:0;padding:0 18px;min-height:60px;font:inherit;font-size:1em;color:#1d2a20;background:#fff}
+.search input::placeholder{color:#7a877d}
+.search button{white-space:nowrap;flex:none;border:0;background:var(--gold);color:#fff;font-weight:600;padding:0 22px;min-height:60px;cursor:pointer;font-size:.95em}
+.brand{font-family:var(--body)!important;font-weight:600!important;font-size:clamp(17px,4.6vw,22px)!important}
+/* sections */
+main .col{display:flex;flex-direction:column;gap:36px;padding-block:28px 56px}
+.sec{display:flex;flex-direction:column;gap:14px}
+.sec h2{font-family:var(--display);font-weight:700;font-size:1.3em;margin:0;display:flex;align-items:center;gap:10px}
+.sec h2::before{content:"";width:10px;height:10px;transform:rotate(45deg);background:var(--gold);flex:none}
+.sub{margin:-8px 0 0;color:var(--muted);font-size:.85em}
+
+/* lineage chart */
+.chart{background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:24px 14px;display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto}
+.tier{display:flex;justify-content:center;gap:14px;flex-wrap:nowrap}
+.stem{width:2px;height:22px;background:var(--gold);opacity:.7}
+.branch{height:2px;background:var(--gold);opacity:.7;width:66%}
+.person{display:flex;flex-direction:column;align-items:center;gap:6px;width:96px;text-align:center}
+.person.big{width:160px}
+.ph{width:78px;height:78px;border-radius:50%;background:var(--slot);border:2px solid var(--line);display:grid;place-items:center;color:var(--muted);font-size:.62em;line-height:1.3}
+.big .ph{width:140px;height:140px;border:3px solid var(--gold);background-color:var(--petal);font-size:.7em}
+.nm{font-weight:600;font-size:.78em;line-height:1.4}
+.rl{font-size:.68em;color:var(--muted);line-height:1.3}
+
+/* ratana chart */
+.ratana{display:flex;flex-direction:column;align-items:stretch}
+.lvl{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.lvl.top{background:var(--petal);border-color:var(--gold)}
+.lvl h3{margin:0;font-family:var(--body);font-weight:600;font-size:.92em;line-height:1.55;text-wrap:balance}
+.lvl.top h3{font-size:1.05em}
+.link{width:2px;height:22px;background:var(--gold);align-self:center;opacity:.8}
+.tier{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.eleven{gap:10px}
+.eleven .person{width:60px}
+.eleven .ph{width:56px;height:56px}
+.rn{display:inline-block;background:var(--gold);color:#fff;font-weight:600;font-size:.78em;padding:2px 14px;border-radius:999px;letter-spacing:.02em}
+/* thai ornament: ประจำยาม */
+:root{--prajam:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%2012C12.6%208.6%2015.4%206.8%2018%206C17.2%208.6%2015.4%2011.4%2012%2012Z%22%20transform%3D%22rotate%280%2012%2012%29%22%20opacity%3D%22.7%22/%3E%3Cpath%20d%3D%22M12%2012C12.6%208.6%2015.4%206.8%2018%206C17.2%208.6%2015.4%2011.4%2012%2012Z%22%20transform%3D%22rotate%2890%2012%2012%29%22%20opacity%3D%22.7%22/%3E%3Cpath%20d%3D%22M12%2012C12.6%208.6%2015.4%206.8%2018%206C17.2%208.6%2015.4%2011.4%2012%2012Z%22%20transform%3D%22rotate%28180%2012%2012%29%22%20opacity%3D%22.7%22/%3E%3Cpath%20d%3D%22M12%2012C12.6%208.6%2015.4%206.8%2018%206C17.2%208.6%2015.4%2011.4%2012%2012Z%22%20transform%3D%22rotate%28270%2012%2012%29%22%20opacity%3D%22.7%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/svg%3E");--thaigold:#b8914a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--thaigold:#d8b46e}}
+:root[data-theme="dark"]{--thaigold:#d8b46e}
+.orn{display:inline-block;width:1em;height:1em;background:currentColor;-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+.sec h2::before{content:"";width:22px;height:22px;transform:none;background:var(--gold);-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+.bar{box-shadow:inset 0 -3px 0 var(--thaigold)}
+.bar::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:8px;background:linear-gradient(135deg,var(--thaigold) 25%,transparent 25%) 0 0/12px 8px,linear-gradient(225deg,var(--thaigold) 25%,transparent 25%) 0 0/12px 8px;opacity:.55;pointer-events:none}
+.link{position:relative;width:2px;height:40px;background:var(--thaigold);opacity:1}
+.link::after{content:"";position:absolute;left:50%;top:50%;width:20px;height:20px;transform:translate(-50%,-50%);background:var(--gold);-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+.lvl{border-color:color-mix(in srgb,var(--thaigold) 35%,var(--line))}
+.lvl.top{border:2px solid var(--thaigold)}
+.rn{background:transparent!important;color:var(--gold)!important;border:1.5px solid var(--thaigold);display:inline-flex!important;align-items:center;gap:6px}
+.rn::before,.rn::after{content:"";width:.8em;height:.8em;background:var(--thaigold);-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+.ph{border:2px solid var(--thaigold)!important;background-color:var(--petal)!important}
+.big .ph{border-width:3px!important;box-shadow:0 0 0 5px var(--card),0 0 0 6.5px var(--thaigold)}
+.badge{border:1.5px solid var(--thaigold)}
+.arrow{color:var(--thaigold)}
+.note .nn{background:transparent;color:var(--gold);border:1.5px solid var(--thaigold)}
+.roomhead{box-shadow:inset 0 -3px 0 var(--thaigold)}
+.foot{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--thaigold);padding-block:8px 32px}
+.foot::before,.foot::after{content:"";flex:1;max-width:120px;height:1px;background:var(--thaigold);opacity:.6}
+.ph{position:relative;overflow:hidden;background-image:var(--lotusimg);background-size:86% auto;background-repeat:no-repeat;background-position:center!important}
+.ph.has{background-size:cover!important}
+.ph:not(.has){background-color:#fff!important}
+.addimg{inset:auto!important;left:50%!important;bottom:4%!important;transform:translateX(-50%);width:18px;height:18px;border-radius:50%!important;background:rgba(255,255,255,.7)!important;color:var(--thaigold)!important;font-size:14px!important;opacity:.45}
+.addimg:hover,.addimg:focus-visible{opacity:1}
+.big .addimg{width:22px;height:22px;font-size:16px!important}
+.addimg{position:absolute;inset:0;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--gold);font-size:1.6em;font-weight:400;line-height:1}
+.big .addimg{font-size:2.2em}
+.ph.has .addimg{opacity:.3}
+.addimg:focus-visible{outline:3px solid var(--gold);outline-offset:-3px;border-radius:50%}
+.aclist{list-style:none;margin:0;padding:0;width:100%;display:flex;flex-direction:column;gap:10px;text-align:left}
+.ac{display:flex;align-items:center;gap:14px;padding:10px 4px;border-top:1px solid var(--line)}
+.ac:first-child{border-top:0}
+.ac .ph{flex:none;width:64px;height:64px;border-radius:50%;display:grid;place-items:center}
+.acx{display:flex;flex-direction:column;min-width:0;line-height:1.5}
+.acx b{font-weight:600}
+.acx span{font-size:.82em;color:var(--muted)}
+.acx .ord{color:var(--gold);font-weight:600;font-size:.72em}
+:root{--lotusimg:url(../images/lotus.jpg)}
+.ph.arch{width:200px!important;height:225px!important;border-radius:100px 100px 18px 18px!important;background-position:center top!important;box-shadow:0 0 0 5px var(--card),0 0 0 6.5px var(--thaigold)!important}
+.person.big{width:220px!important}
+.lvl.top{position:relative;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(255,246,222,.98) 0,rgba(255,232,196,.75) 30%,rgba(255,220,200,.25) 58%,rgba(255,220,200,0) 75%),url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2256%22%20height%3D%2256%22%20viewBox%3D%220%200%2056%2056%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23b8914a%22%20stroke-width%3D%22.8%22%20opacity%3D%22.55%22%3E%3Cpath%20d%3D%22M28%200L56%2028L28%2056L0%2028Z%22/%3E%3C/g%3E%3Cg%20fill%3D%22%23b8914a%22%20opacity%3D%22.45%22%3E%3Cg%20transform%3D%22translate%2828%2028%29%20scale%280.75%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%280%200%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2856%200%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%280%2056%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2856%2056%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3C/g%3E%3Cg%20fill%3D%22%23d6457a%22%20opacity%3D%22.25%22%3E%3Ccircle%20cx%3D%2228%22%20cy%3D%227%22%20r%3D%221.6%22/%3E%3Ccircle%20cx%3D%2228%22%20cy%3D%2249%22%20r%3D%221.6%22/%3E%3Ccircle%20cx%3D%227%22%20cy%3D%2228%22%20r%3D%221.6%22/%3E%3Ccircle%20cx%3D%2249%22%20cy%3D%2228%22%20r%3D%221.6%22/%3E%3C/g%3E%3C/svg%3E") center/56px 56px,var(--petal)}
+.lvl.top::before{content:"";position:absolute;inset:-20%;z-index:-1;background:repeating-conic-gradient(from 0deg at 50% 42%,rgba(255,226,160,.55) 0deg 3deg,rgba(255,226,160,0) 3deg 10deg);-webkit-mask:radial-gradient(circle at 50% 42%,#000 0,#000 25%,transparent 62%);mask:radial-gradient(circle at 50% 42%,#000 0,#000 25%,transparent 62%)}
+.lvl.top::after{content:"";position:absolute;inset:8px;border:1px solid var(--thaigold);border-radius:12px;opacity:.6;pointer-events:none}
+.lvl.top>*{position:relative;z-index:1}
+.lvl.top h3{color:#3a2a1a}
+.ph.arch{box-shadow:0 0 0 5px rgba(255,248,230,.9),0 0 0 6.5px var(--thaigold),0 0 40px 18px rgba(255,225,150,.75)!important}
+.lvl.top{background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(255,240,205,.95) 0,rgba(255,232,190,.6) 30%,rgba(255,255,255,0) 70%),#fff!important}
+.buddha{box-shadow:0 0 0 4px #fff,0 0 0 5.5px var(--thaigold),0 0 46px 22px rgba(255,222,150,.7)!important}
+.buddha{display:block;width:240px;max-width:100%;height:auto;border-radius:10px;box-shadow:0 0 0 4px #fff,0 0 0 5.5px var(--thaigold)}
+.person.big{width:auto!important}
+.lvl.top .rn{background:#fff!important;color:#c2336d!important;border-color:var(--thaigold)!important;box-shadow:0 0 0 5px #fff,0 2px 10px rgba(184,145,74,.25);position:relative;z-index:3;font-size:.85em!important;padding:4px 16px!important}
+/* rooms */
+.rooms{display:flex;flex-direction:column;gap:12px}
+.room{display:flex;align-items:center;gap:14px;background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:14px 16px;min-height:84px;text-align:left;color:inherit;cursor:pointer;width:100%;font:inherit}
+.room:hover{border-color:var(--gold)}
+.badge{flex:none;width:56px;height:56px;border-radius:14px;background:var(--petal);color:var(--gold);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:1.05em}
+.rt{flex:1;min-width:0;display:flex;flex-direction:column}
+.rt b{font-weight:600;line-height:1.5}
+.rt span{font-size:.8em;color:var(--muted)}
+.arrow{flex:none;color:var(--gold);font-size:1.4em}
+.ex{opacity:.6}
+
+/* room view */
+.roomhead{background:var(--sky);color:#fff}
+.roomhead .col{padding-block:22px 28px;display:flex;flex-direction:column;gap:6px}
+.roomhead .k{color:#ffd3e2;font-size:.85em;font-weight:600}
+.roomhead h1{font-family:var(--display);font-size:1.45em;line-height:1.45;margin:0;text-wrap:balance}
+.roomimg{margin-top:10px;aspect-ratio:16/7;max-width:100%;border-radius:14px;border:2px dashed rgba(255,255,255,.4);display:grid;place-items:center;font-size:.75em;opacity:.8}
+.notes{display:flex;flex-direction:column;gap:12px}
+.note{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;width:100%;text-align:left;color:inherit;font:inherit}
+.nn{flex:none;width:38px;height:38px;border-radius:50%;background:var(--gold);color:#fff;display:grid;place-items:center;font-weight:600;font-size:.85em}
+.note b{font-weight:600;line-height:1.55;min-width:0}
+.empty{background:var(--card);border:1.5px dashed var(--line);border-radius:16px;padding:22px;text-align:center;color:var(--muted)}
+
+/* reader */
+.reader .col{padding-block:24px 0}
+.crumb{font-size:.8em;color:var(--muted);margin-bottom:10px}
+.text{white-space:pre-wrap;word-break:break-word;margin:0;line-height:1.85}
+.actions{position:sticky;bottom:0;background:var(--paper);border-top:1.5px solid var(--line);padding-block:12px calc(12px + env(safe-area-inset-bottom,0px));margin-top:28px}
+.actions .col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:flex;align-items:center;justify-content:center;min-height:58px;border-radius:14px;font-weight:600;font-size:.95em;border:0;cursor:pointer;text-decoration:none}
+.copy{background:var(--sky);color:#fff}
+:root[data-theme="dark"] .copy{background:var(--sky2)}
+.line{background:#06c755;color:#fff}
+.toast{text-align:center;color:var(--gold);font-weight:600;min-height:1.6em;font-size:.85em;grid-column:1/-1}
+
+.mock{margin:0 auto;max-width:680px;font-size:.72em;color:var(--muted);text-align:center;padding:14px}
+@media (prefers-reduced-motion:no-preference){.view{animation:fade .25s ease}}
+@keyframes fade{from{opacity:.4}to{opacity:1}}
+
+a.room,a.note{text-decoration:none}
+
+/* ---------- rooms button under search ---------- */
+.roomsbtn{display:flex;align-items:center;gap:12px;margin-top:12px;background:var(--card);color:var(--ink);border:2px solid var(--thaigold);border-radius:16px;min-height:64px;padding:0 18px;text-decoration:none;font-weight:600;font-size:1.02em;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.roomsbtn .orn{color:var(--gold);font-size:1.2em;flex:none}
+.roomsbtn span:nth-child(2){flex:1;text-align:left}
+.roomsbtn .go{color:var(--gold);font-size:1.5em;flex:none}
+.roomsbtn:active{transform:translateY(1px)}
+#roomsv .roomhead h1{font-size:1.35em}
+
+/* ---------- admin ---------- */
+.adminbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--gold);color:#fff;font-size:.78em;font-weight:600;padding-block:6px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.adminbar .astatus{flex:1;min-width:0;font-weight:500}
+.adminbar button{background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;font:inherit;cursor:pointer}
+.astatus.err{color:#fff3a6}
+.addbtn{width:100%;min-height:56px;border:2px dashed var(--thaigold);background:transparent;color:var(--gold);border-radius:16px;font:600 .95em var(--body);cursor:pointer;margin-top:4px}
+.addbtn.small{width:auto;min-height:40px;padding:0 16px;font-size:.8em;border-radius:12px}
+.editlink{align-self:flex-start;background:transparent;border:1px solid rgba(255,255,255,.6);color:inherit;border-radius:10px;padding:4px 12px;font:500 .8em var(--body);cursor:pointer;margin-top:6px}
+.editlink.small{border-color:var(--line);color:var(--muted);font-size:.68em;padding:2px 10px;margin-top:4px}
+.person .editlink.small{align-self:center}
+.noteadmin{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.noteadmin button{min-height:48px;padding:0 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:600 .85em var(--body);cursor:pointer}
+.noteadmin .danger{color:#b3261e;border-color:#e8b4b0}
+dialog{border:0;border-radius:20px;padding:0;width:min(560px,calc(100vw - 24px));max-height:calc(100vh - 48px);background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(20,30,22,.5)}
+dialog form{display:flex;flex-direction:column;gap:14px;padding:20px}
+dialog h3{margin:0;font-family:var(--display);font-size:1.15em}
+.fld{display:flex;flex-direction:column;gap:6px;font-size:.85em;color:var(--muted)}
+.fld input,.fld textarea{font:400 1.05rem/1.6 var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
+.fld textarea{min-height:40vh;resize:vertical}
+.dlgbtns{display:flex;gap:10px;justify-content:flex-end}
+.dlgbtns button{min-height:50px;padding:0 22px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:600 .95em var(--body);cursor:pointer}
+.dlgbtns .primary{background:var(--sky);border-color:var(--sky);color:#fff}
+.login{display:flex;flex-direction:column;gap:16px;padding-block:28px 48px}
+.login form{display:flex;flex-direction:column;gap:14px}
+.login .msg{color:var(--gold);font-weight:600;min-height:1.5em}
+
+/* ---------- wide screens: the site sits on a Thai-pattern backdrop like a page ---------- */
+:root{--backdrop:#e6eee3}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--backdrop:#0b100c}}
+:root[data-theme="dark"]{--backdrop:#0b100c}
+@media (min-width:820px){
+  html{background:var(--backdrop) url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cpath%20d%3D%22M32%200L64%2032L32%2064L0%2032Z%22%20fill%3D%22none%22%20stroke%3D%22%23b8914a%22%20stroke-width%3D%22.7%22%20opacity%3D%22.35%22/%3E%3Cg%20fill%3D%22%23b8914a%22%20opacity%3D%22.3%22%3E%3Cg%20transform%3D%22translate%2832%2032%29%20scale%280.8%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%280%200%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2864%200%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%280%2064%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2864%2064%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") center/64px 64px}
+  body{background:transparent}
+  .shell{max-width:760px;margin:32px auto;background:var(--paper);border-radius:28px;overflow:clip;box-shadow:0 0 0 1.5px color-mix(in srgb,var(--thaigold) 45%,transparent),0 24px 60px rgba(30,50,30,.18)}
+  .bar{top:0}
+  .bar::after{display:none}
+  .banner{border-radius:0!important}
+  .hero .col{max-width:none}
+  .hero .inner{max-width:680px;margin-inline:auto;width:100%}
+  .hero .inner{padding-inline:28px!important}
+  main .col{padding-inline:32px!important}
+  .actions{position:sticky;bottom:0}
+  .tier{gap:22px}
+}
+@media (min-width:820px){ .ac .ph{width:72px;height:72px} }
+
+/* ---------- reading page: styled lines (text unchanged) ---------- */
+.reader .text{white-space:normal;line-height:1.85;display:flex;flex-direction:column;gap:2px;background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:22px 20px 26px}
+.reader .ln{white-space:pre-wrap;word-break:break-word}
+.reader .ln.gap{margin-top:.85em}
+.reader .ln.title{font-family:var(--display);font-weight:700;font-size:1.28em;line-height:1.55;color:var(--sky);text-wrap:balance;padding-bottom:14px;margin-bottom:6px;border-bottom:1.5px solid color-mix(in srgb,var(--thaigold) 50%,transparent)}
+.reader .ln.subtitle{align-self:flex-start;background:var(--petal);color:var(--gold);font-weight:600;border-radius:999px;padding:4px 16px;margin-top:.9em}
+.reader .pno{display:inline-block;color:var(--gold);font-weight:600;margin-right:2px}
+.reader .ln.ref{margin-top:1.4em;padding:12px 14px;border-radius:12px;background:var(--paper);border-left:4px solid var(--thaigold);color:var(--muted);font-size:.88em}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .reader .ln.title{color:#cfe8d3}}
+:root[data-theme="dark"] .reader .ln.title{color:#cfe8d3}
+
+/* ---------- search results ---------- */
+:root{--hl:#ffe08a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hl:#7a5a12}}
+:root[data-theme="dark"]{--hl:#7a5a12}
+.rsum{margin:-6px 0 0;color:var(--muted);font-size:.88em}
+.res{display:flex;flex-direction:column;gap:6px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;color:inherit;text-decoration:none}
+.res:hover{border-color:var(--thaigold)}
+.res .rhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.res .rb{background:var(--petal);color:var(--gold);font-weight:600;font-size:.78em;padding:2px 12px;border-radius:999px}
+.res .cnt{color:var(--muted);font-size:.78em}
+.res .rt{font-weight:600;line-height:1.5}
+.res .rroom{color:var(--muted);font-size:.78em}
+.res .sn{color:var(--muted);font-size:.88em;line-height:1.6}
+.res mark{background:var(--hl);color:inherit;border-radius:4px;padding:0 2px}
+
+/* ratana circles with role + name */
+.tier{align-items:flex-start}
+.tier .person{width:clamp(96px,28vw,150px)}
+.person .role{font-weight:600;font-size:.8em;color:var(--gold);line-height:1.4}
+.person .role+.nm{font-weight:500;font-size:.72em;line-height:1.45;color:var(--ink)}
+.tier{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important;width:100%}
+.tier .person{width:auto}
+.tier .ph{width:72px;height:72px}
+.person .nm{word-break:normal;overflow-wrap:normal;line-break:strict}
+@media (min-width:820px){.tier .ph{width:88px;height:88px}}
+.nm .w{white-space:nowrap}
+
+/* ---------- rooms staircase (บันไดขั้นวิชชา) ---------- */
+.steps{display:flex;flex-direction:column-reverse;gap:10px;position:relative;padding-left:6px}
+.steps::before{content:"";position:absolute;left:28px;top:20px;bottom:20px;width:2px;background:linear-gradient(var(--thaigold),color-mix(in srgb,var(--thaigold) 30%,transparent))}
+.step{position:relative;display:flex;align-items:center;gap:14px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;min-height:76px;color:inherit;text-decoration:none;margin-left:calc(var(--i,0) * 12px)}
+.step:hover{border-color:var(--thaigold)}
+.sno{flex:none;width:48px;height:48px;border-radius:50%;border:2px solid var(--thaigold);background:var(--petal);display:grid;place-items:center;font-weight:700;color:var(--gold);box-shadow:0 0 0 4px var(--card)}
+.step .st{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.45}
+.step .st b{font-weight:600}
+.step .st small{color:var(--muted);font-size:.8em}
+.step .arrow{flex:none;color:var(--thaigold);font-size:1.4em}
+#roomsSec{margin-top:-8px}
+
+/* ---------- lineage tree (รัตนะที่ ๓) ---------- */
+.lineage{width:100%;text-align:left}
+.troot{display:flex;align-items:center;gap:12px;background:var(--petal);border:1.5px solid var(--thaigold);border-radius:16px;padding:10px 12px}
+.troot .ph{flex:none;width:56px;height:56px;border-radius:50%}
+.tree{list-style:none;margin:0;padding:0 0 0 22px;position:relative}
+.tree li{position:relative;padding:8px 0 0 20px}
+.tree li::before{content:"";position:absolute;left:0;top:0;bottom:0;border-left:2px solid var(--thaigold)}
+.tree li:last-child::before{bottom:auto;height:44px}
+.tree li::after{content:"";position:absolute;left:0;top:44px;width:16px;border-top:2px solid var(--thaigold)}
+.tree .ac{border:1.5px solid var(--line);border-radius:14px;padding:8px 10px;background:var(--card);border-top:1.5px solid var(--line)!important}
+.tree .ac .ph{width:56px;height:56px}
+.tree.sub{padding-left:26px}
+.tree.sub .ac{background:color-mix(in srgb,var(--petal) 45%,var(--card))}
+.acx b .w,.troot b .w{white-space:nowrap}
+.acx .b{font-weight:600;color:var(--ink);line-height:1.45}
+.acx .b .w{white-space:nowrap}
+
+/* numbers in the lineage tree: รัตนะ.ลำดับในชั้นนี้ */
+.tree .ac{position:relative}
+.tnum{flex:none;min-width:44px;height:30px;padding:0 8px;border-radius:999px;background:var(--gold);color:#fff;font-weight:700;font-size:.82em;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.ordnote{font-size:.72em!important;color:var(--muted)!important;opacity:.85}
+.tree .ac{overflow:visible;margin-top:6px}
+.tnum{position:absolute;top:-10px;left:-10px;min-width:40px;height:26px;font-size:.74em;box-shadow:0 0 0 3px var(--card);z-index:1}
+
+/* number sits on the gold line, in front of each card */
+.tree{padding-left:30px}
+.tree li{padding-left:26px}
+.tnum{position:absolute!important;left:-15px!important;top:30px!important;width:30px;min-width:0!important;height:30px!important;padding:0!important;border-radius:50%!important;background:var(--card)!important;color:var(--gold)!important;border:2px solid var(--thaigold);box-shadow:none!important;font-size:.8em!important;font-weight:700;display:grid;place-items:center;z-index:2}
+.tree li::after{left:15px;width:11px}
+.tnum{width:auto!important;min-width:32px!important;padding:0 6px!important;border-radius:999px!important;left:-16px!important}
+
+/* reading page: show the note exactly as posted, no styling of individual lines */
+.reader .text{display:block!important;white-space:pre-wrap!important;word-break:break-word;color:var(--ink)}
+
+/* reading page heading: larger and bold only, same text colour, no added colours */
+.reader .text .ttl{white-space:pre-wrap;font-weight:700;font-size:1.25em;line-height:1.55;color:var(--ink);padding-bottom:12px;margin-bottom:10px;border-bottom:1.5px solid var(--line);text-wrap:balance}
+.reader .text .body{white-space:pre-wrap;color:var(--ink)}
+.reader .text .ttl{border-bottom:2px solid var(--thaigold)}
+/* space between lineage groups so cards never touch */
+.lineage{display:flex;flex-direction:column}
+.lineage>.tree{margin-bottom:22px}
+.lineage>.tree:last-child{margin-bottom:0}
+.tree li:last-child{padding-bottom:2px}
+.acx{gap:2px}
+.acx .ordnote{line-height:1.5;margin-top:2px}
+
+/* ---------- team proposals & admin review ---------- */
+.actions .propose{grid-column:1/-1;background:var(--card);color:var(--ink);border:2px solid var(--thaigold);min-height:52px}
+.footlinks{text-align:center;margin:0}
+.footlinks button{background:none;border:0;color:var(--muted);font:500 .8em var(--body);text-decoration:underline;padding:10px 16px;cursor:pointer}
+.adminbar #adminWho{font-weight:600}
+.adminbar .astatus{flex-basis:100%;order:9}
+.fld select{font:400 1rem/1.5 var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
+.fld .hint{color:var(--muted)}
+.fld .pinin{font-size:1.6rem!important;letter-spacing:.5em;text-align:center;font-weight:700}
+.dlgerr{margin:0;min-height:1.4em;color:var(--gold);font-weight:600;font-size:.88em}
+.pend{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.phd{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.chip{background:var(--petal);color:var(--gold);font-weight:600;font-size:.75em;padding:2px 10px;border-radius:999px}
+.chip.y{background:#fff3cf;color:#8a6300}
+.who{color:var(--muted);font-size:.8em}
+.ptext{white-space:pre-wrap;word-break:break-word;max-height:14em;overflow:auto;background:var(--paper);border-radius:10px;padding:10px 12px;font-size:.9em}
+.pbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pbtn{min-height:50px;border-radius:12px;border:0;font:600 .95em var(--body);cursor:pointer}
+.pbtn.no{background:var(--line);color:var(--ink)}
+.pbtn.yes{background:var(--sky);color:#fff}
+.pbtn.small{min-height:40px;padding:0 14px;font-size:.82em;flex:none}
+.pbtn:disabled{opacity:.5}
+.sh3{font-size:.95em;margin:8px 0 0;color:var(--muted)}
+.arow{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+.an{width:28px;height:28px;border-radius:50%;border:2px solid var(--thaigold);display:grid;place-items:center;font-size:.78em;font-weight:700;color:var(--gold);flex:none}
+.aname{flex:1;min-width:0;font-weight:600}
+.acode{color:var(--ink);letter-spacing:.12em;font-variant-numeric:tabular-nums;user-select:all}
+.acode.big2{flex:1;font-size:1.3em;font-weight:700}
+.ax{background:none;border:0;color:#b3261e;font:600 .85em var(--body);cursor:pointer;padding:6px}
+.note{margin:0;color:var(--muted);font-size:.85em}
+
+/* passcode pad */
+.pinpad{display:flex;flex-direction:column;gap:14px;outline:none;margin-top:6px}
+.pinboxes{display:flex;justify-content:center;gap:10px}
+.pinbox{width:52px;height:62px;border:2px solid var(--line);border-radius:14px;background:var(--card);display:grid;place-items:center;font:700 1.7rem var(--body);color:var(--ink)}
+.pinbox.on{border-color:var(--thaigold);box-shadow:0 0 0 3px color-mix(in srgb,var(--thaigold) 25%,transparent)}
+.pinbox:not(:empty){border-color:var(--thaigold)}
+.pinkeys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pinkey{min-height:60px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:600 1.5rem var(--body);cursor:pointer}
+.pinkey:active{background:var(--petal)}
+.pinkey.del{font-size:1rem;color:var(--muted)}
+
+/* passcode dialog (แบบ ก กลางคืนในวัด): deep green, lotus in a gold ring, gold dots and gold-ring keys */
+dialog.pinmode{width:min(380px,calc(100vw - 24px));background:radial-gradient(120% 70% at 50% 0%,#2a5e38 0%,#1f4a2b 45%,#163a21 100%);color:#f3ead6;overflow:hidden}
+dialog.pinmode form{padding:40px 24px 18px;gap:6px;align-items:center}
+.pinbanner{width:76px;height:76px;border-radius:50%;background:#fff center/88% no-repeat;border:2px solid #c9a45a;box-shadow:0 0 0 6px rgba(201,164,90,.18)}
+dialog.pinmode h3{text-align:center;font-family:var(--display);font-size:1.25em;color:#f3ead6;margin-top:14px;letter-spacing:.02em}
+dialog.pinmode #dlgFields{width:100%}
+dialog.pinmode .fld{align-items:center}
+dialog.pinmode .pinpad{gap:24px;margin-top:6px;align-items:center}
+dialog.pinmode .pinboxes{gap:18px}
+dialog.pinmode .pinbox{width:14px;height:14px;border-radius:50%;border:1.5px solid #c9a45a;background:transparent;box-shadow:none}
+dialog.pinmode .pinbox.filled{background:#c9a45a}
+dialog.pinmode .pinkeys{grid-template-columns:repeat(3,70px);gap:14px 24px;justify-content:center}
+dialog.pinmode .pinkey{width:70px;height:70px;min-height:0;border-radius:50%;border:1.5px solid rgba(201,164,90,.55);background:transparent;font:300 1.7rem var(--body);color:#f3ead6;transition:background .12s}
+dialog.pinmode .pinkey:active{background:rgba(201,164,90,.25)}
+dialog.pinmode .pinkey.del{border:0;font-size:1.3rem;color:rgba(243,234,214,.7)}
+dialog.pinmode .dlgerr{text-align:center;color:#ffd78a}
+dialog.pinmode .dlgbtns{justify-content:center}
+dialog.pinmode #dlgOk{display:none}
+dialog.pinmode #dlgCancel{border:0;background:none;color:rgba(243,234,214,.75);font-weight:400;min-height:44px}
+
+/* ---------- tidy header + slim admin strip + clean room rows ---------- */
+.bar .col{min-height:64px;padding-block:8px}
+.brand{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.35;font-size:clamp(16px,4.4vw,21px)!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.size button{min-width:42px;min-height:40px}
+.adminbar{background:#f1f5f0!important;color:#3d4a40!important;border-bottom:1px solid var(--line);padding-block:6px!important;gap:6px 16px!important;font-size:.76em!important;flex-wrap:nowrap!important;overflow-x:auto}
+.adminbar #adminWho{color:var(--sky);font-weight:700;margin-right:auto;white-space:nowrap}
+.adminbar button{background:none!important;border:0!important;color:#3d4a40!important;padding:6px 2px!important;font-weight:600!important;white-space:nowrap;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}
+.adminbar #logout{color:#9a3b2e!important}
+.adminbar .astatus{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--sky);color:#fff;border-radius:999px;padding:8px 16px;font-size:13px;z-index:50;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+.adminbar .astatus:empty{display:none}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .adminbar{background:#18221a!important;color:#cfd8d0!important}:root:not([data-theme="light"]) .adminbar button{color:#cfd8d0!important}}
+:root[data-theme="dark"] .adminbar{background:#18221a!important;color:#cfd8d0!important}
+:root[data-theme="dark"] .adminbar button{color:#cfd8d0!important}
+#roomsv main .col{padding-block:12px 40px}
+#roomsv .steps{padding-left:0;gap:0;flex-direction:column}
+#roomsv .steps::before{display:none}
+#roomsv .step{margin-left:0!important;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;padding:18px 2px;min-height:0}
+#roomsv .sno{width:44px;height:44px;box-shadow:none;background:none}
+#roomsv .addbtn{margin-top:18px;border:0;justify-content:flex-start;text-align:left;min-height:48px;padding:0 2px;color:var(--sky);background:none}
+.adminbar{gap:6px 18px!important}.adminbar button{text-decoration:none!important}
+
+/* ---------- clean top: admin tools in one floating button, text size only on reading page ---------- */
+.adminbar{position:fixed!important;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;background:none!important;border:0!important;padding:0!important;display:block!important;overflow:visible!important}
+.adminbar[hidden]{display:none!important}
+.afab{position:relative;width:56px;height:56px;border-radius:50%;border:0;background:var(--sky);box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;display:grid;place-items:center}
+.afab::before{content:"";width:26px;height:26px;background:#fff;-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+#afabCount{position:absolute;top:-4px;right:-4px;min-width:22px;height:22px;border-radius:999px;background:var(--gold);color:#fff;font:700 12px var(--body);display:grid;place-items:center;padding:0 5px}
+#afabCount:empty{display:none}
+.amenu{position:absolute;right:0;bottom:68px;min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.18);overflow:hidden;display:flex;flex-direction:column}
+.amenu[hidden]{display:none}
+.amenu #adminWho{padding:12px 16px 8px;font:600 .78em var(--body);color:var(--muted);margin:0}
+.amenu button{background:none!important;border:0!important;border-top:1px solid var(--line)!important;text-align:left;padding:14px 16px!important;font:600 .95em var(--body)!important;color:var(--ink)!important;cursor:pointer;text-decoration:none!important}
+.amenu #logout{color:#b3261e!important}
+.adminbar .astatus{position:fixed;left:50%;right:auto;bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+.bar .size{display:none}
+.on-read .bar .size{display:flex}
+.bar .col{min-height:58px}
+.adminbar .afab{background:var(--sky)!important;border-radius:50%!important;padding:0!important;border:0!important}
+
+/* ---------- หัว ๔: photo on top, title under it, sign-in button top right ---------- */
+.on-home .bar{display:none}
+.hero{position:relative}
+.hero .col.pad{padding:0}
+.on-home .banner{border-radius:0!important}
+.cap2{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;padding:20px 16px 4px;background:var(--sky)}
+.cap2a{font-family:var(--display);font-weight:700;color:var(--thaigold);font-size:clamp(20px,5.6vw,28px);letter-spacing:.08em;line-height:1.4}
+.cap2b{margin:0;font-family:var(--display);font-weight:700;color:#fff;font-size:clamp(28px,8vw,40px);line-height:1.3}
+.hero .inner{margin-top:0!important;padding-top:16px!important}
+.acctwrap{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:calc(12px + env(safe-area-inset-right,0px));z-index:45}
+.acctwrap[hidden]{display:none}
+html:not(.on-home) .acctwrap{display:none}
+.acct{background:rgba(255,255,255,.94);color:var(--sky);border:0;border-radius:999px;padding:9px 16px;font:600 .82rem var(--body);box-shadow:0 2px 10px rgba(0,0,0,.22);cursor:pointer}
+.acctwrap .amenu{position:absolute;right:0;top:46px;bottom:auto;min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.2);overflow:hidden;display:flex;flex-direction:column}
+.acctwrap .amenu[hidden]{display:none}
+.acctwrap .amenu #adminWho{padding:12px 16px 8px;font:600 .75rem var(--body);color:var(--muted)}
+.acctwrap .amenu button{background:none;border:0;border-top:1px solid var(--line);text-align:left;padding:14px 16px;font:600 .95rem var(--body);color:var(--ink);cursor:pointer}
+.acctwrap .amenu #logout{color:#b3261e}
+.astatus{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--sky);color:#fff;border-radius:999px;padding:8px 16px;font:500 13px var(--body);z-index:60;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+.astatus:empty{display:none}
+@media (min-width:820px){.acctwrap{position:absolute}.shell{position:relative}}
+
+/* ---------- sign-in page ---------- */
+.login2{display:flex;flex-direction:column;align-items:center;gap:12px;padding-block:32px 48px!important;max-width:420px!important}
+.lglogo{width:72px;height:72px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid var(--thaigold)}
+.login2 h1{margin:0;font-family:var(--display);color:var(--sky);font-size:1.4em}
+.seg2{display:grid;grid-template-columns:1fr 1fr;width:100%;background:var(--line);border-radius:14px;padding:4px}
+.seg2 button{border:0;background:none;border-radius:11px;padding:12px;font:600 1rem var(--body);color:var(--muted);cursor:pointer}
+.seg2 button.on{background:var(--card);color:var(--sky);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.lgnote{margin:0;color:var(--muted);font-size:.85em;text-align:center}
+.lgform{width:100%;display:flex;flex-direction:column;gap:14px}
+.lgform .fld[hidden]{display:none}
+.lgform select{font:400 1.05rem/1.6 var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
+#lgCode{letter-spacing:.4em;font-size:1.3rem}
+.lgbtn{width:100%;min-height:56px}
+.lgfine{color:var(--muted);font-size:.8em;margin:0}
+/* photos you can change */
+.ph.editable,.person.big.editable{cursor:pointer;position:relative}
+.cam{position:absolute;right:-2px;bottom:-2px;width:26px;height:26px;border-radius:50%;background:var(--card);border:1.5px solid var(--thaigold);display:grid;place-items:center;font-size:13px;line-height:1;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.ph.editable{overflow:visible}
+.person.big .cam{right:8px;bottom:8px;width:34px;height:34px;font-size:16px}
+.addimg{display:none!important}
+.dlgdel{margin-right:auto;border:0!important;background:none!important;color:#b3261e!important;font-weight:600}
+.dlgdel[hidden]{display:none}
+#lgCode::placeholder{letter-spacing:0;font-size:1rem}
+.login2{gap:10px;padding-block:24px 40px!important}
+.login2 h1{margin-bottom:6px}
+.lgnote{margin:4px 0 6px}
+.acct{padding:7px 14px;font-size:.78rem}
+.acctwrap{position:absolute!important}body{position:relative}
+/* หัวแบบ ๒: ภาพเป็นการ์ดมีกรอบทอง แยกจากชื่อเว็บ */
+.on-home .hero .bwrap{padding:58px 16px 0;background:var(--sky)}
+.on-home .hero .banner{border-radius:16px!important;border:2px solid var(--thaigold);box-shadow:0 8px 20px rgba(0,0,0,.3);box-sizing:border-box}
+.on-home .cap2{padding:26px 16px 6px}
+
+/* หน้าแรก: การ์ดหมวดเลื่อนซ้ายขวา มีเหรียญทองธรรมจักร / คัมภีร์ */
+svg.defs{position:absolute;width:0;height:0}
+.secs{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:16px;padding:16px 16px 10px;background:var(--sky);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.secs::-webkit-scrollbar{display:none}
+.sec4{flex:0 0 68%;max-width:320px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:4px;background:var(--card);color:var(--ink);border:2px solid var(--thaigold);border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.sec4 .med{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#2f6a3c,#173621);border:2px solid #d4a94f;display:grid;place-items:center;box-shadow:0 3px 8px rgba(0,0,0,.25),inset 0 0 0 3px rgba(247,227,168,.25);margin-bottom:6px}
+.sec4 .med svg{width:42px;height:42px}
+.sec4 b{font-family:var(--display);font-weight:700;font-size:1.05em;line-height:1.35}
+.sec4 small{color:var(--muted);font-size:.85em}
+.sec4.soon{opacity:.6}
+.sec4:active{transform:translateY(1px)}
+.secdots{display:flex;justify-content:center;gap:6px;background:var(--sky);padding:2px 0 18px}
+.secdots i{width:7px;height:7px;border-radius:4px;background:rgba(255,255,255,.35);transition:width .2s}
+.secdots i.on{width:18px;background:var(--thaigold)}
+@media (min-width:820px){.secs{padding-inline:28px;scroll-padding-inline:28px}}
+/* หน้าห้องเรียน: หัวสีเขียวกลางจอ + เลขห้องใหญ่สีทอง */
+.roomshead2{background:var(--sky);color:#fff;text-align:center;border-bottom:3px solid var(--thaigold)}
+.roomshead2 .col{padding-block:6px 22px}
+.roomshead2 .orn{display:block;width:26px;height:26px;margin:0 auto 8px;background:var(--thaigold);-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+.roomshead2 h1{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(22px,6vw,30px);line-height:1.35;text-wrap:balance}
+.roomshead2 p{margin:4px 0 0;color:#cfe0d2;font-size:.9em}
+#roomsv .step .st b{font-family:var(--display);font-weight:700}
+.on-rooms .bar{box-shadow:none}.on-rooms .bar::after{display:none}
+.sec4.soon{opacity:1}.sec4.soon .med,.sec4.soon b{opacity:.5}
+.sec4.soon small{display:inline-block;background:var(--petal);color:var(--gold);font-weight:600;border-radius:99px;padding:2px 10px;font-size:.78em}
+.roomshead2 .col{padding-block:0 22px}
+
+/* หน้าห้องเรียน: บันไดขั้นวิชชา เหรียญทองเลขห้อง ห้องถัดไปเยื้องขวาทีละขั้น */
+#roomsv .steps{gap:12px;flex-direction:column}
+#roomsv .step{margin-left:calc(var(--i,0) * 14px)!important;border:1.5px solid var(--thaigold);border-radius:16px;background:var(--card);padding:12px 14px;min-height:76px;box-shadow:0 4px 0 color-mix(in srgb,var(--thaigold) 22%,transparent),0 6px 14px rgba(0,0,0,.06)}
+#roomsv .sno{width:54px;height:54px;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3dfae,#b8914a);box-shadow:inset 0 0 0 2px rgba(255,255,255,.5),0 2px 6px rgba(0,0,0,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;color:#fff}
+#roomsv .sno::before{content:"ห้อง";font:600 .62em var(--body);letter-spacing:.04em;margin-bottom:2px}
+#roomsv .sno span{font-family:var(--display);font-weight:700;font-size:1.15em;color:#fff}
+#roomsv .sno span{font-family:var(--body);font-weight:600;font-size:1.3em;text-shadow:0 1px 2px rgba(110,78,20,.55)}#roomsv .sno::before{text-shadow:0 1px 2px rgba(110,78,20,.55)}
+
+/* หน้าในห้อง: ภาพหัวห้อง (แอดมินเลือกเองได้) เลของค์ธรรมใหญ่สีทอง ๑. ๒. */
+#roomv .roomphoto{position:relative;background-color:var(--sky);background-size:cover;background-position:center;box-shadow:none;border-bottom:3px solid var(--thaigold);min-height:220px;display:flex;align-items:flex-end}
+#roomv .roomphoto.deflt{background-size:230%;background-position:47% 52%}
+#roomv .roomphoto .col{width:100%;padding-block:24px 20px;gap:4px;text-align:left}
+#roomv .roomhead .k{color:var(--gold2,#d8b46e);color:#e8cf95;font-weight:600;font-size:.9em;letter-spacing:.04em}
+#roomv .roomhead h1{font-size:clamp(22px,6vw,30px);text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.roomcam{position:absolute;top:10px;right:max(12px,env(safe-area-inset-right,0px));background:rgba(255,255,255,.92);color:var(--sky);border:0;border-radius:999px;padding:7px 14px;font:600 .8rem var(--body);box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer}
+#roomv .notes{gap:10px}
+#roomv .note{align-items:center;gap:14px;border:1px solid var(--line);padding:14px 16px;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+#roomv .note .nn{width:auto;height:auto;min-width:1.5em;border:0;border-radius:0;background:none;color:var(--thaigold);font:700 1.9em/1 var(--display);padding-right:12px;border-right:1.5px solid color-mix(in srgb,var(--thaigold) 60%,transparent);place-items:center}
+#roomv .note b{flex:1;color:var(--ink);font-weight:600;font-size:1.02em}
+
+/* หน้าอ่าน: ไม่แสดงชื่อห้องด้านบน เนื้อหาเข้มและชัดขึ้น (ตัวอักษรตามต้นฉบับ ไม่เพิ่มสี) */
+:root{--readink:#0f1a13}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--readink:#f4f8f4}}
+:root[data-theme="dark"]{--readink:#f4f8f4}
+.reader .crumb:empty{display:none}
+.reader .col{padding-top:16px}
+.reader .text .body{font-weight:500;font-size:1.08em;line-height:1.9;color:var(--readink)}
+.reader .text .ttl{color:var(--readink)}
+
+/* หน้าอ่าน: รายละเอียดห้องด้านบน, ปุ่มขนาดตัวอักษรใต้ชื่อห้อง, ปุ่มไอคอนแถวเดียวด้านล่าง */
+.reader .crumb{display:block;font-size:.88em;font-weight:600;color:var(--muted);margin-bottom:8px}
+.sz2{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.sz2 span{flex:1;color:var(--muted);font-size:.88em}
+.sz2 button{min-width:56px;min-height:44px;border-radius:12px;border:1.5px solid var(--thaigold);background:var(--card);color:var(--ink);font:700 1em var(--body);cursor:pointer}
+.sz2 button:active{transform:translateY(1px)}
+.reader .actions .col{grid-template-columns:repeat(3,1fr);gap:8px}
+.reader .actions .propose{grid-column:auto}
+.btn.ib{flex-direction:column;gap:4px;min-height:64px;font-size:.85em;padding:6px 4px;text-align:center;line-height:1.2}
+.btn.ib svg{width:24px;height:24px;flex:none}
+.reader .actions .propose.ib{min-height:64px;border-width:1.5px}
+.reader .actions .toast{grid-column:1/-1}.reader .actions .col:has(#propose[hidden]){grid-template-columns:1fr 1fr}
+.btn.ib span{white-space:nowrap;font-size:.95em}.reader .actions .col{gap:6px}
+/* แถบบนของหน้าใน: เส้นทองเรียบ จางที่ปลาย (แทนลายฟันปลา) */
+.bar{box-shadow:none}
+.bar::after{display:block;bottom:-3px;height:3px;opacity:1;background:linear-gradient(90deg,transparent,var(--thaigold) 22%,#e3c27e 50%,var(--thaigold) 78%,transparent)}
+.on-rooms .bar::after{display:none}
+.reader .col{padding-top:22px}
+/* หน้าอ่าน: แถบปุ่มด้านล่างเตี้ยลง ให้เนื้อหายาวลงมามากขึ้น */
+.reader .actions{margin-top:20px;padding-block:6px calc(6px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--paper) 94%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.btn.ib{flex-direction:row;gap:6px;min-height:46px;padding:4px 6px}
+.btn.ib svg{width:20px;height:20px}
+.reader .actions .propose.ib{min-height:46px}
+.reader .actions .toast:empty{display:none}.reader .actions .col{grid-template-columns:1fr 1.05fr 1.45fr}
+/* เลขห้องหน้าบันได: เหรียญทองเข้ม ตัวเลขขาวใหญ่ (แบบ ๕) */
+#roomsv .sno{width:62px;height:62px;background:radial-gradient(circle at 35% 30%,#c79b4a,#7d5a1f)}
+#roomsv .sno::before{font-size:.6em;margin-bottom:3px;text-shadow:none}
+#roomsv .sno span{color:#fff;font-weight:700;font-size:1.4em;line-height:1;margin-top:-4px;text-shadow:0 1px 1px rgba(0,0,0,.35)}
+#roomsv .sno{justify-content:center;padding:0}
+
+/* หน้าในห้อง: รายละเอียดห้องอยู่บนสุดของการ์ดเดียวกับรายการองค์ธรรม (แบบ ๑๑) */
+#roomv .roomcard{margin-top:18px;background:var(--card);border:1.5px solid var(--thaigold);border-radius:20px;padding:18px 14px 14px}
+.roomdesc{margin:0}
+.rdtext{display:flex;flex-direction:column;align-items:center;text-align:center;color:var(--readink);font-weight:500;line-height:1.7;padding:0 6px}
+.rdtext span{white-space:pre-wrap;word-break:break-word}
+.rdtext span.gap{height:.25em}
+.rddiv{display:flex;align-items:center;gap:10px;margin:14px 2px 12px}
+.rddiv i{flex:1;height:1px;background:color-mix(in srgb,var(--thaigold) 55%,transparent)}
+.rddiv .orn{display:block;width:20px;height:20px;background:var(--thaigold);-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+#roomv .roomcard h2{margin-top:0}
+#roomv .roomcard .note{box-shadow:none}
+/* หน้ารวมห้อง: เรียงตรงกันทุกห้อง ไม่เยื้องแบบขั้นบันได */
+#roomsv .step{margin-left:0!important;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+#roomsv .steps{gap:10px}
+
+/* ท่านอาจารย์ในรัตนะ: แตะเพื่อดูบันทึกการบรรลุธรรม */
+.tap{cursor:pointer}
+.recbadge{display:inline-block;margin-top:4px;font:600 .68rem var(--body);color:#fff;background:var(--thaigold);border-radius:99px;padding:2px 10px;white-space:nowrap}
+.ac .recbadge{align-self:flex-start}
+.ac.tap .acx{position:relative}
+/* หน้าท่านอาจารย์ */
+.perhead{background:var(--sky);color:#fff;border-bottom:3px solid var(--thaigold)}
+.perhead .col{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding-block:4px 22px}
+.perhead .ph{width:96px;height:96px;box-shadow:0 0 0 3px var(--thaigold)}
+.perhead .pname{font-family:var(--display);font-weight:700;font-size:clamp(20px,5.6vw,26px);line-height:1.4}
+.perhead .psub{color:#e8cf95;font-size:.88em;font-weight:600}
+#personv main .col{padding-block:18px 40px}
+.reccard{background:var(--card);border:1.5px solid var(--thaigold);border-radius:20px;padding:16px 14px}
+.reccard h2{margin:0}
+.recs{display:flex;flex-direction:column;gap:10px}
+.rec{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;text-decoration:none;color:inherit;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+.rdate{flex:none;width:76px;display:flex;flex-direction:column;align-items:center;line-height:1.15;padding-right:12px;border-right:1.5px solid color-mix(in srgb,var(--thaigold) 60%,transparent);color:var(--thaigold);text-align:center}
+.rdate b{font:700 2.1em/1 var(--body);color:var(--thaigold)}
+.rdate span{font-size:.8em;font-weight:600;margin-top:2px}
+.rdate .ry{font-size:.78em;color:var(--muted);font-weight:600}
+.rtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.rtx small{color:var(--thaigold);font-weight:700;font-size:.8em}
+.rt{color:var(--readink);font-weight:600;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.rec .arrow{flex:none;color:var(--thaigold);font-size:1.4em}
+#personv .addbtn{margin-top:4px}
+/* หน้าอ่านบันทึก: ไม่มีปุ่มเสนอแก้ไข และไม่มีปุ่มลบแยก */
+.on-rec #propose,.on-rec #delNote{display:none!important}
+.on-rec .reader .actions .col{grid-template-columns:1fr 1fr}
+
+/* แตะท่านอาจารย์: ลูกศรเล็กสีทองมุมขวา แทนป้าย */
+.tap{position:relative}
+.tapgo{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--thaigold);font-size:1.5em;line-height:1}
+.ac.tap{padding-right:30px}
+.person.tap .tapgo{position:static;transform:none;font-size:1.2em;margin-top:2px}
+#personv main .col{display:flex;flex-direction:column;gap:16px}
+.biotext{white-space:pre-wrap;word-break:break-word;color:var(--readink);font-weight:500;line-height:1.8}
+.rt.full{display:block;-webkit-line-clamp:unset;overflow:visible}
+.psub .nw{white-space:nowrap}
+#dlgFields textarea[rows="3"]{min-height:0;height:7.5em}
