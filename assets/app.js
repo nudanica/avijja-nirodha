@@ -54,7 +54,7 @@
   }
 
   // photo: resize on the phone, upload, then point the record at it
-  function pickPhoto(onDone) {
+  function pickPhoto(onDone, maxSize) {
     var p = $('picker');
     p.value = '';
     p.onchange = function () {
@@ -62,7 +62,7 @@
       if (!f) return;
       var img = new Image();
       img.onload = function () {
-        var max = 600, w = img.width, h = img.height, k = Math.min(1, max / Math.max(w, h));
+        var max = maxSize || 600, w = img.width, h = img.height, k = Math.min(1, max / Math.max(w, h));
         var c = document.createElement('canvas');
         c.width = Math.round(w * k); c.height = Math.round(h * k);
         c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
@@ -401,7 +401,7 @@
   function noteLink(ri, ni, label) {
     var a = el('a', 'note');
     a.href = '#r' + (ri + 1) + 'n' + (ni + 1);
-    a.appendChild(el('span', 'nn', th(ni + 1)));
+    a.appendChild(el('span', 'nn', th(ni + 1) + '.'));
     a.appendChild(el('b', null, label));
     return a;
   }
@@ -462,7 +462,7 @@
     $('back').hidden = v === 'home';
     document.documentElement.classList.toggle('on-read', v === 'readv');
     document.documentElement.classList.toggle('on-home', v === 'home');
-    document.documentElement.classList.toggle('on-rooms', v === 'roomsv');
+    document.documentElement.classList.toggle('on-rooms', v === 'roomsv' || v === 'roomv');
     $('amenu').hidden = true;
     window.scrollTo(0, 0);
   }
@@ -482,15 +482,33 @@
     var r = DATA.rooms[ri];
     if (!r) return openRooms();
     curRoom = ri;
-    $('brand').textContent = 'ห้องที่ ' + r.no;
+    $('brand').textContent = '';
     $('rk').textContent = 'ห้องที่ ' + r.no;
-    $('rh').textContent = '[' + r.no + '.] ' + r.title;
+    $('rh').textContent = r.title;
+    roomPhoto(r);
     $('rc').textContent = 'องค์ธรรมในห้องนี้ (' + th(r.notes.length) + ')';
     var l = $('nlist');
     l.innerHTML = '';
     if (!r.notes.length) l.appendChild(el('div', 'empty', 'ยังไม่มีองค์ธรรมในห้องนี้'));
     r.notes.forEach(function (n, ni) { l.appendChild(noteLink(ri, ni, n.title)); });
     show('roomv');
+  }
+
+  // room header photo: the room's own image, or the lotus photo until an admin picks one
+  function roomPhoto(r) {
+    var h = $('roomhead');
+    h.style.backgroundImage = 'linear-gradient(rgba(23,54,33,.72),rgba(23,54,33,.08) 35%,rgba(23,54,33,.08) 50%,rgba(23,54,33,.95)),url("' + (r.image || DATA.heroImage) + '")';
+    h.classList.toggle('deflt', !r.image);
+    var b = $('roomPhotoBtn');
+    b.hidden = !ADMIN;
+    b.onclick = function () {
+      pickPhoto(function (path, preview) {
+        r.image = path;
+        roomPhoto(r);
+        h.style.backgroundImage = h.style.backgroundImage.replace(/url\("[^"]*"\)$/, 'url("' + preview + '")');
+        saveData('เปลี่ยนรูปห้อง ' + r.no);
+      }, 1200);
+    };
   }
 
   function openNote(ri, ni) {

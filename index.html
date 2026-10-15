@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=Sarabun:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=20261015t">
+<link rel="stylesheet" href="assets/style.css?v=20261015v">
 </head>
 <body>
 <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
@@ -95,7 +95,8 @@
 </div>
 
 <div id="roomv" class="view" hidden>
-  <section class="roomhead"><div class="col pad">
+  <section class="roomhead roomphoto" id="roomhead"><div class="col pad">
+    <button class="roomcam" id="roomPhotoBtn" type="button" hidden>📷 เปลี่ยนรูปห้อง</button>
     <span class="k" id="rk"></span>
     <h1 id="rh"></h1>
     <button class="editlink" id="editRoom" type="button" hidden>แก้ไข / ลบห้อง</button>
@@ -151,6 +152,6 @@
 </dialog>
 <input type="file" id="picker" accept="image/*" hidden>
 
-<script src="assets/app.js?v=20261015t"></script>
+<script src="assets/app.js?v=20261015v"></script>
 </body>
 </html>

@@ -522,3 +522,15 @@ svg.defs{position:absolute;width:0;height:0}
 #roomsv .sno::before{content:"ห้อง";font:600 .62em var(--body);letter-spacing:.04em;margin-bottom:2px}
 #roomsv .sno span{font-family:var(--display);font-weight:700;font-size:1.15em;color:#fff}
 #roomsv .sno span{font-family:var(--body);font-weight:600;font-size:1.3em;text-shadow:0 1px 2px rgba(110,78,20,.55)}#roomsv .sno::before{text-shadow:0 1px 2px rgba(110,78,20,.55)}
+
+/* หน้าในห้อง: ภาพหัวห้อง (แอดมินเลือกเองได้) เลของค์ธรรมใหญ่สีทอง ๑. ๒. */
+#roomv .roomphoto{position:relative;background-color:var(--sky);background-size:cover;background-position:center;box-shadow:none;border-bottom:3px solid var(--thaigold);min-height:220px;display:flex;align-items:flex-end}
+#roomv .roomphoto.deflt{background-size:230%;background-position:47% 52%}
+#roomv .roomphoto .col{width:100%;padding-block:24px 20px;gap:4px;text-align:left}
+#roomv .roomhead .k{color:var(--gold2,#d8b46e);color:#e8cf95;font-weight:600;font-size:.9em;letter-spacing:.04em}
+#roomv .roomhead h1{font-size:clamp(22px,6vw,30px);text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.roomcam{position:absolute;top:10px;right:max(12px,env(safe-area-inset-right,0px));background:rgba(255,255,255,.92);color:var(--sky);border:0;border-radius:999px;padding:7px 14px;font:600 .8rem var(--body);box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer}
+#roomv .notes{gap:10px}
+#roomv .note{align-items:center;gap:14px;border:1px solid var(--line);padding:14px 16px;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+#roomv .note .nn{width:auto;height:auto;min-width:1.5em;border:0;border-radius:0;background:none;color:var(--thaigold);font:700 1.9em/1 var(--display);padding-right:12px;border-right:1.5px solid color-mix(in srgb,var(--thaigold) 60%,transparent);place-items:center}
+#roomv .note b{flex:1;color:var(--ink);font-weight:600;font-size:1.02em}
