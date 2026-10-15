@@ -573,3 +573,15 @@ svg.defs{position:absolute;width:0;height:0}
 #roomsv .sno::before{font-size:.6em;margin-bottom:3px;text-shadow:none}
 #roomsv .sno span{color:#fff;font-weight:700;font-size:1.4em;line-height:1;margin-top:-4px;text-shadow:0 1px 1px rgba(0,0,0,.35)}
 #roomsv .sno{justify-content:center;padding:0}
+
+/* หน้าในห้อง: รายละเอียดห้องอยู่บนสุดของการ์ดเดียวกับรายการองค์ธรรม (แบบ ๑๑) */
+#roomv .roomcard{margin-top:18px;background:var(--card);border:1.5px solid var(--thaigold);border-radius:20px;padding:18px 14px 14px}
+.roomdesc{margin:0}
+.rdtext{display:flex;flex-direction:column;align-items:center;text-align:center;color:var(--readink);font-weight:500;line-height:1.7;padding:0 6px}
+.rdtext span{white-space:pre-wrap;word-break:break-word}
+.rdtext span.gap{height:.25em}
+.rddiv{display:flex;align-items:center;gap:10px;margin:14px 2px 12px}
+.rddiv i{flex:1;height:1px;background:color-mix(in srgb,var(--thaigold) 55%,transparent)}
+.rddiv .orn{display:block;width:20px;height:20px;background:var(--thaigold);-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+#roomv .roomcard h2{margin-top:0}
+#roomv .roomcard .note{box-shadow:none}

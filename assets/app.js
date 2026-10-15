@@ -485,6 +485,13 @@
     $('brand').textContent = '';
     $('rk').textContent = 'ห้องที่ ' + r.no;
     $('rh').textContent = r.title;
+    $('rdesc').hidden = !r.desc;
+    var dt = $('rdescText');
+    dt.innerHTML = '';
+    // each line exactly as typed; blank lines become a small gap instead of a full empty line
+    (r.desc || '').split('\n').forEach(function (ln) {
+      dt.appendChild(ln.trim() ? el('span', null, ln) : el('span', 'gap'));
+    });
     roomPhoto(r);
     $('rc').textContent = 'องค์ธรรมในห้องนี้ (' + th(r.notes.length) + ')';
     var l = $('nlist');
@@ -728,17 +735,20 @@
     $('addRoom').onclick = function () {
       ask('เพิ่มห้องใหม่', [
         { label: 'เลขห้อง', value: th(String(DATA.rooms.length + 1).padStart(2, '0')) },
-        { label: 'ชื่อห้อง', placeholder: 'เช่น ผู้ใหม่ในระดับ วิชชาพระโสดาบันบุคคล' }
+        { label: 'ชื่อห้อง', placeholder: 'เช่น ผู้ใหม่ในระดับ วิชชาพระโสดาบันบุคคล' },
+        { label: 'รายละเอียดห้อง (ถ้ามี)', multiline: true }
       ], function (v) {
         if (!v[1].trim()) return;
-        DATA.rooms.push({ no: v[0].trim(), title: v[1].trim(), notes: [] });
+        var nr = { no: v[0].trim(), title: v[1].trim(), notes: [] };
+        if (v[2].trim()) nr.desc = v[2];
+        DATA.rooms.push(nr);
         renderRooms();
         saveData('เพิ่มห้อง ' + v[0]);
       });
     };
     $('editRoom').onclick = function () {
       var r = DATA.rooms[curRoom];
-      ask('แก้ไขห้อง', [{ label: 'เลขห้อง', value: r.no }, { label: 'ชื่อห้อง', value: r.title }], function (v) {
+      ask('แก้ไขห้อง', [{ label: 'เลขห้อง', value: r.no }, { label: 'ชื่อห้อง', value: r.title }, { label: 'รายละเอียดห้อง', value: r.desc || '', multiline: true }], function (v) {
         if (v.del) {
           DATA.rooms.splice(curRoom, 1);
           location.hash = 'rooms';
@@ -746,6 +756,7 @@
           return;
         }
         r.no = v[0].trim(); r.title = v[1].trim();
+        if (v[2].trim()) r.desc = v[2]; else delete r.desc;
         openRoom(curRoom);
         saveData('แก้ชื่อห้อง ' + r.no);
       }, 'บันทึก', 'ลบห้องนี้ทั้งห้อง');
