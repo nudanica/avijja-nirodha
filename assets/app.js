@@ -141,9 +141,9 @@
     d.classList.toggle('pinmode', pinMode);
     var ban = $('pinBanner');
     if (ban) ban.remove();
-    if (pinMode && DATA && DATA.heroImage) {
+    if (pinMode && DATA && DATA.placeholderPhoto) {
       ban = el('div', 'pinbanner'); ban.id = 'pinBanner';
-      ban.style.backgroundImage = 'url("' + DATA.heroImage + '")';
+      ban.style.backgroundImage = 'url("' + DATA.placeholderPhoto + '")';
       $('dlgForm').insertBefore(ban, $('dlgForm').firstChild);
     }
     $('dlgForm').onsubmit = function (e) {

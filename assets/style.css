@@ -374,22 +374,22 @@ dialog h3{margin:0;font-family:var(--display);font-size:1.15em}
 .pinkey:active{background:var(--petal)}
 .pinkey.del{font-size:1rem;color:var(--muted)}
 
-/* passcode dialog (แบบ ข): lotus photo on top, clean white body, dots and soft round keys */
-dialog.pinmode{width:min(380px,calc(100vw - 24px));background:#fff;color:#1d2a20;overflow:hidden}
-dialog.pinmode form{padding:0 24px 18px;gap:6px;align-items:center}
-.pinbanner{width:calc(100% + 48px);margin:0 -24px;aspect-ratio:16/9;background-size:cover;background-position:center top}
-dialog.pinmode h3{text-align:center;font-family:var(--display);font-size:1.25em;color:#24502f;margin-top:20px}
+/* passcode dialog (แบบ ก กลางคืนในวัด): deep green, lotus in a gold ring, gold dots and gold-ring keys */
+dialog.pinmode{width:min(380px,calc(100vw - 24px));background:radial-gradient(120% 70% at 50% 0%,#2a5e38 0%,#1f4a2b 45%,#163a21 100%);color:#f3ead6;overflow:hidden}
+dialog.pinmode form{padding:40px 24px 18px;gap:6px;align-items:center}
+.pinbanner{width:76px;height:76px;border-radius:50%;background:#fff center/88% no-repeat;border:2px solid #c9a45a;box-shadow:0 0 0 6px rgba(201,164,90,.18)}
+dialog.pinmode h3{text-align:center;font-family:var(--display);font-size:1.25em;color:#f3ead6;margin-top:14px;letter-spacing:.02em}
 dialog.pinmode #dlgFields{width:100%}
 dialog.pinmode .fld{align-items:center}
 dialog.pinmode .pinpad{gap:24px;margin-top:6px;align-items:center}
 dialog.pinmode .pinboxes{gap:18px}
-dialog.pinmode .pinbox{width:14px;height:14px;border-radius:50%;border:1.5px solid #24502f;background:transparent;box-shadow:none}
-dialog.pinmode .pinbox.filled{background:#24502f}
+dialog.pinmode .pinbox{width:14px;height:14px;border-radius:50%;border:1.5px solid #c9a45a;background:transparent;box-shadow:none}
+dialog.pinmode .pinbox.filled{background:#c9a45a}
 dialog.pinmode .pinkeys{grid-template-columns:repeat(3,70px);gap:14px 24px;justify-content:center}
-dialog.pinmode .pinkey{width:70px;height:70px;min-height:0;border-radius:50%;border:0;background:#f1f5f0;font:300 1.7rem var(--body);color:#1d2a20;transition:background .12s}
-dialog.pinmode .pinkey:active{background:#dfe9dc}
-dialog.pinmode .pinkey.del{background:transparent;font-size:1.3rem;color:#6a776d}
-dialog.pinmode .dlgerr{text-align:center;color:#b3261e}
+dialog.pinmode .pinkey{width:70px;height:70px;min-height:0;border-radius:50%;border:1.5px solid rgba(201,164,90,.55);background:transparent;font:300 1.7rem var(--body);color:#f3ead6;transition:background .12s}
+dialog.pinmode .pinkey:active{background:rgba(201,164,90,.25)}
+dialog.pinmode .pinkey.del{border:0;font-size:1.3rem;color:rgba(243,234,214,.7)}
+dialog.pinmode .dlgerr{text-align:center;color:#ffd78a}
 dialog.pinmode .dlgbtns{justify-content:center}
 dialog.pinmode #dlgOk{display:none}
-dialog.pinmode #dlgCancel{border:0;background:none;color:#6a776d;font-weight:400;min-height:44px}
+dialog.pinmode #dlgCancel{border:0;background:none;color:rgba(243,234,214,.75);font-weight:400;min-height:44px}
