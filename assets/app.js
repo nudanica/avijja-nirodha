@@ -504,8 +504,8 @@
   // room header photo: the room's own image, or the lotus photo until an admin picks one
   function roomPhoto(r) {
     var h = $('roomhead');
-    h.style.backgroundImage = 'linear-gradient(rgba(23,54,33,.72),rgba(23,54,33,.08) 35%,rgba(23,54,33,.08) 50%,rgba(23,54,33,.95)),url("' + (r.image || DATA.heroImage) + '")';
-    h.classList.toggle('deflt', !r.image);
+    h.style.backgroundImage = 'linear-gradient(rgba(23,54,33,.72),rgba(23,54,33,.08) 35%,rgba(23,54,33,.08) 50%,rgba(23,54,33,.95)),url("' + (r.image || DATA.roomImage || 'images/room.jpg') + '")';
+    h.classList.remove('deflt');
     var b = $('roomPhotoBtn');
     b.hidden = !ADMIN;
     b.onclick = function () {
