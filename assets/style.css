@@ -585,3 +585,6 @@ svg.defs{position:absolute;width:0;height:0}
 .rddiv .orn{display:block;width:20px;height:20px;background:var(--thaigold);-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
 #roomv .roomcard h2{margin-top:0}
 #roomv .roomcard .note{box-shadow:none}
+/* หน้ารวมห้อง: เรียงตรงกันทุกห้อง ไม่เยื้องแบบขั้นบันได */
+#roomsv .step{margin-left:0!important;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+#roomsv .steps{gap:10px}
