@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>คลังองค์ธรรมเพราะอวิชชาดับ</title>
+<meta name="description" content="คลังองค์ธรรมเพราะอวิชชาดับ อ่าน คัดลอก และส่งต่อทาง LINE">
+<meta property="og:title" content="คลังองค์ธรรมเพราะอวิชชาดับ">
+<meta property="og:description" content="อ่าน คัดลอก และส่งต่อทาง LINE">
+<meta property="og:image" content="images/hero.jpg">
+<meta name="theme-color" content="#24502f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=Sarabun:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="bar"><div class="col pad">
+  <button class="back" id="back" type="button" hidden>‹ กลับ</button>
+  <span class="brand" id="brand"></span>
+  <div class="size"><button id="smaller" type="button" aria-label="ตัวเล็กลง">ก-</button><button id="bigger" type="button" aria-label="ตัวใหญ่ขึ้น">ก+</button></div>
+</div></header>
+
+<div id="home" class="view">
+  <section class="hero"><div class="col pad">
+    <div class="bwrap"><img class="banner" id="heroImg" src="" alt=""></div>
+    <div class="inner">
+      <h1 class="vh" id="h1"></h1>
+      <form class="search" id="sform" role="search">
+        <input id="q" type="search" placeholder="พิมพ์คำที่ต้องการค้นหา" aria-label="ค้นหา">
+        <button type="submit">ค้นหา</button>
+      </form>
+    </div>
+  </div></section>
+  <main><div class="col pad">
+    <section class="sec">
+      <h2 id="ratanaHeading"></h2>
+      <div class="ratana" id="ratana"></div>
+    </section>
+    <section class="sec" id="results" hidden>
+      <h2>ผลการค้นหา</h2>
+      <div class="notes" id="rlist"></div>
+    </section>
+    <section class="sec">
+      <h2 id="roomsHeading"></h2>
+      <div class="rooms" id="rooms"></div>
+    </section>
+    <div class="foot" aria-hidden="true"><span class="orn"></span><span class="orn" style="font-size:1.4em"></span><span class="orn"></span></div>
+  </div></main>
+</div>
+
+<div id="roomv" class="view" hidden>
+  <section class="roomhead"><div class="col pad">
+    <span class="k" id="rk"></span>
+    <h1 id="rh"></h1>
+  </div></section>
+  <main><div class="col pad"><section class="sec">
+    <h2 id="rc"></h2>
+    <div class="notes" id="nlist"></div>
+  </section></div></main>
+</div>
+
+<div id="readv" class="view reader" hidden>
+  <div class="col pad">
+    <div class="crumb" id="crumb"></div>
+    <p class="text" id="text"></p>
+  </div>
+  <div class="actions"><div class="col pad">
+    <button class="btn copy" id="copy" type="button">คัดลอก</button>
+    <a class="btn line" id="share" href="#" target="_blank" rel="noopener">ส่งต่อ LINE</a>
+    <div class="toast" id="toast" aria-live="polite"></div>
+  </div></div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
