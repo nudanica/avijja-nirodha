@@ -80,10 +80,11 @@
 - ฟังก์ชันที่ต้องมีตามแผน: ค้นหาทั้งคลัง, เลือกดูตามระดับวิชชา, คัดลอก/แชร์ LINE, ระบบเสนอเพิ่มเติม/แก้ไขให้สมาชิกตรวจก่อนเผยแพร่, ประวัติการแก้ไขและสำรองข้อมูล
 
 ## เว็บจริง (ขึ้นแล้ว)
-- GitHub repository: nudanica/dhamma (Public) เปิด GitHub Pages จาก branch main
-- เจ้าของอยากเปลี่ยนชื่อเป็น Avijja Nirodha (repo: avijja-nirodha) — แนะนำวิธี rename แล้ว รอเจ้าของทำ และรอตอบว่าจะเปลี่ยนชื่อที่แสดงบนเว็บด้วยหรือไม่
+- GitHub repository: nudanica/avijja-nirodha (Public, เปลี่ยนชื่อจาก dhamma แล้ว) เปิด GitHub Pages จาก branch main
+- ชื่อที่แสดงบนเว็บยังเป็น "คลังองค์ธรรมเพราะอวิชชาดับ" (ยังไม่ได้ตอบว่าจะเปลี่ยนเป็น Avijja Nirodha หรือไม่)
+- ทุกครั้งหลังเจ้าของอัปโหลด: เข้าเว็บจริงตรวจเองทุกหน้า (หน้าแรก ห้องเรียน หน้าอ่าน ค้นหา admin.html รูป) แล้วค่อยรายงาน
 - ทุกครั้งที่แก้: ส่งตัวอย่างให้เจ้าของคอนเฟิร์มก่อน แล้วค่อยให้อัปโหลด zip
-- ลิงก์เว็บ: https://nudanica.github.io/dhamma/
+- ลิงก์เว็บ: https://nudanica.github.io/avijja-nirodha/
 - โครงไฟล์: index.html, admin.html, assets/style.css, assets/app.js, data/site.json (เนื้อหาทั้งหมด), images/ (รูป), images/people/ (รูปที่อัปโหลดจากโหมดผู้ดูแล)
 - เนื้อหาและการตั้งค่าอยู่ใน data/site.json ทั้งหมด ไม่ฝังในโค้ด รวมถึงลิงก์ YouTube ของรูปดอกบัว (heroLink)
 - รูปดอกบัวด้านบนกดแล้วไปช่อง YouTube: https://www.youtube.com/channel/UCZu8tTy5v_cKkpjgPNBb5Cg
@@ -97,7 +98,7 @@
 - บนจอคอม: หน้าเว็บอยู่ในกรอบกลางจอ พื้นหลังลายประจำยามก้ามปูสีทองบนเขียวอ่อน
 
 ## โหมดผู้ดูแล
-- เข้าที่ https://nudanica.github.io/dhamma/admin.html ใส่ GitHub token (fine-grained, เฉพาะ repo dhamma, Contents: Read and write) ครั้งเดียว เครื่องจะจำไว้
+- เข้าที่ https://nudanica.github.io/avijja-nirodha/admin.html ใส่ GitHub token (fine-grained, เฉพาะ repo avijja-nirodha, Contents: Read and write) ครั้งเดียว เครื่องจะจำไว้
 - เมื่อเข้าแล้ว: ปุ่ม + บนรูป (ย่อรูปในเครื่องแล้วอัปโหลด), แก้ไข/เพิ่มรายชื่อในรัตนะ, เพิ่มห้อง, แก้ชื่อห้อง, เพิ่มเรื่อง (วางข้อความตามต้นฉบับ บรรทัดแรกเป็นชื่อเรื่องในรายการ), แก้ไข/ลบเรื่อง
 - บันทึกตรงขึ้น GitHub ทันที เว็บสาธารณะอัปเดตภายใน ๑–๒ นาที ประวัติทุกครั้งอยู่ใน GitHub
 - ผู้อ่านทั่วไปไม่เห็นปุ่มเหล่านี้
