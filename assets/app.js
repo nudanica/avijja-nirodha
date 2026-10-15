@@ -307,7 +307,7 @@
       a.appendChild(n);
       var rt = el('span', 'st');
       rt.appendChild(el('b', null, r.title));
-      rt.appendChild(el('small', null, th(r.notes.length) + ' เรื่อง'));
+      rt.appendChild(el('small', null, th(r.notes.length) + ' องค์ธรรม'));
       a.appendChild(rt);
       a.appendChild(el('span', 'arrow', '›'));
       box.appendChild(a);
@@ -361,6 +361,17 @@
     });
   }
 
+
+  // first line shown larger as the heading; everything else exactly as posted, same colour
+  function showText(box, t) {
+    box.innerHTML = '';
+    var k = t.indexOf('\n');
+    var head = k < 0 ? t : t.slice(0, k);
+    var rest = k < 0 ? '' : t.slice(k + 1);
+    box.appendChild(el('div', 'ttl', head));
+    if (rest) box.appendChild(el('div', 'body', rest));
+  }
+
   // ---------- views ----------
   function show(v) {
     ['home', 'roomsv', 'roomv', 'readv'].forEach(function (x) { $(x).hidden = x !== v; });
@@ -386,10 +397,10 @@
     $('brand').textContent = 'ห้องที่ ' + r.no;
     $('rk').textContent = 'ห้องที่ ' + r.no;
     $('rh').textContent = '[' + r.no + '.] ' + r.title;
-    $('rc').textContent = 'เรื่องในห้องนี้ (' + th(r.notes.length) + ')';
+    $('rc').textContent = 'องค์ธรรมในห้องนี้ (' + th(r.notes.length) + ')';
     var l = $('nlist');
     l.innerHTML = '';
-    if (!r.notes.length) l.appendChild(el('div', 'empty', 'ยังไม่มีเรื่องในห้องนี้'));
+    if (!r.notes.length) l.appendChild(el('div', 'empty', 'ยังไม่มีองค์ธรรมในห้องนี้'));
     r.notes.forEach(function (n, ni) { l.appendChild(noteLink(ri, ni, n.title)); });
     show('roomv');
   }
@@ -401,7 +412,7 @@
     current = n; curRoom = ri; curNote = ni;
     $('brand').textContent = 'ห้องที่ ' + r.no;
     $('crumb').textContent = 'ห้องที่ ' + r.no + ' · ' + r.title;
-    $('text').textContent = n.text;
+    showText($('text'), n.text);
     $('share').href = 'https://line.me/R/share?text=' + encodeURIComponent(n.text);
     $('toast').textContent = '';
     show('readv');
@@ -516,7 +527,7 @@
       });
     };
     $('addNote').onclick = function () {
-      ask('เพิ่มเรื่องใหม่', [{ label: 'วางข้อความจากโน้ต LINE ทั้งหมด', multiline: true }], function (v) {
+      ask('เพิ่มองค์ธรรมในห้องนี้', [{ label: 'วางข้อความจากโน้ต LINE ทั้งหมด', multiline: true }], function (v) {
         var t = v[0];
         if (!t.trim()) return;
         DATA.rooms[curRoom].notes.push({ title: firstLine(t), text: t });
@@ -526,14 +537,14 @@
     };
     $('editNote').onclick = function () {
       var n = DATA.rooms[curRoom].notes[curNote];
-      ask('แก้ไขเรื่อง', [{ label: 'ข้อความ', value: n.text, multiline: true }], function (v) {
+      ask('แก้ไของค์ธรรม', [{ label: 'ข้อความ', value: n.text, multiline: true }], function (v) {
         n.text = v[0]; n.title = firstLine(v[0]);
         openNote(curRoom, curNote);
         saveData('แก้ไขเรื่อง');
       });
     };
     $('delNote').onclick = function () {
-      ask('ลบเรื่องนี้ใช่ไหม', [], function () {
+      ask('ลบองค์ธรรมนี้ใช่ไหม', [], function () {
         DATA.rooms[curRoom].notes.splice(curNote, 1);
         location.hash = 'r' + (curRoom + 1);
         saveData('ลบเรื่อง');

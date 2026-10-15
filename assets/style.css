@@ -319,3 +319,8 @@ dialog h3{margin:0;font-family:var(--display);font-size:1.15em}
 
 /* reading page: show the note exactly as posted, no styling of individual lines */
 .reader .text{display:block!important;white-space:pre-wrap!important;word-break:break-word;color:var(--ink)}
+
+/* reading page heading: larger and bold only, same text colour, no added colours */
+.reader .text .ttl{white-space:pre-wrap;font-weight:700;font-size:1.25em;line-height:1.55;color:var(--ink);padding-bottom:12px;margin-bottom:10px;border-bottom:1.5px solid var(--line);text-wrap:balance}
+.reader .text .body{white-space:pre-wrap;color:var(--ink)}
+.reader .text .ttl{border-bottom:2px solid var(--thaigold)}
