@@ -110,7 +110,7 @@
   }
 
   // simple form dialog. field kinds: text (default), multiline, select (options), pin (n digits)
-  function ask(title, fields, onOk, okLabel) {
+  function ask(title, fields, onOk, okLabel, delLabel) {
     $('dlgTitle').textContent = title;
     $('dlgOk').textContent = okLabel || 'บันทึก';
     var box = $('dlgFields');
@@ -153,6 +153,15 @@
       if (keep !== true) d.close();
     };
     $('dlgCancel').onclick = function () { d.close(); };
+    var del = $('dlgDel');
+    del.hidden = !delLabel;
+    del.textContent = delLabel || '';
+    del.onclick = function () {
+      if (del.dataset.sure !== '1') { del.dataset.sure = '1'; del.textContent = 'แตะอีกครั้งเพื่อยืนยันการลบ'; return; }
+      del.dataset.sure = ''; d.close();
+      var v = fields.map(function () { return ''; }); v.del = true; onOk(v, function () {});
+    };
+    del.dataset.sure = '';
     d.showModal();
   }
 
@@ -166,10 +175,12 @@
       if (alt) ph.setAttribute('aria-label', alt);
     }
     if (ADMIN && onChange) {
-      var b = el('button', 'addimg', '+');
-      b.type = 'button';
-      b.setAttribute('aria-label', src ? 'เปลี่ยนรูป' : 'เพิ่มรูป');
-      b.onclick = function () {
+      ph.classList.add('editable');
+      ph.tabIndex = 0;
+      ph.setAttribute('role', 'button');
+      ph.setAttribute('aria-label', (src ? 'เปลี่ยนรูป ' : 'ใส่รูป ') + (alt || ''));
+      ph.appendChild(el('span', 'cam', '📷'));
+      ph.onclick = function () {
         pickPhoto(function (path, preview) {
           ph.classList.add('has');
           ph.style.backgroundImage = 'url("' + preview + '")';
@@ -177,7 +188,6 @@
           saveData('ใส่รูป ' + (alt || ''));
         });
       };
-      ph.appendChild(b);
     }
     return ph;
   }
@@ -190,11 +200,17 @@
       if (label === 'list') f.push({ label: 'ฐานะ', value: p.status }, { label: 'ลำดับ', value: p.order }, { label: 'เป็นลูกศิษย์ของ (ชื่อครูบาอาจารย์)', value: p.teacher || '' });
       else f.push({ label: 'องค์ / ตำแหน่ง', value: p.role || '' });
       ask('แก้ไขรายชื่อ', f, function (v) {
+        if (v.del) {
+          DATA.ratana.forEach(function (r) { if (r.people) { var i = r.people.indexOf(p); if (i > -1) r.people.splice(i, 1); } });
+          renderRatana();
+          saveData('ลบรายชื่อ ' + (p.name || ''));
+          return;
+        }
         p.name = v[0];
         if (label === 'list') { p.status = v[1]; p.order = v[2]; p.teacher = v[3].trim(); } else { p.role = v[1]; }
         renderRatana();
         saveData('แก้รายชื่อ');
-      });
+      }, 'บันทึก', 'ลบรายชื่อนี้');
     };
     return b;
   }
@@ -302,6 +318,13 @@
         var img = el('img', 'buddha');
         img.src = r.image; img.alt = r.imageAlt || r.title;
         wrap.appendChild(img);
+        if (ADMIN) {
+          wrap.classList.add('editable');
+          wrap.appendChild(el('span', 'cam', '📷'));
+          wrap.onclick = function () {
+            pickPhoto(function (path, preview) { img.src = preview; r.image = path; saveData('เปลี่ยนรูป ' + r.label); });
+          };
+        }
         lvl.appendChild(wrap);
         lvl.appendChild(el('h3', null, r.title));
       } else if (r.style === 'list') {
@@ -407,8 +430,11 @@
 
   // ---------- views ----------
   function show(v) {
-    ['home', 'roomsv', 'roomv', 'readv', 'pendingv', 'settingsv'].forEach(function (x) { $(x).hidden = x !== v; });
+    ['home', 'loginv', 'roomsv', 'roomv', 'readv', 'pendingv', 'settingsv'].forEach(function (x) { $(x).hidden = x !== v; });
     $('back').hidden = v === 'home';
+    document.documentElement.classList.toggle('on-read', v === 'readv');
+    document.documentElement.classList.toggle('on-home', v === 'home');
+    $('amenu').hidden = true;
     window.scrollTo(0, 0);
   }
 
@@ -418,7 +444,7 @@
   }
 
   function openRooms() {
-    $('brand').textContent = DATA.siteTitle;
+    $('brand').textContent = DATA.roomsHeading;
     renderRooms();
     show('roomsv');
   }
@@ -454,7 +480,7 @@
   function route() {
     var h = location.hash.replace('#', '');
     if (h === 'rooms') return openRooms();
-    if (h === 'admin') { if (ADMIN) { location.hash = 'pending'; return; } openHome(); setTimeout(adminLogin, 50); return; }
+    if (h === 'admin' || h === 'login') return openLogin(h === 'admin' ? 'admin' : 'member');
     if (h === 'pending' && ADMIN) return openPending();
     if (h === 'settings' && ADMIN) return openSettings();
     var m = /^r(\d+)(?:n(\d+))?$/.exec(h);
@@ -537,7 +563,8 @@
   $('bigger').addEventListener('click', function () { fs = Math.min(30, fs + 2); applySize(); });
   $('smaller').addEventListener('click', function () { fs = Math.max(15, fs - 2); applySize(); });
 
-  // ---------- team: propose (shared 4-digit team code) ----------
+  // ---------- members: propose (shared 4-digit member code) ----------
+  var MEMBER = !!store('team_code') && !!store('member_name');
   function roomOptions() {
     return DATA.rooms.map(function (r, i) { return { value: String(i + 1), label: 'ห้องที่ ' + r.no + ' · ' + r.title }; });
   }
@@ -545,56 +572,108 @@
     var f = [];
     if (kind === 'add') f.push({ label: 'ห้อง', options: roomOptions(), value: String((curRoom >= 0 ? curRoom : 0) + 1) });
     f.push({ label: kind === 'add' ? 'วางข้อความจากโน้ต LINE ทั้งหมด' : 'ข้อความที่เสนอแก้ (แก้ในช่องนี้ได้เลย)', multiline: true, value: kind === 'edit' ? current.text : '' });
-    f.push({ label: 'ชื่อผู้เสนอ', value: store('team_name') || '', placeholder: 'ชื่อในกลุ่ม LINE' });
     ask(kind === 'add' ? 'เสนอเพิ่มองค์ธรรมใหม่' : 'เสนอแก้ไของค์ธรรมนี้', f, function (v, err) {
       var room = kind === 'add' ? +v[0] : curRoom + 1;
       var text = kind === 'add' ? v[1] : v[0];
-      var name = (kind === 'add' ? v[2] : v[1]).trim();
       if (!text.trim()) { err('กรุณาวางข้อความ'); return true; }
-      if (!name) { err('กรุณาใส่ชื่อผู้เสนอ'); return true; }
-      store('team_name', name);
       err('กำลังส่ง…');
-      call('propose', { teamCode: store('team_code'), type: kind, room: room, note: curNote + 1, text: text, name: name })
+      call('propose', { teamCode: store('team_code'), type: kind, room: room, note: curNote + 1, text: text, name: store('member_name') })
         .then(function () { $('dlg').close(); $('toast').textContent = 'ส่งข้อเสนอแล้ว รอแอดมินอนุมัติก่อนขึ้นเว็บ'; })
         .catch(function (e) {
-          if (e.message === 'bad_team_code') { store('team_code', null); err('รหัสทีมงานเปลี่ยนแล้ว กรุณาขอรหัสใหม่'); }
+          if (e.message === 'bad_team_code') { memberLogout(); err('รหัสสมาชิกเปลี่ยนแล้ว กรุณาเข้าสู่ระบบใหม่'); }
           else err('ส่งไม่สำเร็จ ลองกดอีกครั้ง');
         });
       return true;
     }, 'ส่งข้อเสนอ');
   }
-  function withTeamCode(next) {
-    if (store('team_code')) return next();
-    ask('ใส่รหัสทีมงาน', [{ label: '', pin: 4 }], function (v, err) {
-      var c = v[0].trim();
-      if (!/^\d{4}$/.test(c)) { err('รหัสมี ๔ หลัก'); return true; }
-      err('กำลังตรวจรหัส…');
-      call('checkTeam', { teamCode: c }).then(function () {
-        store('team_code', c);
-        $('dlg').close();
-        next();
-      }).catch(function () { err('รหัสไม่ถูกต้อง'); });
-      return true;
-    }, 'ตกลง');
-  }
   $('propose').addEventListener('click', function () {
-    withTeamCode(function () {
-      ask('ต้องการเสนออะไร', [{ label: 'เลือก', options: [{ value: 'add', label: 'เพิ่มองค์ธรรมใหม่' }, { value: 'edit', label: 'แก้ไของค์ธรรมนี้' }] }], function (v) {
-        setTimeout(function () { proposeForm(v[0]); }, 50);
-      }, 'ถัดไป');
-    });
+    if (!MEMBER) { store('after_login', location.hash); location.hash = 'login'; return; }
+    ask('ต้องการเสนออะไร', [{ label: 'เลือก', options: [{ value: 'add', label: 'เพิ่มองค์ธรรมใหม่' }, { value: 'edit', label: 'แก้ไของค์ธรรมนี้' }] }], function (v) {
+      setTimeout(function () { proposeForm(v[0]); }, 50);
+    }, 'ถัดไป');
   });
+  function memberLogout() { ['team_code', 'member_name'].forEach(function (k) { store(k, null); }); MEMBER = false; }
+
+  // ---------- sign-in page ----------
+  var loginRole = 'member';
+  function setRole(role) {
+    loginRole = role;
+    $('tabMember').classList.toggle('on', role === 'member');
+    $('tabAdmin').classList.toggle('on', role === 'admin');
+    $('fName').hidden = role !== 'member';
+    $('fAdminName').hidden = role !== 'admin' || !$('lgAdminName').options.length;
+    $('lgCode').maxLength = role === 'member' ? 4 : 6;
+    $('lgCode').placeholder = role === 'member' ? 'รหัส ๔ หลัก' : 'รหัส ๖ หลัก';
+    $('lgNote').textContent = role === 'member' ? 'ส่งข้อเสนอเพิ่ม / แก้ไของค์ธรรม รอแอดมินอนุมัติ' : 'ตรวจ อนุมัติ และแก้ไขเว็บ';
+    $('lgErr').textContent = '';
+    $('lgCode').value = '';
+  }
+  function openLogin(role) {
+    $('brand').textContent = 'เข้าสู่ระบบ';
+    $('lgLogo').src = DATA.placeholderPhoto || '';
+    $('lgName').value = store('member_name') || '';
+    show('loginv');
+    setRole(role || 'member');
+    if (!$('lgAdminName').options.length) {
+      call('adminNames', {}).then(function (j) {
+        j.names.forEach(function (n) { var o = el('option', null, n); o.value = n; $('lgAdminName').appendChild(o); });
+        if (loginRole === 'admin') $('fAdminName').hidden = false;
+      }).catch(function () {});
+    }
+  }
+  $('tabMember').onclick = function () { setRole('member'); };
+  $('tabAdmin').onclick = function () { setRole('admin'); };
+  $('lgForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var code = $('lgCode').value.trim(), err = $('lgErr');
+    if (loginRole === 'member') {
+      var name = $('lgName').value.trim();
+      if (!name) { err.textContent = 'กรุณากรอกชื่อ'; return; }
+      if (!/^\d{4}$/.test(code)) { err.textContent = 'รหัสสมาชิกมี ๔ หลัก'; return; }
+      err.textContent = 'กำลังตรวจรหัส…';
+      call('checkTeam', { teamCode: code }).then(function () {
+        store('team_code', code); store('member_name', name); MEMBER = true;
+        drawAccount();
+        var back = store('after_login'); store('after_login', null);
+        location.hash = back || '';
+        if (!back) { history.replaceState(null, '', location.pathname); route(); }
+      }).catch(function () { err.textContent = 'รหัสไม่ถูกต้อง'; });
+    } else {
+      if (!/^\d{6}$/.test(code)) { err.textContent = 'รหัสแอดมินมี ๖ หลัก'; return; }
+      err.textContent = 'กำลังตรวจรหัส…';
+      var nm = $('fAdminName').hidden ? '' : $('lgAdminName').value;
+      call('checkAdmin', { adminCode: code, name: nm }).then(function (j) {
+        store('admin_code', code); store('admin_main', j.isMain ? '1' : null); store('admin_name', j.name);
+        location.href = location.pathname;
+      }).catch(function () { err.textContent = 'ชื่อหรือรหัสไม่ถูกต้อง'; });
+    }
+  });
+
+  // ---------- account button (top right) ----------
+  function drawAccount() {
+    var who = ADMIN ? ADMIN_NAME : (MEMBER ? store('member_name') : '');
+    $('acct').textContent = who ? who + ' ▾' : 'เข้าสู่ระบบ';
+    $('adminWho').textContent = ADMIN ? 'แอดมิน' : 'สมาชิก';
+  }
+  $('acct').onclick = function () {
+    if (!ADMIN && !MEMBER) { location.hash = 'login'; return; }
+    $('amenu').hidden = !$('amenu').hidden;
+  };
+  document.addEventListener('click', function (e) { if (!$('acctwrap').contains(e.target)) $('amenu').hidden = true; });
+  $('logout').onclick = function () {
+    ['admin_code', 'admin_main', 'admin_name'].forEach(function (k) { store(k, null); });
+    memberLogout();
+    location.href = location.pathname;
+  };
+  ['pendingBtn', 'settingsBtn'].forEach(function (id) { $(id).addEventListener('click', function () { $('amenu').hidden = true; }); });
 
   // ---------- admin actions ----------
   function setupAdmin() {
     document.documentElement.classList.add('is-admin');
-    $('adminbar').hidden = false;
-    $('adminWho').textContent = 'แอดมิน: ' + ADMIN_NAME;
     $('pendingBtn').hidden = false;
     $('settingsBtn').hidden = !IS_MAIN;
     ['addRoom', 'addNote', 'editRoom', 'noteAdmin'].forEach(function (id) { $(id).hidden = false; });
     $('propose').hidden = true;
-    $('logout').onclick = function () { ['admin_code', 'admin_main', 'admin_name'].forEach(function (k) { store(k, null); }); location.href = location.pathname; };
     $('pendingBtn').onclick = function () { location.hash = 'pending'; };
     $('settingsBtn').onclick = function () { location.hash = 'settings'; };
     refreshPendingCount();
@@ -612,11 +691,17 @@
     };
     $('editRoom').onclick = function () {
       var r = DATA.rooms[curRoom];
-      ask('แก้ชื่อห้อง', [{ label: 'เลขห้อง', value: r.no }, { label: 'ชื่อห้อง', value: r.title }], function (v) {
+      ask('แก้ไขห้อง', [{ label: 'เลขห้อง', value: r.no }, { label: 'ชื่อห้อง', value: r.title }], function (v) {
+        if (v.del) {
+          DATA.rooms.splice(curRoom, 1);
+          location.hash = 'rooms';
+          saveData('ลบห้อง ' + r.no);
+          return;
+        }
         r.no = v[0].trim(); r.title = v[1].trim();
         openRoom(curRoom);
         saveData('แก้ชื่อห้อง ' + r.no);
-      });
+      }, 'บันทึก', 'ลบห้องนี้ทั้งห้อง');
     };
     $('addNote').onclick = function () {
       ask('เพิ่มองค์ธรรมในห้องนี้', [{ label: 'วางข้อความจากโน้ต LINE ทั้งหมด', multiline: true }], function (v) {
@@ -709,12 +794,12 @@
   function drawSettings(j) {
     var box = $('slist');
     box.innerHTML = '';
-    box.appendChild(el('h3', 'sh3', 'รหัสทีมงาน (ใช้ร่วมกันทั้งทีม)'));
+    box.appendChild(el('h3', 'sh3', 'รหัสสมาชิก (ใช้ร่วมกันทุกท่าน)'));
     var row = el('div', 'arow');
     row.appendChild(el('span', 'acode big2', j.teamCode.split('').join(' ')));
     var ch = el('button', 'pbtn yes small', 'เปลี่ยนรหัส'); ch.type = 'button';
     ch.onclick = function () {
-      ask('ตั้งรหัสทีมงานใหม่', [{ label: '', pin: 4 }], function (v, err) {
+      ask('ตั้งรหัสสมาชิกใหม่', [{ label: 'รหัสใหม่ ๔ หลัก', placeholder: 'เช่น 2580' }], function (v, err) {
         if (!/^\d{4}$/.test(v[0].trim())) { err('รหัสมี ๔ หลัก'); return true; }
         call('setTeamCode', { adminCode: ADMIN_CODE, newCode: v[0].trim() }).then(function () { $('dlg').close(); openSettings(); })
           .catch(function () { err('เปลี่ยนไม่สำเร็จ'); });
@@ -723,8 +808,8 @@
     };
     row.appendChild(ch);
     box.appendChild(row);
-    box.appendChild(el('p', 'note', 'ส่งรหัสนี้ให้ทีมงานทาง LINE ถ้ารหัสหลุดไปถึงคนนอก กดเปลี่ยนรหัสแล้วส่งรหัสใหม่'));
-    box.appendChild(el('h3', 'sh3', 'แอดมิน (รหัสแยกของแต่ละท่าน)'));
+    box.appendChild(el('p', 'note', 'ส่งรหัสนี้ให้สมาชิกทาง LINE ถ้ารหัสหลุดไปถึงคนนอก กดเปลี่ยนรหัสแล้วส่งรหัสใหม่'));
+    box.appendChild(el('h3', 'sh3', 'แอดมิน (รหัส ๖ หลักแยกของแต่ละท่าน)'));
     if (!j.admins.length) box.appendChild(el('div', 'empty', 'ยังไม่มีแอดมินเพิ่มเติม'));
     j.admins.forEach(function (a, i) {
       var r = el('div', 'arow');
@@ -753,18 +838,6 @@
     box.appendChild(el('p', 'note', 'ระบบสร้างรหัส ๖ หลักให้แต่ละท่าน คัดลอกรหัสแล้วส่งให้ท่านนั้นทาง LINE'));
   }
 
-  function adminLogin() {
-    ask('เข้าสู่ระบบแอดมิน', [{ label: '', pin: 6 }], function (v, err) {
-      var c = v[0].trim();
-      err('กำลังตรวจรหัส…');
-      call('checkAdmin', { adminCode: c }).then(function (j) {
-        store('admin_code', c); store('admin_main', j.isMain ? '1' : null); store('admin_name', j.name);
-        location.reload();
-      }).catch(function () { err('รหัสไม่ถูกต้อง'); });
-      return true;
-    }, 'เข้าสู่ระบบ');
-  }
-  $('adminLink').addEventListener('click', function () { if (ADMIN) location.hash = 'pending'; else adminLogin(); });
 
   // ---------- load ----------
   // config.json holds the backend address; it is kept apart from the content so saving content never touches it
@@ -772,7 +845,7 @@
     API = cfg.apiUrl || '';
     return fetch(DATA_PATH, { cache: 'no-cache' }).then(function (r) { return r.json(); });
   }).then(function (d) {
-    if (!API) { $('propose').hidden = true; $('adminLink').hidden = true; }
+    if (!API) { $('propose').hidden = true; $('acctwrap').hidden = true; }
     // admins work on the newest copy straight from the backend
     if (ADMIN && API) return call('getData', { adminCode: ADMIN_CODE }).then(function (g) { return g.data; }, function () { return d; });
     return d;
@@ -782,11 +855,11 @@
     $('heroImg').src = d.heroImage;
     $('heroImg').alt = d.heroAlt || '';
     if (d.heroLink) { $('heroLink').href = d.heroLink; $('heroLink').setAttribute('aria-label', 'ช่อง YouTube เพราะอวิชชาดับ'); } else { $('heroLink').removeAttribute('href'); }
-    $('h1').textContent = d.siteTitle;
     $('ratanaHeading').textContent = d.ratanaHeading;
     $('roomsHeading').textContent = d.roomsHeading;
     $('roomsBtnLabel').textContent = d.roomsHeading;
     if (ADMIN) setupAdmin();
+    drawAccount();
     renderRatana();
     renderRooms();
     window.addEventListener('hashchange', route);

@@ -393,3 +393,92 @@ dialog.pinmode .dlgerr{text-align:center;color:#ffd78a}
 dialog.pinmode .dlgbtns{justify-content:center}
 dialog.pinmode #dlgOk{display:none}
 dialog.pinmode #dlgCancel{border:0;background:none;color:rgba(243,234,214,.75);font-weight:400;min-height:44px}
+
+/* ---------- tidy header + slim admin strip + clean room rows ---------- */
+.bar .col{min-height:64px;padding-block:8px}
+.brand{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.35;font-size:clamp(16px,4.4vw,21px)!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.size button{min-width:42px;min-height:40px}
+.adminbar{background:#f1f5f0!important;color:#3d4a40!important;border-bottom:1px solid var(--line);padding-block:6px!important;gap:6px 16px!important;font-size:.76em!important;flex-wrap:nowrap!important;overflow-x:auto}
+.adminbar #adminWho{color:var(--sky);font-weight:700;margin-right:auto;white-space:nowrap}
+.adminbar button{background:none!important;border:0!important;color:#3d4a40!important;padding:6px 2px!important;font-weight:600!important;white-space:nowrap;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}
+.adminbar #logout{color:#9a3b2e!important}
+.adminbar .astatus{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--sky);color:#fff;border-radius:999px;padding:8px 16px;font-size:13px;z-index:50;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+.adminbar .astatus:empty{display:none}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .adminbar{background:#18221a!important;color:#cfd8d0!important}:root:not([data-theme="light"]) .adminbar button{color:#cfd8d0!important}}
+:root[data-theme="dark"] .adminbar{background:#18221a!important;color:#cfd8d0!important}
+:root[data-theme="dark"] .adminbar button{color:#cfd8d0!important}
+#roomsv main .col{padding-block:12px 40px}
+#roomsv .steps{padding-left:0;gap:0;flex-direction:column}
+#roomsv .steps::before{display:none}
+#roomsv .step{margin-left:0!important;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;padding:18px 2px;min-height:0}
+#roomsv .sno{width:44px;height:44px;box-shadow:none;background:none}
+#roomsv .addbtn{margin-top:18px;border:0;justify-content:flex-start;text-align:left;min-height:48px;padding:0 2px;color:var(--sky);background:none}
+.adminbar{gap:6px 18px!important}.adminbar button{text-decoration:none!important}
+
+/* ---------- clean top: admin tools in one floating button, text size only on reading page ---------- */
+.adminbar{position:fixed!important;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;background:none!important;border:0!important;padding:0!important;display:block!important;overflow:visible!important}
+.adminbar[hidden]{display:none!important}
+.afab{position:relative;width:56px;height:56px;border-radius:50%;border:0;background:var(--sky);box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;display:grid;place-items:center}
+.afab::before{content:"";width:26px;height:26px;background:#fff;-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+#afabCount{position:absolute;top:-4px;right:-4px;min-width:22px;height:22px;border-radius:999px;background:var(--gold);color:#fff;font:700 12px var(--body);display:grid;place-items:center;padding:0 5px}
+#afabCount:empty{display:none}
+.amenu{position:absolute;right:0;bottom:68px;min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.18);overflow:hidden;display:flex;flex-direction:column}
+.amenu[hidden]{display:none}
+.amenu #adminWho{padding:12px 16px 8px;font:600 .78em var(--body);color:var(--muted);margin:0}
+.amenu button{background:none!important;border:0!important;border-top:1px solid var(--line)!important;text-align:left;padding:14px 16px!important;font:600 .95em var(--body)!important;color:var(--ink)!important;cursor:pointer;text-decoration:none!important}
+.amenu #logout{color:#b3261e!important}
+.adminbar .astatus{position:fixed;left:50%;right:auto;bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+.bar .size{display:none}
+.on-read .bar .size{display:flex}
+.bar .col{min-height:58px}
+.adminbar .afab{background:var(--sky)!important;border-radius:50%!important;padding:0!important;border:0!important}
+
+/* ---------- หัว ๔: photo on top, title under it, sign-in button top right ---------- */
+.on-home .bar{display:none}
+.hero{position:relative}
+.hero .col.pad{padding:0}
+.on-home .banner{border-radius:0!important}
+.cap2{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;padding:20px 16px 4px;background:var(--sky)}
+.cap2a{font-family:var(--display);font-weight:700;color:var(--thaigold);font-size:clamp(20px,5.6vw,28px);letter-spacing:.08em;line-height:1.4}
+.cap2b{margin:0;font-family:var(--display);font-weight:700;color:#fff;font-size:clamp(28px,8vw,40px);line-height:1.3}
+.hero .inner{margin-top:0!important;padding-top:16px!important}
+.acctwrap{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:calc(12px + env(safe-area-inset-right,0px));z-index:45}
+.acctwrap[hidden]{display:none}
+html:not(.on-home) .acctwrap{display:none}
+.acct{background:rgba(255,255,255,.94);color:var(--sky);border:0;border-radius:999px;padding:9px 16px;font:600 .82rem var(--body);box-shadow:0 2px 10px rgba(0,0,0,.22);cursor:pointer}
+.acctwrap .amenu{position:absolute;right:0;top:46px;bottom:auto;min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.2);overflow:hidden;display:flex;flex-direction:column}
+.acctwrap .amenu[hidden]{display:none}
+.acctwrap .amenu #adminWho{padding:12px 16px 8px;font:600 .75rem var(--body);color:var(--muted)}
+.acctwrap .amenu button{background:none;border:0;border-top:1px solid var(--line);text-align:left;padding:14px 16px;font:600 .95rem var(--body);color:var(--ink);cursor:pointer}
+.acctwrap .amenu #logout{color:#b3261e}
+.astatus{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--sky);color:#fff;border-radius:999px;padding:8px 16px;font:500 13px var(--body);z-index:60;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+.astatus:empty{display:none}
+@media (min-width:820px){.acctwrap{position:absolute}.shell{position:relative}}
+
+/* ---------- sign-in page ---------- */
+.login2{display:flex;flex-direction:column;align-items:center;gap:12px;padding-block:32px 48px!important;max-width:420px!important}
+.lglogo{width:72px;height:72px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid var(--thaigold)}
+.login2 h1{margin:0;font-family:var(--display);color:var(--sky);font-size:1.4em}
+.seg2{display:grid;grid-template-columns:1fr 1fr;width:100%;background:var(--line);border-radius:14px;padding:4px}
+.seg2 button{border:0;background:none;border-radius:11px;padding:12px;font:600 1rem var(--body);color:var(--muted);cursor:pointer}
+.seg2 button.on{background:var(--card);color:var(--sky);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.lgnote{margin:0;color:var(--muted);font-size:.85em;text-align:center}
+.lgform{width:100%;display:flex;flex-direction:column;gap:14px}
+.lgform .fld[hidden]{display:none}
+.lgform select{font:400 1.05rem/1.6 var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
+#lgCode{letter-spacing:.4em;font-size:1.3rem}
+.lgbtn{width:100%;min-height:56px}
+.lgfine{color:var(--muted);font-size:.8em;margin:0}
+/* photos you can change */
+.ph.editable,.person.big.editable{cursor:pointer;position:relative}
+.cam{position:absolute;right:-2px;bottom:-2px;width:26px;height:26px;border-radius:50%;background:var(--card);border:1.5px solid var(--thaigold);display:grid;place-items:center;font-size:13px;line-height:1;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.ph.editable{overflow:visible}
+.person.big .cam{right:8px;bottom:8px;width:34px;height:34px;font-size:16px}
+.addimg{display:none!important}
+.dlgdel{margin-right:auto;border:0!important;background:none!important;color:#b3261e!important;font-weight:600}
+.dlgdel[hidden]{display:none}
+#lgCode::placeholder{letter-spacing:0;font-size:1rem}
+.login2{gap:10px;padding-block:24px 40px!important}
+.login2 h1{margin-bottom:6px}
+.lgnote{margin:4px 0 6px}
+.acct{padding:7px 14px;font-size:.78rem}

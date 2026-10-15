@@ -35,7 +35,12 @@ function handle_(req) {
   var a = req.action;
   if (a === 'checkTeam') return { ok: checkTeam_(req.teamCode) };
   if (a === 'propose') return propose_(req);
-  if (a === 'checkAdmin') { var ad = admin_(req.adminCode); return ad ? { ok: true, name: ad.name, isMain: ad.isMain } : { ok: false }; }
+  if (a === 'adminNames') return { ok: true, names: ['ผู้ดูแลหลัก'].concat(listAdmins_().map(function (x) { return x.name; })) };
+  if (a === 'checkAdmin') {
+    var ad = admin_(req.adminCode);
+    if (!ad || (req.name && req.name !== ad.name)) return { ok: false };
+    return { ok: true, name: ad.name, isMain: ad.isMain };
+  }
 
   var me = admin_(req.adminCode);
   if (!me) return { ok: false, error: 'not_admin' };
@@ -61,7 +66,7 @@ function setProp_(k, v) { PropertiesService.getScriptProperties().setProperty(k,
 function book_() {
   var id = prop_('SHEET_ID');
   if (id) return SpreadsheetApp.openById(id);
-  var ss = SpreadsheetApp.create('ข้อมูลทีมงาน คลังองค์ธรรมเพราะอวิชชาดับ');
+  var ss = SpreadsheetApp.create('ข้อมูลสมาชิก คลังองค์ธรรมเพราะอวิชชาดับ');
   setProp_('SHEET_ID', ss.getId());
   var p = ss.getSheets()[0];
   p.setName('ข้อเสนอ');
@@ -257,7 +262,7 @@ function setup() {
   var ss = book_();
   var site = readSite_();
   Logger.log('ตาราง: ' + ss.getUrl());
-  Logger.log('รหัสทีมงาน: ' + prop_('TEAM_CODE'));
+  Logger.log('รหัสสมาชิก: ' + prop_('TEAM_CODE'));
   Logger.log('อ่านข้อมูลเว็บได้: ' + site.data.rooms.length + ' ห้อง');
   if (!prop_('MAIN_ADMIN_CODE')) Logger.log('ยังไม่ได้ตั้ง MAIN_ADMIN_CODE');
 }
