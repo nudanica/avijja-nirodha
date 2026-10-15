@@ -482,3 +482,43 @@ html:not(.on-home) .acctwrap{display:none}
 .login2 h1{margin-bottom:6px}
 .lgnote{margin:4px 0 6px}
 .acct{padding:7px 14px;font-size:.78rem}
+.acctwrap{position:absolute!important}body{position:relative}
+/* หัวแบบ ๒: ภาพเป็นการ์ดมีกรอบทอง แยกจากชื่อเว็บ */
+.on-home .hero .bwrap{padding:58px 16px 0;background:var(--sky)}
+.on-home .hero .banner{border-radius:16px!important;border:2px solid var(--thaigold);box-shadow:0 8px 20px rgba(0,0,0,.3);box-sizing:border-box}
+.on-home .cap2{padding:26px 16px 6px}
+
+/* หน้าแรก: การ์ดหมวดเลื่อนซ้ายขวา มีเหรียญทองธรรมจักร / คัมภีร์ */
+svg.defs{position:absolute;width:0;height:0}
+.secs{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:16px;padding:16px 16px 10px;background:var(--sky);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.secs::-webkit-scrollbar{display:none}
+.sec4{flex:0 0 68%;max-width:320px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:4px;background:var(--card);color:var(--ink);border:2px solid var(--thaigold);border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.sec4 .med{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#2f6a3c,#173621);border:2px solid #d4a94f;display:grid;place-items:center;box-shadow:0 3px 8px rgba(0,0,0,.25),inset 0 0 0 3px rgba(247,227,168,.25);margin-bottom:6px}
+.sec4 .med svg{width:42px;height:42px}
+.sec4 b{font-family:var(--display);font-weight:700;font-size:1.05em;line-height:1.35}
+.sec4 small{color:var(--muted);font-size:.85em}
+.sec4.soon{opacity:.6}
+.sec4:active{transform:translateY(1px)}
+.secdots{display:flex;justify-content:center;gap:6px;background:var(--sky);padding:2px 0 18px}
+.secdots i{width:7px;height:7px;border-radius:4px;background:rgba(255,255,255,.35);transition:width .2s}
+.secdots i.on{width:18px;background:var(--thaigold)}
+@media (min-width:820px){.secs{padding-inline:28px;scroll-padding-inline:28px}}
+/* หน้าห้องเรียน: หัวสีเขียวกลางจอ + เลขห้องใหญ่สีทอง */
+.roomshead2{background:var(--sky);color:#fff;text-align:center;border-bottom:3px solid var(--thaigold)}
+.roomshead2 .col{padding-block:6px 22px}
+.roomshead2 .orn{display:block;width:26px;height:26px;margin:0 auto 8px;background:var(--thaigold);-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+.roomshead2 h1{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(22px,6vw,30px);line-height:1.35;text-wrap:balance}
+.roomshead2 p{margin:4px 0 0;color:#cfe0d2;font-size:.9em}
+#roomsv .step .st b{font-family:var(--display);font-weight:700}
+.on-rooms .bar{box-shadow:none}.on-rooms .bar::after{display:none}
+.sec4.soon{opacity:1}.sec4.soon .med,.sec4.soon b{opacity:.5}
+.sec4.soon small{display:inline-block;background:var(--petal);color:var(--gold);font-weight:600;border-radius:99px;padding:2px 10px;font-size:.78em}
+.roomshead2 .col{padding-block:0 22px}
+
+/* หน้าห้องเรียน: บันไดขั้นวิชชา เหรียญทองเลขห้อง ห้องถัดไปเยื้องขวาทีละขั้น */
+#roomsv .steps{gap:12px;flex-direction:column}
+#roomsv .step{margin-left:calc(var(--i,0) * 14px)!important;border:1.5px solid var(--thaigold);border-radius:16px;background:var(--card);padding:12px 14px;min-height:76px;box-shadow:0 4px 0 color-mix(in srgb,var(--thaigold) 22%,transparent),0 6px 14px rgba(0,0,0,.06)}
+#roomsv .sno{width:54px;height:54px;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3dfae,#b8914a);box-shadow:inset 0 0 0 2px rgba(255,255,255,.5),0 2px 6px rgba(0,0,0,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;color:#fff}
+#roomsv .sno::before{content:"ห้อง";font:600 .62em var(--body);letter-spacing:.04em;margin-bottom:2px}
+#roomsv .sno span{font-family:var(--display);font-weight:700;font-size:1.15em;color:#fff}
+#roomsv .sno span{font-family:var(--body);font-weight:600;font-size:1.3em;text-shadow:0 1px 2px rgba(110,78,20,.55)}#roomsv .sno::before{text-shadow:0 1px 2px rgba(110,78,20,.55)}

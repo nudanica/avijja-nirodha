@@ -349,6 +349,34 @@
     });
   }
 
+  var ICONS = {"wheel": "<svg viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"36.5\" fill=\"none\" stroke=\"url(#gg)\" stroke-width=\"7\"/><circle cx=\"86.5\" cy=\"50.0\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"85.3\" cy=\"59.4\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"81.6\" cy=\"68.2\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"75.8\" cy=\"75.8\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"68.2\" cy=\"81.6\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"59.4\" cy=\"85.3\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"50.0\" cy=\"86.5\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"40.6\" cy=\"85.3\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"31.8\" cy=\"81.6\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"24.2\" cy=\"75.8\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"18.4\" cy=\"68.2\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"14.7\" cy=\"59.4\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"13.5\" cy=\"50.0\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"14.7\" cy=\"40.6\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"18.4\" cy=\"31.8\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"24.2\" cy=\"24.2\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"31.7\" cy=\"18.4\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"40.6\" cy=\"14.7\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"50.0\" cy=\"13.5\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"59.4\" cy=\"14.7\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"68.2\" cy=\"18.4\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"75.8\" cy=\"24.2\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"81.6\" cy=\"31.7\" r=\"1.3\" fill=\"#fff8e6\"/><circle cx=\"85.3\" cy=\"40.6\" r=\"1.3\" fill=\"#fff8e6\"/><line x1=\"61.1\" y1=\"54.6\" x2=\"80.5\" y2=\"62.6\" stroke=\"url(#gg)\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><circle cx=\"90.7\" cy=\"66.8\" r=\"4.2\" fill=\"url(#gg)\"/><line x1=\"54.6\" y1=\"61.1\" x2=\"62.6\" y2=\"80.5\" stroke=\"url(#gg)\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><circle cx=\"66.8\" cy=\"90.7\" r=\"4.2\" fill=\"url(#gg)\"/><line x1=\"45.4\" y1=\"61.1\" x2=\"37.4\" y2=\"80.5\" stroke=\"url(#gg)\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><circle cx=\"33.2\" cy=\"90.7\" r=\"4.2\" fill=\"url(#gg)\"/><line x1=\"38.9\" y1=\"54.6\" x2=\"19.5\" y2=\"62.6\" stroke=\"url(#gg)\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><circle cx=\"9.3\" cy=\"66.8\" r=\"4.2\" fill=\"url(#gg)\"/><line x1=\"38.9\" y1=\"45.4\" x2=\"19.5\" y2=\"37.4\" stroke=\"url(#gg)\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><circle cx=\"9.3\" cy=\"33.2\" r=\"4.2\" fill=\"url(#gg)\"/><line x1=\"45.4\" y1=\"38.9\" x2=\"37.4\" y2=\"19.5\" stroke=\"url(#gg)\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><circle cx=\"33.2\" cy=\"9.3\" r=\"4.2\" fill=\"url(#gg)\"/><line x1=\"54.6\" y1=\"38.9\" x2=\"62.6\" y2=\"19.5\" stroke=\"url(#gg)\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><circle cx=\"66.8\" cy=\"9.3\" r=\"4.2\" fill=\"url(#gg)\"/><line x1=\"61.1\" y1=\"45.4\" x2=\"80.5\" y2=\"37.4\" stroke=\"url(#gg)\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><circle cx=\"90.7\" cy=\"33.2\" r=\"4.2\" fill=\"url(#gg)\"/><circle cx=\"50\" cy=\"50\" r=\"12\" fill=\"url(#gg)\"/><circle cx=\"50\" cy=\"50\" r=\"6\" fill=\"none\" stroke=\"#fff8e6\" stroke-width=\"1.5\"/></svg>", "book": "<svg viewBox=\"0 0 100 100\"><path d=\"M50 30C38 22 22 22 10 26v48c12-4 28-4 40 4z\" fill=\"#f3e6c4\" stroke=\"url(#gg)\" stroke-width=\"3\" stroke-linejoin=\"round\"/><path d=\"M50 30c12-8 28-8 40-4v48c-12-4-28-4-40 4z\" fill=\"#f3e6c4\" stroke=\"url(#gg)\" stroke-width=\"3\" stroke-linejoin=\"round\"/><path d=\"M50 30v48\" stroke=\"url(#gg)\" stroke-width=\"3\"/><path d=\"M18 38c8-2 18-2 26 2M18 48c8-2 18-2 26 2M18 58c8-2 18-2 26 2M56 40c8-4 18-4 26-2M56 50c8-4 18-4 26-2M56 60c8-4 18-4 26-2\" stroke=\"#b8914a\" stroke-width=\"1.6\" fill=\"none\" opacity=\".7\"/><path d=\"M48 78l2 12 2-12\" fill=\"url(#gp)\"/></svg>"};
+
+  // home sections as swipeable cards; site.json "sections" overrides the default list
+  function renderSections() {
+    var list = DATA.sections || [
+      { href: '#rooms', title: DATA.roomsHeading, sub: DATA.roomsSub || 'เลือกห้องตามระดับวิชชา', icon: 'wheel' },
+      { title: 'พระสูตร', sub: 'เร็ว ๆ นี้', icon: 'book', soon: true }
+    ];
+    var box = $('secs'), dots = $('secdots');
+    box.innerHTML = ''; dots.innerHTML = '';
+    list.forEach(function (s, i) {
+      var a = el(s.soon ? 'div' : 'a', 'sec4' + (s.soon ? ' soon' : ''));
+      if (!s.soon) a.href = s.href;
+      var m = el('span', 'med'); m.innerHTML = ICONS[s.icon] || ICONS.wheel; a.appendChild(m);
+      a.appendChild(el('b', null, s.title));
+      if (s.sub) a.appendChild(el('small', null, s.sub));
+      box.appendChild(a);
+      dots.appendChild(el('i', i ? null : 'on'));
+    });
+    dots.hidden = list.length < 2;
+    box.onscroll = function () {
+      var w = box.firstChild ? box.firstChild.offsetWidth + 12 : 1;
+      var k = Math.round(box.scrollLeft / w);
+      if (box.scrollLeft + box.clientWidth >= box.scrollWidth - 4) k = list.length - 1;
+      Array.prototype.forEach.call(dots.children, function (d, x) { d.className = x === k ? 'on' : ''; });
+    };
+  }
+
   // rooms as a staircase: first room at the bottom, each higher level one step up and in
   function renderRooms() {
     var box = $('rooms');
@@ -434,6 +462,7 @@
     $('back').hidden = v === 'home';
     document.documentElement.classList.toggle('on-read', v === 'readv');
     document.documentElement.classList.toggle('on-home', v === 'home');
+    document.documentElement.classList.toggle('on-rooms', v === 'roomsv');
     $('amenu').hidden = true;
     window.scrollTo(0, 0);
   }
@@ -444,7 +473,7 @@
   }
 
   function openRooms() {
-    $('brand').textContent = DATA.roomsHeading;
+    $('brand').textContent = '';
     renderRooms();
     show('roomsv');
   }
@@ -857,7 +886,8 @@
     if (d.heroLink) { $('heroLink').href = d.heroLink; $('heroLink').setAttribute('aria-label', 'ช่อง YouTube เพราะอวิชชาดับ'); } else { $('heroLink').removeAttribute('href'); }
     $('ratanaHeading').textContent = d.ratanaHeading;
     $('roomsHeading').textContent = d.roomsHeading;
-    $('roomsBtnLabel').textContent = d.roomsHeading;
+    $('roomsSub').textContent = d.roomsSub || 'เลือกห้องตามระดับวิชชา';
+    renderSections();
     if (ADMIN) setupAdmin();
     drawAccount();
     renderRatana();

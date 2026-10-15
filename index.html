@@ -12,9 +12,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=Sarabun:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=20261015q">
+<link rel="stylesheet" href="assets/style.css?v=20261015t">
 </head>
 <body>
+<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+<linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e3a8"/><stop offset=".5" stop-color="#d4a94f"/><stop offset="1" stop-color="#a87a2c"/></linearGradient>
+<linearGradient id="gp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd9e6"/><stop offset="1" stop-color="#d6457a"/></linearGradient>
+<linearGradient id="gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a2c2c"/><stop offset="1" stop-color="#5a1a1a"/></linearGradient>
+</defs></svg>
 <div class="shell">
 
 <div class="acctwrap" id="acctwrap">
@@ -43,8 +48,9 @@
         <input id="q" type="search" placeholder="พิมพ์คำที่ต้องการค้นหา" aria-label="ค้นหา">
         <button type="submit">ค้นหา</button>
       </form>
-      <a class="roomsbtn" href="#rooms"><span class="orn" aria-hidden="true"></span><span id="roomsBtnLabel"></span><span class="go" aria-hidden="true">›</span></a>
     </div>
+    <div class="secs" id="secs"></div>
+    <div class="secdots" id="secdots" aria-hidden="true"></div>
   </div></section>
   <main><div class="col pad">
     <section class="sec" id="results" hidden>
@@ -81,7 +87,7 @@
 </div>
 
 <div id="roomsv" class="view" hidden>
-  <h1 class="vh" id="roomsHeading"></h1>
+  <section class="roomshead2"><div class="col pad"><span class="orn" aria-hidden="true"></span><h1 id="roomsHeading"></h1><p id="roomsSub"></p></div></section>
   <main><div class="col pad"><section class="sec">
     <div class="steps" id="rooms"></div>
     <button class="addbtn" id="addRoom" type="button" hidden>+ เพิ่มห้อง</button>
@@ -145,6 +151,6 @@
 </dialog>
 <input type="file" id="picker" accept="image/*" hidden>
 
-<script src="assets/app.js?v=20261015q"></script>
+<script src="assets/app.js?v=20261015t"></script>
 </body>
 </html>
