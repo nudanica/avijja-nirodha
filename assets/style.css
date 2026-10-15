@@ -316,3 +316,6 @@ dialog h3{margin:0;font-family:var(--display);font-size:1.15em}
 .tnum{position:absolute!important;left:-15px!important;top:30px!important;width:30px;min-width:0!important;height:30px!important;padding:0!important;border-radius:50%!important;background:var(--card)!important;color:var(--gold)!important;border:2px solid var(--thaigold);box-shadow:none!important;font-size:.8em!important;font-weight:700;display:grid;place-items:center;z-index:2}
 .tree li::after{left:15px;width:11px}
 .tnum{width:auto!important;min-width:32px!important;padding:0 6px!important;border-radius:999px!important;left:-16px!important}
+
+/* reading page: show the note exactly as posted, no styling of individual lines */
+.reader .text{display:block!important;white-space:pre-wrap!important;word-break:break-word;color:var(--ink)}

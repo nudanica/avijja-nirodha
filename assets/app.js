@@ -401,7 +401,7 @@
     current = n; curRoom = ri; curNote = ni;
     $('brand').textContent = 'ห้องที่ ' + r.no;
     $('crumb').textContent = 'ห้องที่ ' + r.no + ' · ' + r.title;
-    renderText($('text'), n.text);
+    $('text').textContent = n.text;
     $('share').href = 'https://line.me/R/share?text=' + encodeURIComponent(n.text);
     $('toast').textContent = '';
     show('readv');
