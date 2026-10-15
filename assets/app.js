@@ -516,7 +516,7 @@
     var n = r && r.notes[ni];
     if (!n) return openRoom(ri);
     current = n; curRoom = ri; curNote = ni;
-    $('brand').textContent = 'ห้องที่ ' + r.no;
+    $('brand').textContent = '';
     $('crumb').textContent = 'ห้องที่ ' + r.no + ' · ' + r.title;
     showText($('text'), n.text);
     $('share').href = 'https://line.me/R/share?text=' + encodeURIComponent(n.text);

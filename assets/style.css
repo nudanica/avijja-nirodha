@@ -534,3 +534,37 @@ svg.defs{position:absolute;width:0;height:0}
 #roomv .note{align-items:center;gap:14px;border:1px solid var(--line);padding:14px 16px;box-shadow:0 3px 10px rgba(0,0,0,.05)}
 #roomv .note .nn{width:auto;height:auto;min-width:1.5em;border:0;border-radius:0;background:none;color:var(--thaigold);font:700 1.9em/1 var(--display);padding-right:12px;border-right:1.5px solid color-mix(in srgb,var(--thaigold) 60%,transparent);place-items:center}
 #roomv .note b{flex:1;color:var(--ink);font-weight:600;font-size:1.02em}
+
+/* หน้าอ่าน: ไม่แสดงชื่อห้องด้านบน เนื้อหาเข้มและชัดขึ้น (ตัวอักษรตามต้นฉบับ ไม่เพิ่มสี) */
+:root{--readink:#0f1a13}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--readink:#f4f8f4}}
+:root[data-theme="dark"]{--readink:#f4f8f4}
+.reader .crumb:empty{display:none}
+.reader .col{padding-top:16px}
+.reader .text .body{font-weight:500;font-size:1.08em;line-height:1.9;color:var(--readink)}
+.reader .text .ttl{color:var(--readink)}
+
+/* หน้าอ่าน: รายละเอียดห้องด้านบน, ปุ่มขนาดตัวอักษรใต้ชื่อห้อง, ปุ่มไอคอนแถวเดียวด้านล่าง */
+.reader .crumb{display:block;font-size:.88em;font-weight:600;color:var(--muted);margin-bottom:8px}
+.sz2{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.sz2 span{flex:1;color:var(--muted);font-size:.88em}
+.sz2 button{min-width:56px;min-height:44px;border-radius:12px;border:1.5px solid var(--thaigold);background:var(--card);color:var(--ink);font:700 1em var(--body);cursor:pointer}
+.sz2 button:active{transform:translateY(1px)}
+.reader .actions .col{grid-template-columns:repeat(3,1fr);gap:8px}
+.reader .actions .propose{grid-column:auto}
+.btn.ib{flex-direction:column;gap:4px;min-height:64px;font-size:.85em;padding:6px 4px;text-align:center;line-height:1.2}
+.btn.ib svg{width:24px;height:24px;flex:none}
+.reader .actions .propose.ib{min-height:64px;border-width:1.5px}
+.reader .actions .toast{grid-column:1/-1}.reader .actions .col:has(#propose[hidden]){grid-template-columns:1fr 1fr}
+.btn.ib span{white-space:nowrap;font-size:.95em}.reader .actions .col{gap:6px}
+/* แถบบนของหน้าใน: เส้นทองเรียบ จางที่ปลาย (แทนลายฟันปลา) */
+.bar{box-shadow:none}
+.bar::after{display:block;bottom:-3px;height:3px;opacity:1;background:linear-gradient(90deg,transparent,var(--thaigold) 22%,#e3c27e 50%,var(--thaigold) 78%,transparent)}
+.on-rooms .bar::after{display:none}
+.reader .col{padding-top:22px}
+/* หน้าอ่าน: แถบปุ่มด้านล่างเตี้ยลง ให้เนื้อหายาวลงมามากขึ้น */
+.reader .actions{margin-top:20px;padding-block:6px calc(6px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--paper) 94%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.btn.ib{flex-direction:row;gap:6px;min-height:46px;padding:4px 6px}
+.btn.ib svg{width:20px;height:20px}
+.reader .actions .propose.ib{min-height:46px}
+.reader .actions .toast:empty{display:none}.reader .actions .col{grid-template-columns:1fr 1.05fr 1.45fr}
