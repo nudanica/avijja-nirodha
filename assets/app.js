@@ -897,11 +897,39 @@
   }
 
 
+  // ---------- keep the page fresh without a refresh button (LINE's browser has none) ----------
+  var LAST_DATA = '';
+  var MY_VER = (document.querySelector('script[src*="app.js"]').getAttribute('src').match(/v=([^&]+)/) || [])[1] || '';
+  function busy() { return $('dlg').open || document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName); }
+  function checkUpdates() {
+    if (document.hidden || busy()) return;
+    // new look (index.html / css / js uploaded): reload once with a fresh address so no cached copy is used
+    fetch('index.html?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (h) {
+      var m = h.match(/app\.js\?v=([^"&]+)/);
+      if (m && MY_VER && m[1] !== MY_VER && !busy()) location.replace(location.pathname + '?v=' + m[1] + location.hash);
+    }).catch(function () {});
+    // new content: admins already work from the backend copy
+    if (ADMIN) return;
+    fetch(DATA_PATH + '?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (t) {
+      if (!t || t === LAST_DATA || busy()) return;
+      var d = JSON.parse(t);
+      LAST_DATA = t; DATA = d;
+      var y = window.scrollY;
+      renderSections(); renderRatana(); renderRooms(); route();
+      window.scrollTo(0, y);
+    }).catch(function () {});
+  }
+  function startAutoUpdate() {
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) checkUpdates(); });
+    window.addEventListener('pageshow', function (e) { if (e.persisted) checkUpdates(); });
+    setInterval(checkUpdates, 60000);
+  }
+
   // ---------- load ----------
   // config.json holds the backend address; it is kept apart from the content so saving content never touches it
   fetch('config.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }).then(function (cfg) {
     API = cfg.apiUrl || '';
-    return fetch(DATA_PATH, { cache: 'no-cache' }).then(function (r) { return r.json(); });
+    return fetch(DATA_PATH + '?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (t) { LAST_DATA = t; return JSON.parse(t); });
   }).then(function (d) {
     if (!API) { $('propose').hidden = true; $('acctwrap').hidden = true; }
     // admins work on the newest copy straight from the backend
@@ -923,6 +951,7 @@
     renderRooms();
     window.addEventListener('hashchange', route);
     route();
+    startAutoUpdate();
   }).catch(function () {
     document.body.insertAdjacentHTML('beforeend', '<p style="padding:24px;text-align:center">โหลดข้อมูลไม่สำเร็จ กรุณาลองเปิดใหม่อีกครั้ง</p>');
   });
