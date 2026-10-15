@@ -111,12 +111,12 @@ main .col{display:flex;flex-direction:column;gap:36px;padding-block:28px 56px}
 .ph{position:relative;overflow:hidden;background-image:var(--lotusimg);background-size:86% auto;background-repeat:no-repeat;background-position:center!important}
 .ph.has{background-size:cover!important}
 .ph:not(.has){background-color:#fff!important}
-.addimg{display:none;inset:auto!important;left:50%!important;bottom:4%!important;transform:translateX(-50%);width:18px;height:18px;border-radius:50%!important;background:rgba(255,255,255,.7)!important;color:var(--thaigold)!important;font-size:14px!important;opacity:.45}
+.addimg{inset:auto!important;left:50%!important;bottom:4%!important;transform:translateX(-50%);width:18px;height:18px;border-radius:50%!important;background:rgba(255,255,255,.7)!important;color:var(--thaigold)!important;font-size:14px!important;opacity:.45}
 .addimg:hover,.addimg:focus-visible{opacity:1}
-.big .addimg{display:none;width:22px;height:22px;font-size:16px!important}
-.addimg{display:none;position:absolute;inset:0;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--gold);font-size:1.6em;font-weight:400;line-height:1}
-.big .addimg{display:none;font-size:2.2em}
-.ph.has .addimg{display:none;opacity:.3}
+.big .addimg{width:22px;height:22px;font-size:16px!important}
+.addimg{position:absolute;inset:0;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--gold);font-size:1.6em;font-weight:400;line-height:1}
+.big .addimg{font-size:2.2em}
+.ph.has .addimg{opacity:.3}
 .addimg:focus-visible{outline:3px solid var(--gold);outline-offset:-3px;border-radius:50%}
 .aclist{list-style:none;margin:0;padding:0;width:100%;display:flex;flex-direction:column;gap:10px;text-align:left}
 .ac{display:flex;align-items:center;gap:14px;padding:10px 4px;border-top:1px solid var(--line)}
@@ -180,3 +180,139 @@ main .col{display:flex;flex-direction:column;gap:36px;padding-block:28px 56px}
 @keyframes fade{from{opacity:.4}to{opacity:1}}
 
 a.room,a.note{text-decoration:none}
+
+/* ---------- rooms button under search ---------- */
+.roomsbtn{display:flex;align-items:center;gap:12px;margin-top:12px;background:var(--card);color:var(--ink);border:2px solid var(--thaigold);border-radius:16px;min-height:64px;padding:0 18px;text-decoration:none;font-weight:600;font-size:1.02em;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.roomsbtn .orn{color:var(--gold);font-size:1.2em;flex:none}
+.roomsbtn span:nth-child(2){flex:1;text-align:left}
+.roomsbtn .go{color:var(--gold);font-size:1.5em;flex:none}
+.roomsbtn:active{transform:translateY(1px)}
+#roomsv .roomhead h1{font-size:1.35em}
+
+/* ---------- admin ---------- */
+.adminbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--gold);color:#fff;font-size:.78em;font-weight:600;padding-block:6px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.adminbar .astatus{flex:1;min-width:0;font-weight:500}
+.adminbar button{background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;font:inherit;cursor:pointer}
+.astatus.err{color:#fff3a6}
+.addbtn{width:100%;min-height:56px;border:2px dashed var(--thaigold);background:transparent;color:var(--gold);border-radius:16px;font:600 .95em var(--body);cursor:pointer;margin-top:4px}
+.addbtn.small{width:auto;min-height:40px;padding:0 16px;font-size:.8em;border-radius:12px}
+.editlink{align-self:flex-start;background:transparent;border:1px solid rgba(255,255,255,.6);color:inherit;border-radius:10px;padding:4px 12px;font:500 .8em var(--body);cursor:pointer;margin-top:6px}
+.editlink.small{border-color:var(--line);color:var(--muted);font-size:.68em;padding:2px 10px;margin-top:4px}
+.person .editlink.small{align-self:center}
+.noteadmin{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.noteadmin button{min-height:48px;padding:0 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:600 .85em var(--body);cursor:pointer}
+.noteadmin .danger{color:#b3261e;border-color:#e8b4b0}
+dialog{border:0;border-radius:20px;padding:0;width:min(560px,calc(100vw - 24px));max-height:calc(100vh - 48px);background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(20,30,22,.5)}
+dialog form{display:flex;flex-direction:column;gap:14px;padding:20px}
+dialog h3{margin:0;font-family:var(--display);font-size:1.15em}
+.fld{display:flex;flex-direction:column;gap:6px;font-size:.85em;color:var(--muted)}
+.fld input,.fld textarea{font:400 1.05rem/1.6 var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
+.fld textarea{min-height:40vh;resize:vertical}
+.dlgbtns{display:flex;gap:10px;justify-content:flex-end}
+.dlgbtns button{min-height:50px;padding:0 22px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:600 .95em var(--body);cursor:pointer}
+.dlgbtns .primary{background:var(--sky);border-color:var(--sky);color:#fff}
+.login{display:flex;flex-direction:column;gap:16px;padding-block:28px 48px}
+.login form{display:flex;flex-direction:column;gap:14px}
+.login .msg{color:var(--gold);font-weight:600;min-height:1.5em}
+
+/* ---------- wide screens: the site sits on a Thai-pattern backdrop like a page ---------- */
+:root{--backdrop:#e6eee3}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--backdrop:#0b100c}}
+:root[data-theme="dark"]{--backdrop:#0b100c}
+@media (min-width:820px){
+  html{background:var(--backdrop) url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cpath%20d%3D%22M32%200L64%2032L32%2064L0%2032Z%22%20fill%3D%22none%22%20stroke%3D%22%23b8914a%22%20stroke-width%3D%22.7%22%20opacity%3D%22.35%22/%3E%3Cg%20fill%3D%22%23b8914a%22%20opacity%3D%22.3%22%3E%3Cg%20transform%3D%22translate%2832%2032%29%20scale%280.8%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%280%200%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2864%200%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%280%2064%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2864%2064%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") center/64px 64px}
+  body{background:transparent}
+  .shell{max-width:760px;margin:32px auto;background:var(--paper);border-radius:28px;overflow:clip;box-shadow:0 0 0 1.5px color-mix(in srgb,var(--thaigold) 45%,transparent),0 24px 60px rgba(30,50,30,.18)}
+  .bar{top:0}
+  .bar::after{display:none}
+  .banner{border-radius:0!important}
+  .hero .col{max-width:none}
+  .hero .inner{max-width:680px;margin-inline:auto;width:100%}
+  .hero .inner{padding-inline:28px!important}
+  main .col{padding-inline:32px!important}
+  .actions{position:sticky;bottom:0}
+  .tier{gap:22px}
+}
+@media (min-width:820px){ .ac .ph{width:72px;height:72px} }
+
+/* ---------- reading page: styled lines (text unchanged) ---------- */
+.reader .text{white-space:normal;line-height:1.85;display:flex;flex-direction:column;gap:2px;background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:22px 20px 26px}
+.reader .ln{white-space:pre-wrap;word-break:break-word}
+.reader .ln.gap{margin-top:.85em}
+.reader .ln.title{font-family:var(--display);font-weight:700;font-size:1.28em;line-height:1.55;color:var(--sky);text-wrap:balance;padding-bottom:14px;margin-bottom:6px;border-bottom:1.5px solid color-mix(in srgb,var(--thaigold) 50%,transparent)}
+.reader .ln.subtitle{align-self:flex-start;background:var(--petal);color:var(--gold);font-weight:600;border-radius:999px;padding:4px 16px;margin-top:.9em}
+.reader .pno{display:inline-block;color:var(--gold);font-weight:600;margin-right:2px}
+.reader .ln.ref{margin-top:1.4em;padding:12px 14px;border-radius:12px;background:var(--paper);border-left:4px solid var(--thaigold);color:var(--muted);font-size:.88em}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .reader .ln.title{color:#cfe8d3}}
+:root[data-theme="dark"] .reader .ln.title{color:#cfe8d3}
+
+/* ---------- search results ---------- */
+:root{--hl:#ffe08a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hl:#7a5a12}}
+:root[data-theme="dark"]{--hl:#7a5a12}
+.rsum{margin:-6px 0 0;color:var(--muted);font-size:.88em}
+.res{display:flex;flex-direction:column;gap:6px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;color:inherit;text-decoration:none}
+.res:hover{border-color:var(--thaigold)}
+.res .rhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.res .rb{background:var(--petal);color:var(--gold);font-weight:600;font-size:.78em;padding:2px 12px;border-radius:999px}
+.res .cnt{color:var(--muted);font-size:.78em}
+.res .rt{font-weight:600;line-height:1.5}
+.res .rroom{color:var(--muted);font-size:.78em}
+.res .sn{color:var(--muted);font-size:.88em;line-height:1.6}
+.res mark{background:var(--hl);color:inherit;border-radius:4px;padding:0 2px}
+
+/* ratana circles with role + name */
+.tier{align-items:flex-start}
+.tier .person{width:clamp(96px,28vw,150px)}
+.person .role{font-weight:600;font-size:.8em;color:var(--gold);line-height:1.4}
+.person .role+.nm{font-weight:500;font-size:.72em;line-height:1.45;color:var(--ink)}
+.tier{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important;width:100%}
+.tier .person{width:auto}
+.tier .ph{width:72px;height:72px}
+.person .nm{word-break:normal;overflow-wrap:normal;line-break:strict}
+@media (min-width:820px){.tier .ph{width:88px;height:88px}}
+.nm .w{white-space:nowrap}
+
+/* ---------- rooms staircase (บันไดขั้นวิชชา) ---------- */
+.steps{display:flex;flex-direction:column-reverse;gap:10px;position:relative;padding-left:6px}
+.steps::before{content:"";position:absolute;left:28px;top:20px;bottom:20px;width:2px;background:linear-gradient(var(--thaigold),color-mix(in srgb,var(--thaigold) 30%,transparent))}
+.step{position:relative;display:flex;align-items:center;gap:14px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;min-height:76px;color:inherit;text-decoration:none;margin-left:calc(var(--i,0) * 12px)}
+.step:hover{border-color:var(--thaigold)}
+.sno{flex:none;width:48px;height:48px;border-radius:50%;border:2px solid var(--thaigold);background:var(--petal);display:grid;place-items:center;font-weight:700;color:var(--gold);box-shadow:0 0 0 4px var(--card)}
+.step .st{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.45}
+.step .st b{font-weight:600}
+.step .st small{color:var(--muted);font-size:.8em}
+.step .arrow{flex:none;color:var(--thaigold);font-size:1.4em}
+#roomsSec{margin-top:-8px}
+
+/* ---------- lineage tree (รัตนะที่ ๓) ---------- */
+.lineage{width:100%;text-align:left}
+.troot{display:flex;align-items:center;gap:12px;background:var(--petal);border:1.5px solid var(--thaigold);border-radius:16px;padding:10px 12px}
+.troot .ph{flex:none;width:56px;height:56px;border-radius:50%}
+.tree{list-style:none;margin:0;padding:0 0 0 22px;position:relative}
+.tree li{position:relative;padding:8px 0 0 20px}
+.tree li::before{content:"";position:absolute;left:0;top:0;bottom:0;border-left:2px solid var(--thaigold)}
+.tree li:last-child::before{bottom:auto;height:44px}
+.tree li::after{content:"";position:absolute;left:0;top:44px;width:16px;border-top:2px solid var(--thaigold)}
+.tree .ac{border:1.5px solid var(--line);border-radius:14px;padding:8px 10px;background:var(--card);border-top:1.5px solid var(--line)!important}
+.tree .ac .ph{width:56px;height:56px}
+.tree.sub{padding-left:26px}
+.tree.sub .ac{background:color-mix(in srgb,var(--petal) 45%,var(--card))}
+.acx b .w,.troot b .w{white-space:nowrap}
+.acx .b{font-weight:600;color:var(--ink);line-height:1.45}
+.acx .b .w{white-space:nowrap}
+
+/* numbers in the lineage tree: รัตนะ.ลำดับในชั้นนี้ */
+.tree .ac{position:relative}
+.tnum{flex:none;min-width:44px;height:30px;padding:0 8px;border-radius:999px;background:var(--gold);color:#fff;font-weight:700;font-size:.82em;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.ordnote{font-size:.72em!important;color:var(--muted)!important;opacity:.85}
+.tree .ac{overflow:visible;margin-top:6px}
+.tnum{position:absolute;top:-10px;left:-10px;min-width:40px;height:26px;font-size:.74em;box-shadow:0 0 0 3px var(--card);z-index:1}
+
+/* number sits on the gold line, in front of each card */
+.tree{padding-left:30px}
+.tree li{padding-left:26px}
+.tnum{position:absolute!important;left:-15px!important;top:30px!important;width:30px;min-width:0!important;height:30px!important;padding:0!important;border-radius:50%!important;background:var(--card)!important;color:var(--gold)!important;border:2px solid var(--thaigold);box-shadow:none!important;font-size:.8em!important;font-weight:700;display:grid;place-items:center;z-index:2}
+.tree li::after{left:15px;width:11px}
+.tnum{width:auto!important;min-width:32px!important;padding:0 6px!important;border-radius:999px!important;left:-16px!important}

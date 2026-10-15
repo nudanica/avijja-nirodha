@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>เข้าสู่ระบบผู้ดูแล</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="shell">
+<header class="bar"><div class="col pad"><span class="brand">เข้าสู่ระบบผู้ดูแล</span></div></header>
+<main><div class="col pad login">
+  <p>ใส่รหัสผู้ดูแล (GitHub token) ครั้งเดียว เครื่องนี้จะจำไว้ ครั้งต่อไปเปิดเว็บแล้วแก้ไขได้ทันที</p>
+  <form id="f">
+    <label class="fld"><span>รหัสผู้ดูแล</span>
+      <input id="tok" type="password" autocomplete="off" placeholder="github_pat_…" required>
+    </label>
+    <button class="btn copy" type="submit">เข้าสู่ระบบ</button>
+  </form>
+  <p class="msg" id="msg" aria-live="polite"></p>
+  <p><a href="./">‹ กลับหน้าเว็บ</a></p>
+</div></main>
+</div>
+<script>
+(function () {
+  var owner = location.hostname.split('.')[0];
+  var repo = location.pathname.split('/').filter(Boolean)[0] || '';
+  var msg = document.getElementById('msg');
+  document.getElementById('f').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var t = document.getElementById('tok').value.trim();
+    msg.textContent = 'กำลังตรวจสอบ…';
+    fetch('https://api.github.com/repos/' + owner + '/' + repo, {
+      headers: { 'Authorization': 'Bearer ' + t, 'Accept': 'application/vnd.github+json' }
+    }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (j && j.permissions && j.permissions.push) {
+        try { localStorage.setItem('gh_token', t); } catch (err) {}
+        msg.textContent = 'สำเร็จ กำลังเข้าสู่หน้าเว็บ…';
+        location.href = './';
+      } else {
+        msg.textContent = 'รหัสนี้ใช้แก้ไขเว็บนี้ไม่ได้ กรุณาตรวจสอบอีกครั้ง';
+      }
+    }).catch(function () { msg.textContent = 'เชื่อมต่อไม่สำเร็จ ลองอีกครั้ง'; });
+  });
+})();
+</script>
+</body>
+</html>

@@ -15,6 +15,13 @@
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+<div class="shell">
+
+<div class="adminbar" id="adminbar" hidden>
+  <span>โหมดผู้ดูแล</span>
+  <span class="astatus" id="astatus" aria-live="polite"></span>
+  <button type="button" id="logout">ออกจากระบบ</button>
+</div>
 
 <header class="bar"><div class="col pad">
   <button class="back" id="back" type="button" hidden>‹ กลับ</button>
@@ -24,47 +31,61 @@
 
 <div id="home" class="view">
   <section class="hero"><div class="col pad">
-    <div class="bwrap"><img class="banner" id="heroImg" src="" alt=""></div>
+    <div class="bwrap"><a id="heroLink" href="#" target="_blank" rel="noopener"><img class="banner" id="heroImg" src="" alt=""></a></div>
     <div class="inner">
       <h1 class="vh" id="h1"></h1>
       <form class="search" id="sform" role="search">
         <input id="q" type="search" placeholder="พิมพ์คำที่ต้องการค้นหา" aria-label="ค้นหา">
         <button type="submit">ค้นหา</button>
       </form>
+      <a class="roomsbtn" href="#rooms"><span class="orn" aria-hidden="true"></span><span id="roomsBtnLabel"></span><span class="go" aria-hidden="true">›</span></a>
     </div>
   </div></section>
   <main><div class="col pad">
+    <section class="sec" id="results" hidden>
+      <h2>ผลการค้นหา</h2>
+      <p class="rsum" id="rsum"></p>
+      <div class="notes" id="rlist"></div>
+    </section>
     <section class="sec">
       <h2 id="ratanaHeading"></h2>
       <div class="ratana" id="ratana"></div>
     </section>
-    <section class="sec" id="results" hidden>
-      <h2>ผลการค้นหา</h2>
-      <div class="notes" id="rlist"></div>
-    </section>
-    <section class="sec">
-      <h2 id="roomsHeading"></h2>
-      <div class="rooms" id="rooms"></div>
-    </section>
     <div class="foot" aria-hidden="true"><span class="orn"></span><span class="orn" style="font-size:1.4em"></span><span class="orn"></span></div>
   </div></main>
+</div>
+
+<div id="roomsv" class="view" hidden>
+  <section class="roomhead"><div class="col pad">
+    <h1 id="roomsHeading"></h1>
+  </div></section>
+  <main><div class="col pad"><section class="sec">
+    <div class="steps" id="rooms"></div>
+    <button class="addbtn" id="addRoom" type="button" hidden>+ เพิ่มห้อง</button>
+  </section></div></main>
 </div>
 
 <div id="roomv" class="view" hidden>
   <section class="roomhead"><div class="col pad">
     <span class="k" id="rk"></span>
     <h1 id="rh"></h1>
+    <button class="editlink" id="editRoom" type="button" hidden>แก้ชื่อห้อง</button>
   </div></section>
   <main><div class="col pad"><section class="sec">
     <h2 id="rc"></h2>
     <div class="notes" id="nlist"></div>
+    <button class="addbtn" id="addNote" type="button" hidden>+ เพิ่มเรื่อง</button>
   </section></div></main>
 </div>
 
 <div id="readv" class="view reader" hidden>
   <div class="col pad">
     <div class="crumb" id="crumb"></div>
-    <p class="text" id="text"></p>
+    <article class="text" id="text"></article>
+    <div class="noteadmin" id="noteAdmin" hidden>
+      <button type="button" id="editNote">แก้ไขเรื่องนี้</button>
+      <button type="button" id="delNote" class="danger">ลบเรื่องนี้</button>
+    </div>
   </div>
   <div class="actions"><div class="col pad">
     <button class="btn copy" id="copy" type="button">คัดลอก</button>
@@ -72,6 +93,20 @@
     <div class="toast" id="toast" aria-live="polite"></div>
   </div></div>
 </div>
+
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" id="dlgForm">
+    <h3 id="dlgTitle"></h3>
+    <div id="dlgFields"></div>
+    <div class="dlgbtns">
+      <button type="button" id="dlgCancel">ยกเลิก</button>
+      <button type="submit" id="dlgOk" class="primary">บันทึก</button>
+    </div>
+  </form>
+</dialog>
+<input type="file" id="picker" accept="image/*" hidden>
 
 <script src="assets/app.js"></script>
 </body>
