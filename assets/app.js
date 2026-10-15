@@ -497,7 +497,7 @@
   }
   function getPerson(ri, pi) { var r = DATA.ratana[ri]; return r && r.people && r.people[pi]; }
   function sortedRecords(p) {
-    return (p.records || []).map(function (x, k) { return { x: x, k: k }; }).sort(function (a, b) { return (a.x.date || '') < (b.x.date || '') ? -1 : (a.x.date || '') > (b.x.date || '') ? 1 : a.k - b.k; });
+    return (p.records || []).map(function (x, k) { return { x: x, k: k }; }).sort(function (a, b) { return (a.x.date || '') > (b.x.date || '') ? -1 : (a.x.date || '') < (b.x.date || '') ? 1 : b.k - a.k; });
   }
   function openPerson(ri, pi) {
     var p = getPerson(ri, pi);
