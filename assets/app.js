@@ -932,8 +932,16 @@
     return fetch(DATA_PATH + '?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (t) { LAST_DATA = t; return JSON.parse(t); });
   }).then(function (d) {
     if (!API) { $('propose').hidden = true; $('acctwrap').hidden = true; }
-    // admins work on the newest copy straight from the backend
-    if (ADMIN && API) return call('getData', { adminCode: ADMIN_CODE }).then(function (g) { return g.data; }, function () { return d; });
+    // show the published copy straight away; admins get the backend copy in the background
+    if (ADMIN && API) {
+      call('getData', { adminCode: ADMIN_CODE }).then(function (g) {
+        if (!g || !g.data || busy()) return;
+        DATA = g.data;
+        var y = window.scrollY;
+        renderSections(); renderRatana(); renderRooms(); route();
+        window.scrollTo(0, y);
+      }).catch(function () {});
+    }
     return d;
   }).then(function (d) {
     DATA = d;
