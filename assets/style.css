@@ -331,3 +331,34 @@ dialog h3{margin:0;font-family:var(--display);font-size:1.15em}
 .tree li:last-child{padding-bottom:2px}
 .acx{gap:2px}
 .acx .ordnote{line-height:1.5;margin-top:2px}
+
+/* ---------- team proposals & admin review ---------- */
+.actions .propose{grid-column:1/-1;background:var(--card);color:var(--ink);border:2px solid var(--thaigold);min-height:52px}
+.footlinks{text-align:center;margin:0}
+.footlinks button{background:none;border:0;color:var(--muted);font:500 .8em var(--body);text-decoration:underline;padding:10px 16px;cursor:pointer}
+.adminbar #adminWho{font-weight:600}
+.adminbar .astatus{flex-basis:100%;order:9}
+.fld select{font:400 1rem/1.5 var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
+.fld .hint{color:var(--muted)}
+.fld .pinin{font-size:1.6rem!important;letter-spacing:.5em;text-align:center;font-weight:700}
+.dlgerr{margin:0;min-height:1.4em;color:var(--gold);font-weight:600;font-size:.88em}
+.pend{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.phd{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.chip{background:var(--petal);color:var(--gold);font-weight:600;font-size:.75em;padding:2px 10px;border-radius:999px}
+.chip.y{background:#fff3cf;color:#8a6300}
+.who{color:var(--muted);font-size:.8em}
+.ptext{white-space:pre-wrap;word-break:break-word;max-height:14em;overflow:auto;background:var(--paper);border-radius:10px;padding:10px 12px;font-size:.9em}
+.pbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pbtn{min-height:50px;border-radius:12px;border:0;font:600 .95em var(--body);cursor:pointer}
+.pbtn.no{background:var(--line);color:var(--ink)}
+.pbtn.yes{background:var(--sky);color:#fff}
+.pbtn.small{min-height:40px;padding:0 14px;font-size:.82em;flex:none}
+.pbtn:disabled{opacity:.5}
+.sh3{font-size:.95em;margin:8px 0 0;color:var(--muted)}
+.arow{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+.an{width:28px;height:28px;border-radius:50%;border:2px solid var(--thaigold);display:grid;place-items:center;font-size:.78em;font-weight:700;color:var(--gold);flex:none}
+.aname{flex:1;min-width:0;font-weight:600}
+.acode{color:var(--ink);letter-spacing:.12em;font-variant-numeric:tabular-nums;user-select:all}
+.acode.big2{flex:1;font-size:1.3em;font-weight:700}
+.ax{background:none;border:0;color:#b3261e;font:600 .85em var(--body);cursor:pointer;padding:6px}
+.note{margin:0;color:var(--muted);font-size:.85em}

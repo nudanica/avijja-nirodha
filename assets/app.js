@@ -17,44 +17,26 @@
   var current = null;
   var curRoom = -1, curNote = -1;
 
-  // ---------- GitHub (admin) ----------
-  // owner/repo come from the address: <owner>.github.io/<repo>/
-  var GH = (function () {
-    var owner = location.hostname.split('.')[0];
-    var repo = location.pathname.split('/').filter(Boolean)[0] || '';
-    return { owner: owner, repo: repo, branch: 'main', token: store('gh_token') || '' };
-  })();
-  var ADMIN = !!GH.token;
+  // ---------- backend (Google Apps Script) ----------
+  // The address of the backend lives in config.json as "apiUrl".
+  var API = '';
+  var ADMIN_CODE = store('admin_code') || '';
+  var ADMIN = !!ADMIN_CODE;
+  var IS_MAIN = store('admin_main') === '1';
+  var ADMIN_NAME = store('admin_name') || '';
   var DATA_PATH = 'data/site.json';
 
-  function api(path, opts) {
-    opts = opts || {};
-    opts.headers = {
-      'Authorization': 'Bearer ' + GH.token,
-      'Accept': 'application/vnd.github+json'
-    };
-    return fetch('https://api.github.com/repos/' + GH.owner + '/' + GH.repo + path, opts).then(function (r) {
-      if (r.status === 401) { throw new Error('auth'); }
-      if (!r.ok && r.status !== 404) { return r.text().then(function (t) { throw new Error(r.status + ' ' + t); }); }
-      return r.status === 404 ? null : r.json();
-    });
-  }
-  function b64FromText(str) {
-    var bytes = new TextEncoder().encode(str), bin = '';
-    for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
-    return btoa(bin);
-  }
-  function textFromB64(b64) {
-    var bin = atob(b64.replace(/\n/g, '')), bytes = new Uint8Array(bin.length);
-    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    return new TextDecoder().decode(bytes);
-  }
-  function putFile(path, b64, message) {
-    return api('/contents/' + path + '?ref=' + GH.branch).then(function (cur) {
-      var body = { message: message, content: b64, branch: GH.branch };
-      if (cur && cur.sha) body.sha = cur.sha;
-      return api('/contents/' + path, { method: 'PUT', body: JSON.stringify(body) });
-    });
+  function call(action, body) {
+    body = body || {};
+    body.action = action;
+    if (!API) return Promise.reject(new Error('no_api'));
+    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j.error === 'not_admin') { store('admin_code', null); store('admin_main', null); }
+        if (!j.ok) throw new Error(j.error || 'failed');
+        return j;
+      });
   }
   function status(msg, kind) {
     var s = $('astatus');
@@ -63,10 +45,10 @@
   }
   function saveData(message) {
     status('กำลังบันทึก…', 'busy');
-    return putFile(DATA_PATH, b64FromText(JSON.stringify(DATA, null, 1)), message)
+    return call('saveData', { adminCode: ADMIN_CODE, data: DATA, message: message })
       .then(function () { status('บันทึกแล้ว เว็บจะอัปเดตภายใน ๑–๒ นาที', 'ok'); })
       .catch(function (e) {
-        status(e.message === 'auth' ? 'รหัสผู้ดูแลหมดอายุ กรุณาเข้าสู่ระบบใหม่' : 'บันทึกไม่สำเร็จ ลองกดอีกครั้ง', 'err');
+        status(e.message === 'not_admin' ? 'รหัสแอดมินใช้ไม่ได้แล้ว กรุณาเข้าใหม่' : 'บันทึกไม่สำเร็จ ลองกดอีกครั้ง', 'err');
         throw e;
       });
   }
@@ -84,11 +66,10 @@
         var c = document.createElement('canvas');
         c.width = Math.round(w * k); c.height = Math.round(h * k);
         c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        var b64 = c.toDataURL('image/jpeg', 0.85).split(',')[1];
-        var path = 'images/people/' + Date.now() + '.jpg';
+        var url = c.toDataURL('image/jpeg', 0.85);
         status('กำลังอัปโหลดรูป…', 'busy');
-        putFile(path, b64, 'เพิ่มรูป').then(function () {
-          onDone(path, c.toDataURL('image/jpeg', 0.85));
+        call('uploadImage', { adminCode: ADMIN_CODE, b64: url.split(',')[1] }).then(function (j) {
+          onDone(j.path, url);
         }).catch(function () { status('อัปโหลดรูปไม่สำเร็จ ลองอีกครั้ง', 'err'); });
       };
       img.src = URL.createObjectURL(f);
@@ -96,28 +77,38 @@
     p.click();
   }
 
-  // simple form dialog
-  function ask(title, fields, onOk) {
+  // simple form dialog. field kinds: text (default), multiline, select (options), pin (n digits)
+  function ask(title, fields, onOk, okLabel) {
     $('dlgTitle').textContent = title;
+    $('dlgOk').textContent = okLabel || 'บันทึก';
     var box = $('dlgFields');
     box.innerHTML = '';
     fields.forEach(function (f, i) {
       var lab = el('label', 'fld');
       lab.appendChild(el('span', null, f.label));
-      var inp = el(f.multiline ? 'textarea' : 'input');
+      var inp;
+      if (f.options) {
+        inp = el('select');
+        f.options.forEach(function (o) { var op = el('option', null, o.label); op.value = o.value; inp.appendChild(op); });
+      } else {
+        inp = el(f.multiline ? 'textarea' : 'input');
+        if (f.multiline) inp.rows = 12;
+        if (f.pin) { inp.inputMode = 'numeric'; inp.maxLength = f.pin; inp.className = 'pinin'; inp.autocomplete = 'off'; }
+      }
       inp.id = 'fld' + i;
-      inp.value = f.value || '';
-      if (f.multiline) inp.rows = 12;
+      if (!f.options || f.value) inp.value = f.value || '';
       if (f.placeholder) inp.placeholder = f.placeholder;
+      if (f.hint) lab.appendChild(el('small', 'hint', f.hint));
       lab.appendChild(inp);
       box.appendChild(lab);
     });
+    var err = el('p', 'dlgerr'); err.id = 'dlgErr'; box.appendChild(err);
     var d = $('dlg');
     $('dlgForm').onsubmit = function (e) {
       e.preventDefault();
       var vals = fields.map(function (f, i) { return $('fld' + i).value; });
-      d.close();
-      onOk(vals);
+      var keep = onOk(vals, function (msg) { $('dlgErr').textContent = msg; });
+      if (keep !== true) d.close();
     };
     $('dlgCancel').onclick = function () { d.close(); };
     d.showModal();
@@ -374,7 +365,7 @@
 
   // ---------- views ----------
   function show(v) {
-    ['home', 'roomsv', 'roomv', 'readv'].forEach(function (x) { $(x).hidden = x !== v; });
+    ['home', 'roomsv', 'roomv', 'readv', 'pendingv', 'settingsv'].forEach(function (x) { $(x).hidden = x !== v; });
     $('back').hidden = v === 'home';
     window.scrollTo(0, 0);
   }
@@ -421,6 +412,9 @@
   function route() {
     var h = location.hash.replace('#', '');
     if (h === 'rooms') return openRooms();
+    if (h === 'admin') { if (ADMIN) { location.hash = 'pending'; return; } openHome(); setTimeout(adminLogin, 50); return; }
+    if (h === 'pending' && ADMIN) return openPending();
+    if (h === 'settings' && ADMIN) return openSettings();
     var m = /^r(\d+)(?:n(\d+))?$/.exec(h);
     if (!m) return openHome();
     var ri = +m[1] - 1;
@@ -433,6 +427,7 @@
     var m = /^#r(\d+)n\d+$/.exec(h);
     if (m) location.hash = 'r' + m[1];
     else if (/^#r\d+$/.test(h)) location.hash = 'rooms';
+    else if (h === '#settings') location.hash = 'pending';
     else { history.replaceState(null, '', location.pathname); route(); }
   });
 
@@ -500,12 +495,67 @@
   $('bigger').addEventListener('click', function () { fs = Math.min(30, fs + 2); applySize(); });
   $('smaller').addEventListener('click', function () { fs = Math.max(15, fs - 2); applySize(); });
 
+  // ---------- team: propose (shared 4-digit team code) ----------
+  function roomOptions() {
+    return DATA.rooms.map(function (r, i) { return { value: String(i + 1), label: 'ห้องที่ ' + r.no + ' · ' + r.title }; });
+  }
+  function proposeForm(kind) {
+    var f = [];
+    if (kind === 'add') f.push({ label: 'ห้อง', options: roomOptions(), value: String((curRoom >= 0 ? curRoom : 0) + 1) });
+    f.push({ label: kind === 'add' ? 'วางข้อความจากโน้ต LINE ทั้งหมด' : 'ข้อความที่เสนอแก้ (แก้ในช่องนี้ได้เลย)', multiline: true, value: kind === 'edit' ? current.text : '' });
+    f.push({ label: 'ชื่อผู้เสนอ', value: store('team_name') || '', placeholder: 'ชื่อในกลุ่ม LINE' });
+    ask(kind === 'add' ? 'เสนอเพิ่มองค์ธรรมใหม่' : 'เสนอแก้ไของค์ธรรมนี้', f, function (v, err) {
+      var room = kind === 'add' ? +v[0] : curRoom + 1;
+      var text = kind === 'add' ? v[1] : v[0];
+      var name = (kind === 'add' ? v[2] : v[1]).trim();
+      if (!text.trim()) { err('กรุณาวางข้อความ'); return true; }
+      if (!name) { err('กรุณาใส่ชื่อผู้เสนอ'); return true; }
+      store('team_name', name);
+      err('กำลังส่ง…');
+      call('propose', { teamCode: store('team_code'), type: kind, room: room, note: curNote + 1, text: text, name: name })
+        .then(function () { $('dlg').close(); $('toast').textContent = 'ส่งข้อเสนอแล้ว รอแอดมินอนุมัติก่อนขึ้นเว็บ'; })
+        .catch(function (e) {
+          if (e.message === 'bad_team_code') { store('team_code', null); err('รหัสทีมงานเปลี่ยนแล้ว กรุณาขอรหัสใหม่'); }
+          else err('ส่งไม่สำเร็จ ลองกดอีกครั้ง');
+        });
+      return true;
+    }, 'ส่งข้อเสนอ');
+  }
+  function withTeamCode(next) {
+    if (store('team_code')) return next();
+    ask('ใส่รหัสทีมงาน', [{ label: 'รหัส ๔ หลักที่ได้รับทาง LINE', pin: 4 }], function (v, err) {
+      var c = v[0].trim();
+      if (!/^\d{4}$/.test(c)) { err('รหัสมี ๔ หลัก'); return true; }
+      err('กำลังตรวจรหัส…');
+      call('checkTeam', { teamCode: c }).then(function () {
+        store('team_code', c);
+        $('dlg').close();
+        next();
+      }).catch(function () { err('รหัสไม่ถูกต้อง'); });
+      return true;
+    }, 'ตกลง');
+  }
+  $('propose').addEventListener('click', function () {
+    withTeamCode(function () {
+      ask('ต้องการเสนออะไร', [{ label: 'เลือก', options: [{ value: 'add', label: 'เพิ่มองค์ธรรมใหม่' }, { value: 'edit', label: 'แก้ไของค์ธรรมนี้' }] }], function (v) {
+        setTimeout(function () { proposeForm(v[0]); }, 50);
+      }, 'ถัดไป');
+    });
+  });
+
   // ---------- admin actions ----------
   function setupAdmin() {
     document.documentElement.classList.add('is-admin');
     $('adminbar').hidden = false;
+    $('adminWho').textContent = 'แอดมิน: ' + ADMIN_NAME;
+    $('pendingBtn').hidden = false;
+    $('settingsBtn').hidden = !IS_MAIN;
     ['addRoom', 'addNote', 'editRoom', 'noteAdmin'].forEach(function (id) { $(id).hidden = false; });
-    $('logout').onclick = function () { store('gh_token', null); location.href = location.pathname; };
+    $('propose').hidden = true;
+    $('logout').onclick = function () { ['admin_code', 'admin_main', 'admin_name'].forEach(function (k) { store(k, null); }); location.href = location.pathname; };
+    $('pendingBtn').onclick = function () { location.hash = 'pending'; };
+    $('settingsBtn').onclick = function () { location.hash = 'settings'; };
+    refreshPendingCount();
 
     $('addRoom').onclick = function () {
       ask('เพิ่มห้องใหม่', [
@@ -532,7 +582,7 @@
         if (!t.trim()) return;
         DATA.rooms[curRoom].notes.push({ title: firstLine(t), text: t });
         openRoom(curRoom);
-        saveData('เพิ่มเรื่องในห้อง ' + DATA.rooms[curRoom].no);
+        saveData('เพิ่มองค์ธรรมในห้อง ' + DATA.rooms[curRoom].no);
       });
     };
     $('editNote').onclick = function () {
@@ -540,28 +590,153 @@
       ask('แก้ไของค์ธรรม', [{ label: 'ข้อความ', value: n.text, multiline: true }], function (v) {
         n.text = v[0]; n.title = firstLine(v[0]);
         openNote(curRoom, curNote);
-        saveData('แก้ไขเรื่อง');
+        saveData('แก้ไของค์ธรรม');
       });
     };
     $('delNote').onclick = function () {
       ask('ลบองค์ธรรมนี้ใช่ไหม', [], function () {
         DATA.rooms[curRoom].notes.splice(curNote, 1);
         location.hash = 'r' + (curRoom + 1);
-        saveData('ลบเรื่อง');
-      });
-      $('dlgOk').textContent = 'ลบ';
-      $('dlg').addEventListener('close', function () { $('dlgOk').textContent = 'บันทึก'; }, { once: true });
+        saveData('ลบองค์ธรรม');
+      }, 'ลบ');
     };
   }
 
-  // ---------- load ----------
-  // admins read straight from GitHub so they always edit the newest copy
-  var load = ADMIN
-    ? api('/contents/' + DATA_PATH + '?ref=' + GH.branch).then(function (f) { return JSON.parse(textFromB64(f.content)); })
-    : fetch(DATA_PATH, { cache: 'no-cache' }).then(function (r) { return r.json(); });
+  function refreshPendingCount() {
+    call('listPending', { adminCode: ADMIN_CODE }).then(function (j) {
+      $('pendingBtn').textContent = 'รอตรวจ ' + th(j.items.length);
+    }).catch(function () {});
+  }
 
-  load.then(function (d) {
+  function timeAgo(iso) {
+    var d = new Date(iso);
+    if (isNaN(d)) return '';
+    return th(d.getDate()) + '/' + th(d.getMonth() + 1) + ' ' + th(String(d.getHours()).padStart(2, '0')) + ':' + th(String(d.getMinutes()).padStart(2, '0'));
+  }
+
+  function openPending() {
+    $('brand').textContent = 'รอตรวจ';
+    show('pendingv');
+    var box = $('plist');
+    box.innerHTML = '';
+    box.appendChild(el('div', 'empty', 'กำลังโหลด…'));
+    call('listPending', { adminCode: ADMIN_CODE }).then(function (j) {
+      box.innerHTML = '';
+      $('pendingBtn').textContent = 'รอตรวจ ' + th(j.items.length);
+      if (!j.items.length) box.appendChild(el('div', 'empty', 'ไม่มีข้อเสนอที่รอตรวจ'));
+      j.items.forEach(function (it) {
+        var r = DATA.rooms[it.room - 1];
+        var c = el('div', 'pend');
+        var h = el('div', 'phd');
+        h.appendChild(el('span', 'chip' + (it.type === 'edit' ? ' y' : ''), it.type === 'edit' ? 'แก้ไข' : 'เพิ่มใหม่'));
+        h.appendChild(el('span', 'who', 'จาก ' + it.name + ' · ' + timeAgo(it.time)));
+        c.appendChild(h);
+        c.appendChild(el('b', null, (r ? 'ห้องที่ ' + r.no : 'ห้องที่ ' + th(it.room)) + (it.type === 'edit' ? ' · องค์ธรรม ' + th(it.note) : '')));
+        var t = el('div', 'ptext', it.text);
+        c.appendChild(t);
+        var btns = el('div', 'pbtns');
+        var no = el('button', 'pbtn no', 'ไม่อนุมัติ'); no.type = 'button';
+        var yes = el('button', 'pbtn yes', 'อนุมัติ'); yes.type = 'button';
+        function decide(ok) {
+          yes.disabled = no.disabled = true;
+          status(ok ? 'กำลังอนุมัติ…' : 'กำลังบันทึก…', 'busy');
+          call('decide', { adminCode: ADMIN_CODE, id: it.id, approve: ok }).then(function () {
+            status(ok ? 'อนุมัติแล้ว เว็บจะอัปเดตภายใน ๑–๒ นาที' : 'ไม่อนุมัติแล้ว', 'ok');
+            if (ok) return call('getData', { adminCode: ADMIN_CODE }).then(function (g) { DATA = g.data; renderRatana(); renderRooms(); });
+          }).then(openPending).catch(function () { status('ทำไม่สำเร็จ ลองอีกครั้ง', 'err'); yes.disabled = no.disabled = false; });
+        }
+        no.onclick = function () { decide(false); };
+        yes.onclick = function () { decide(true); };
+        btns.appendChild(no); btns.appendChild(yes);
+        c.appendChild(btns);
+        box.appendChild(c);
+      });
+    }).catch(function () { box.innerHTML = ''; box.appendChild(el('div', 'empty', 'โหลดไม่สำเร็จ ลองอีกครั้ง')); });
+  }
+
+  function openSettings() {
+    if (!IS_MAIN) return openHome();
+    $('brand').textContent = 'ตั้งค่ารหัส';
+    show('settingsv');
+    var box = $('slist');
+    box.innerHTML = '';
+    box.appendChild(el('div', 'empty', 'กำลังโหลด…'));
+    call('getSettings', { adminCode: ADMIN_CODE }).then(function (j) { drawSettings(j); })
+      .catch(function () { box.innerHTML = ''; box.appendChild(el('div', 'empty', 'โหลดไม่สำเร็จ ลองอีกครั้ง')); });
+  }
+  function drawSettings(j) {
+    var box = $('slist');
+    box.innerHTML = '';
+    box.appendChild(el('h3', 'sh3', 'รหัสทีมงาน (ใช้ร่วมกันทั้งทีม)'));
+    var row = el('div', 'arow');
+    row.appendChild(el('span', 'acode big2', j.teamCode.split('').join(' ')));
+    var ch = el('button', 'pbtn yes small', 'เปลี่ยนรหัส'); ch.type = 'button';
+    ch.onclick = function () {
+      ask('ตั้งรหัสทีมงานใหม่', [{ label: 'รหัสใหม่ ๔ หลัก', pin: 4 }], function (v, err) {
+        if (!/^\d{4}$/.test(v[0].trim())) { err('รหัสมี ๔ หลัก'); return true; }
+        call('setTeamCode', { adminCode: ADMIN_CODE, newCode: v[0].trim() }).then(function () { $('dlg').close(); openSettings(); })
+          .catch(function () { err('เปลี่ยนไม่สำเร็จ'); });
+        return true;
+      });
+    };
+    row.appendChild(ch);
+    box.appendChild(row);
+    box.appendChild(el('p', 'note', 'ส่งรหัสนี้ให้ทีมงานทาง LINE ถ้ารหัสหลุดไปถึงคนนอก กดเปลี่ยนรหัสแล้วส่งรหัสใหม่'));
+    box.appendChild(el('h3', 'sh3', 'แอดมิน (รหัสแยกของแต่ละท่าน)'));
+    if (!j.admins.length) box.appendChild(el('div', 'empty', 'ยังไม่มีแอดมินเพิ่มเติม'));
+    j.admins.forEach(function (a, i) {
+      var r = el('div', 'arow');
+      r.appendChild(el('span', 'an', th(i + 1)));
+      r.appendChild(el('span', 'aname', a.name));
+      r.appendChild(el('span', 'acode', a.code));
+      var del = el('button', 'ax', 'ลบ'); del.type = 'button';
+      del.onclick = function () {
+        ask('ลบแอดมิน ' + a.name + ' ใช่ไหม', [], function () {
+          call('removeAdmin', { adminCode: ADMIN_CODE, code: a.code }).then(openSettings);
+        }, 'ลบ');
+      };
+      r.appendChild(del);
+      box.appendChild(r);
+    });
+    var add = el('button', 'addbtn', '+ เพิ่มแอดมิน'); add.type = 'button';
+    add.onclick = function () {
+      ask('เพิ่มแอดมิน', [{ label: 'ชื่อแอดมิน', placeholder: 'ชื่อในกลุ่ม LINE' }], function (v, err) {
+        if (!v[0].trim()) { err('กรุณาใส่ชื่อ'); return true; }
+        call('addAdmin', { adminCode: ADMIN_CODE, name: v[0].trim() }).then(function () { $('dlg').close(); openSettings(); })
+          .catch(function () { err('เพิ่มไม่สำเร็จ'); });
+        return true;
+      }, 'เพิ่ม');
+    };
+    box.appendChild(add);
+    box.appendChild(el('p', 'note', 'ระบบสร้างรหัส ๖ หลักให้แต่ละท่าน คัดลอกรหัสแล้วส่งให้ท่านนั้นทาง LINE'));
+  }
+
+  function adminLogin() {
+    ask('เข้าสู่ระบบแอดมิน', [{ label: 'รหัสแอดมิน ๖ หลัก', pin: 6 }], function (v, err) {
+      var c = v[0].trim();
+      err('กำลังตรวจรหัส…');
+      call('checkAdmin', { adminCode: c }).then(function (j) {
+        store('admin_code', c); store('admin_main', j.isMain ? '1' : null); store('admin_name', j.name);
+        location.reload();
+      }).catch(function () { err('รหัสไม่ถูกต้อง'); });
+      return true;
+    }, 'เข้าสู่ระบบ');
+  }
+  $('adminLink').addEventListener('click', function () { if (ADMIN) location.hash = 'pending'; else adminLogin(); });
+
+  // ---------- load ----------
+  // config.json holds the backend address; it is kept apart from the content so saving content never touches it
+  fetch('config.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }).then(function (cfg) {
+    API = cfg.apiUrl || '';
+    return fetch(DATA_PATH, { cache: 'no-cache' }).then(function (r) { return r.json(); });
+  }).then(function (d) {
+    if (!API) { $('propose').hidden = true; $('adminLink').hidden = true; }
+    // admins work on the newest copy straight from the backend
+    if (ADMIN && API) return call('getData', { adminCode: ADMIN_CODE }).then(function (g) { return g.data; }, function () { return d; });
+    return d;
+  }).then(function (d) {
     DATA = d;
+    if (!store('admin_code')) { ADMIN = false; }
     $('heroImg').src = d.heroImage;
     $('heroImg').alt = d.heroAlt || '';
     if (d.heroLink) { $('heroLink').href = d.heroLink; $('heroLink').setAttribute('aria-label', 'ช่อง YouTube เพราะอวิชชาดับ'); } else { $('heroLink').removeAttribute('href'); }
@@ -574,8 +749,7 @@
     renderRooms();
     window.addEventListener('hashchange', route);
     route();
-  }).catch(function (e) {
-    if (ADMIN && e.message === 'auth') { store('gh_token', null); location.reload(); return; }
+  }).catch(function () {
     document.body.insertAdjacentHTML('beforeend', '<p style="padding:24px;text-align:center">โหลดข้อมูลไม่สำเร็จ กรุณาลองเปิดใหม่อีกครั้ง</p>');
   });
 })();

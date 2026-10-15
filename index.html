@@ -12,15 +12,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=Sarabun:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=20261015e">
+<link rel="stylesheet" href="assets/style.css?v=20261015g">
 </head>
 <body>
 <div class="shell">
 
 <div class="adminbar" id="adminbar" hidden>
-  <span>โหมดผู้ดูแล</span>
-  <span class="astatus" id="astatus" aria-live="polite"></span>
+  <span id="adminWho">แอดมิน</span>
+  <button type="button" id="pendingBtn" hidden>รอตรวจ</button>
+  <button type="button" id="settingsBtn" hidden>ตั้งค่ารหัส</button>
   <button type="button" id="logout">ออกจากระบบ</button>
+  <span class="astatus" id="astatus" aria-live="polite"></span>
 </div>
 
 <header class="bar"><div class="col pad">
@@ -52,6 +54,7 @@
       <div class="ratana" id="ratana"></div>
     </section>
     <div class="foot" aria-hidden="true"><span class="orn"></span><span class="orn" style="font-size:1.4em"></span><span class="orn"></span></div>
+    <p class="footlinks"><button type="button" id="adminLink">แอดมิน</button></p>
   </div></main>
 </div>
 
@@ -90,8 +93,21 @@
   <div class="actions"><div class="col pad">
     <button class="btn copy" id="copy" type="button">คัดลอก</button>
     <a class="btn line" id="share" href="#" target="_blank" rel="noopener">ส่งต่อ LINE</a>
+    <button class="btn propose" id="propose" type="button">เสนอเพิ่ม / แก้ไข</button>
     <div class="toast" id="toast" aria-live="polite"></div>
   </div></div>
+</div>
+
+
+
+<div id="pendingv" class="view" hidden>
+  <section class="roomhead"><div class="col pad"><h1>ข้อเสนอที่รอตรวจ</h1></div></section>
+  <main><div class="col pad"><section class="sec"><div class="notes" id="plist"></div></section></div></main>
+</div>
+
+<div id="settingsv" class="view" hidden>
+  <section class="roomhead"><div class="col pad"><h1>ตั้งค่ารหัส</h1></div></section>
+  <main><div class="col pad"><section class="sec" id="slist"></section></div></main>
 </div>
 
 </div>
@@ -108,6 +124,6 @@
 </dialog>
 <input type="file" id="picker" accept="image/*" hidden>
 
-<script src="assets/app.js?v=20261015e"></script>
+<script src="assets/app.js?v=20261015g"></script>
 </body>
 </html>
