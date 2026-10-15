@@ -77,6 +77,38 @@
     p.click();
   }
 
+  // number boxes + big keypad, like a phone passcode screen
+  function pinPad(inp, n) {
+    var wrap = el('div', 'pinpad');
+    var boxes = el('div', 'pinboxes');
+    for (var i = 0; i < n; i++) boxes.appendChild(el('span', 'pinbox'));
+    var keys = el('div', 'pinkeys');
+    function draw() {
+      var v = inp.value;
+      [].forEach.call(boxes.children, function (b, i) { b.classList.toggle('filled', i < v.length); });
+      if (v.length === n) setTimeout(function () { $('dlgForm').requestSubmit(); }, 120);
+    }
+    function press(k) {
+      if (k === 'del') inp.value = inp.value.slice(0, -1);
+      else if (inp.value.length < n) inp.value += k;
+      draw();
+    }
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'].forEach(function (k) {
+      if (!k) { keys.appendChild(el('span')); return; }
+      var b = el('button', 'pinkey' + (k === 'del' ? ' del' : ''), k === 'del' ? '⌫' : k);
+      if (k === 'del') b.setAttribute('aria-label', 'ลบ');
+      b.type = 'button';
+      b.onclick = function () { press(k); };
+      keys.appendChild(b);
+    });
+    wrap.onkeydown = function (e) { if (/^\d$/.test(e.key)) press(e.key); else if (e.key === 'Backspace') press('del'); };
+    wrap.tabIndex = 0;
+    wrap.appendChild(boxes);
+    wrap.appendChild(keys);
+    setTimeout(function () { wrap.focus(); draw(); }, 30);
+    return wrap;
+  }
+
   // simple form dialog. field kinds: text (default), multiline, select (options), pin (n digits)
   function ask(title, fields, onOk, okLabel) {
     $('dlgTitle').textContent = title;
@@ -85,7 +117,7 @@
     box.innerHTML = '';
     fields.forEach(function (f, i) {
       var lab = el('label', 'fld');
-      lab.appendChild(el('span', null, f.label));
+      if (f.label) lab.appendChild(el('span', null, f.label));
       var inp;
       if (f.options) {
         inp = el('select');
@@ -93,17 +125,27 @@
       } else {
         inp = el(f.multiline ? 'textarea' : 'input');
         if (f.multiline) inp.rows = 12;
-        if (f.pin) { inp.inputMode = 'numeric'; inp.maxLength = f.pin; inp.className = 'pinin'; inp.autocomplete = 'off'; }
+        if (f.pin) { inp.type = 'hidden'; }
       }
       inp.id = 'fld' + i;
       if (!f.options || f.value) inp.value = f.value || '';
       if (f.placeholder) inp.placeholder = f.placeholder;
       if (f.hint) lab.appendChild(el('small', 'hint', f.hint));
       lab.appendChild(inp);
+      if (f.pin) lab.appendChild(pinPad(inp, f.pin));
       box.appendChild(lab);
     });
     var err = el('p', 'dlgerr'); err.id = 'dlgErr'; box.appendChild(err);
     var d = $('dlg');
+    var pinMode = fields.some(function (f) { return f.pin; });
+    d.classList.toggle('pinmode', pinMode);
+    var ban = $('pinBanner');
+    if (ban) ban.remove();
+    if (pinMode && DATA && DATA.heroImage) {
+      ban = el('div', 'pinbanner'); ban.id = 'pinBanner';
+      ban.style.backgroundImage = 'url("' + DATA.heroImage + '")';
+      $('dlgForm').insertBefore(ban, $('dlgForm').firstChild);
+    }
     $('dlgForm').onsubmit = function (e) {
       e.preventDefault();
       var vals = fields.map(function (f, i) { return $('fld' + i).value; });
@@ -523,7 +565,7 @@
   }
   function withTeamCode(next) {
     if (store('team_code')) return next();
-    ask('ใส่รหัสทีมงาน', [{ label: 'รหัส ๔ หลักที่ได้รับทาง LINE', pin: 4 }], function (v, err) {
+    ask('ใส่รหัสทีมงาน', [{ label: '', pin: 4 }], function (v, err) {
       var c = v[0].trim();
       if (!/^\d{4}$/.test(c)) { err('รหัสมี ๔ หลัก'); return true; }
       err('กำลังตรวจรหัส…');
@@ -672,7 +714,7 @@
     row.appendChild(el('span', 'acode big2', j.teamCode.split('').join(' ')));
     var ch = el('button', 'pbtn yes small', 'เปลี่ยนรหัส'); ch.type = 'button';
     ch.onclick = function () {
-      ask('ตั้งรหัสทีมงานใหม่', [{ label: 'รหัสใหม่ ๔ หลัก', pin: 4 }], function (v, err) {
+      ask('ตั้งรหัสทีมงานใหม่', [{ label: '', pin: 4 }], function (v, err) {
         if (!/^\d{4}$/.test(v[0].trim())) { err('รหัสมี ๔ หลัก'); return true; }
         call('setTeamCode', { adminCode: ADMIN_CODE, newCode: v[0].trim() }).then(function () { $('dlg').close(); openSettings(); })
           .catch(function () { err('เปลี่ยนไม่สำเร็จ'); });
@@ -712,7 +754,7 @@
   }
 
   function adminLogin() {
-    ask('เข้าสู่ระบบแอดมิน', [{ label: 'รหัสแอดมิน ๖ หลัก', pin: 6 }], function (v, err) {
+    ask('เข้าสู่ระบบแอดมิน', [{ label: '', pin: 6 }], function (v, err) {
       var c = v[0].trim();
       err('กำลังตรวจรหัส…');
       call('checkAdmin', { adminCode: c }).then(function (j) {
