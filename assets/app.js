@@ -124,8 +124,9 @@
         f.options.forEach(function (o) { var op = el('option', null, o.label); op.value = o.value; inp.appendChild(op); });
       } else {
         inp = el(f.multiline ? 'textarea' : 'input');
-        if (f.multiline) inp.rows = 12;
+        if (f.multiline) inp.rows = f.rows || 12;
         if (f.pin) { inp.type = 'hidden'; }
+        if (f.type) inp.type = f.type;
       }
       inp.id = 'fld' + i;
       if (!f.options || f.value) inp.value = f.value || '';
@@ -238,6 +239,22 @@
 
 
   // ---------- lineage tree: who is whose disciple ----------
+  // tap a teacher (name area, or the whole row for readers) to open their attainment records
+  function personLink(node, p, badgeIn) {
+    var at = personAt(p);
+    if (!at) return;
+    node.classList.add('tap');
+    node.appendChild(el('span', 'tapgo', '›'));
+    node.addEventListener('click', function (e) {
+      if (ADMIN && e.target.closest('.ph, .editlink')) return;
+      location.hash = 'p' + at;
+    });
+  }
+  function personAt(p) {
+    var out = null;
+    DATA.ratana.forEach(function (r, ri) { (r.people || []).forEach(function (q, pi) { if (q === p) out = (ri + 1) + '-' + (pi + 1); }); });
+    return out;
+  }
   function acNode(p, num) {
     var row = el('div', 'ac');
     row.appendChild(photo(p.photo, p.name, function (path) { p.photo = path; }));
@@ -247,6 +264,7 @@
     if (p.order) x.appendChild(el('span', 'ordnote', p.order));
     var ed = nameEdit(p, 'list'); if (ed) x.appendChild(ed);
     row.appendChild(x);
+    if (p.name) personLink(row, p, x);
     return row;
   }
   function findPerson(name) {
@@ -340,6 +358,7 @@
           if (p.role) per.appendChild(el('div', 'role', p.role));
           if (p.name) per.appendChild(words('nm', p.name));
           var ed = nameEdit(p); if (ed) per.appendChild(ed);
+          if (p.name) personLink(per, p);
           tier.appendChild(per);
         });
         lvl.appendChild(tier);
@@ -458,7 +477,7 @@
 
   // ---------- views ----------
   function show(v) {
-    ['home', 'loginv', 'roomsv', 'roomv', 'readv', 'pendingv', 'settingsv'].forEach(function (x) { $(x).hidden = x !== v; });
+    ['home', 'loginv', 'roomsv', 'roomv', 'readv', 'pendingv', 'settingsv', 'personv'].forEach(function (x) { $(x).hidden = x !== v; });
     $('back').hidden = v === 'home';
     document.documentElement.classList.toggle('on-read', v === 'readv');
     document.documentElement.classList.toggle('on-home', v === 'home');
@@ -466,6 +485,106 @@
     $('amenu').hidden = true;
     window.scrollTo(0, 0);
   }
+
+  // ---------- attainment records of one teacher ----------
+  var MONTHS = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+  var DAYS = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+  function thDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+    if (!m) return null;
+    var d = new Date(+m[1], +m[2] - 1, +m[3]);
+    return { day: th(+m[3]), month: MONTHS[+m[2] - 1], year: th(+m[1] + 543), wd: 'วัน' + DAYS[d.getDay()] };
+  }
+  function getPerson(ri, pi) { var r = DATA.ratana[ri]; return r && r.people && r.people[pi]; }
+  function sortedRecords(p) {
+    return (p.records || []).map(function (x, k) { return { x: x, k: k }; }).sort(function (a, b) { return (a.x.date || '') < (b.x.date || '') ? -1 : (a.x.date || '') > (b.x.date || '') ? 1 : a.k - b.k; });
+  }
+  function openPerson(ri, pi) {
+    var p = getPerson(ri, pi);
+    if (!p) return openHome();
+    $('brand').textContent = '';
+    var head = $('pphead');
+    head.innerHTML = '';
+    head.appendChild(photo(p.photo, p.name, null));
+    head.appendChild(words('pname', p.name));
+    var sub = [DATA.ratana[ri].label, p.status || p.role].filter(Boolean).join(' · ');
+    if (sub || p.order) {
+      var ps = sub ? words('psub', sub) : el('div', 'psub');
+      if (p.order) { ps.appendChild(document.createTextNode(' ')); ps.appendChild(el('span', 'nw', p.order)); }
+      head.appendChild(ps);
+    }
+    // ชีวประวัติย่อ: แสดงเมื่อมีข้อมูล แอดมินเพิ่ม/แก้ได้
+    var bio = $('pbio');
+    bio.hidden = !p.bio && !ADMIN;
+    $('pbioText').textContent = p.bio || '';
+    $('pbioText').hidden = !p.bio;
+    $('editBio').hidden = !ADMIN;
+    $('editBio').textContent = p.bio ? 'แก้ไขชีวประวัติย่อ' : '+ เพิ่มชีวประวัติย่อ';
+    $('editBio').onclick = function () {
+      ask('ชีวประวัติย่อ', [{ label: 'ข้อความ (วัน เดือน ปีเกิด และประวัติ)', multiline: true, value: p.bio || '' }], function (v) {
+        if (v[0].trim()) p.bio = v[0]; else delete p.bio;
+        route();
+        saveData('แก้ชีวประวัติย่อ ' + p.name);
+      });
+    };
+    var list = $('plist2');
+    list.innerHTML = '';
+    var recs = sortedRecords(p);
+    $('ptitle').textContent = 'บันทึกการบรรลุธรรม (' + th(recs.length) + ')';
+    if (!recs.length) list.appendChild(el('div', 'empty', 'ยังไม่มีบันทึกการบรรลุธรรม'));
+    recs.forEach(function (o, i) {
+      var a = el('a', 'rec');
+      a.href = '#p' + (ri + 1) + '-' + (pi + 1) + 'r' + (o.k + 1);
+      var dt = thDate(o.x.date), box = el('span', 'rdate');
+      if (dt) { box.appendChild(el('b', null, dt.day)); box.appendChild(el('span', null, dt.month)); box.appendChild(el('span', 'ry', dt.year)); }
+      else box.appendChild(el('b', null, th(i + 1)));
+      a.appendChild(box);
+      var tx = el('span', 'rtx');
+      if (dt) tx.appendChild(el('small', null, dt.wd));
+      tx.appendChild(el('span', 'rt' + (o.x.title ? ' full' : ''), o.x.title || firstLine(o.x.text)));
+      a.appendChild(tx);
+      a.appendChild(el('span', 'arrow', '›'));
+      list.appendChild(a);
+    });
+    $('addRec').hidden = !ADMIN;
+    $('addRec').onclick = function () { recordForm(p, null); };
+    show('personv');
+  }
+  function recordForm(p, rec) {
+    ask(rec ? 'แก้ไขบันทึกการบรรลุธรรม' : 'เพิ่มบันทึกการบรรลุธรรม', [
+      { label: 'วันที่บรรลุธรรม', type: 'date', value: rec ? rec.date : '' },
+      { label: 'วิชชาที่บรรลุ (แสดงในรายการ)', multiline: true, rows: 3, value: rec ? rec.title || '' : '' },
+      { label: 'ข้อความเต็ม (วางจากโน้ต LINE ทั้งหมด)', multiline: true, value: rec ? rec.text : '' }
+    ], function (v) {
+      if (v.del && rec) {
+        p.records.splice(p.records.indexOf(rec), 1);
+        history.back();
+        saveData('ลบบันทึกการบรรลุธรรม ' + p.name);
+        return;
+      }
+      if (!v[2].trim()) return;
+      var o = rec || {};
+      o.date = v[0]; o.text = v[2];
+      if (v[1].trim()) o.title = v[1]; else delete o.title;
+      if (!rec) (p.records = p.records || []).push(o);
+      route();
+      saveData((rec ? 'แก้' : 'เพิ่ม') + 'บันทึกการบรรลุธรรม ' + p.name);
+    }, 'บันทึก', rec ? 'ลบบันทึกนี้' : null);
+  }
+  function openRecord(ri, pi, k) {
+    var p = getPerson(ri, pi), rec = p && p.records && p.records[k];
+    if (!rec) return openPerson(ri, pi);
+    current = rec; curRecord = { p: p, rec: rec };
+    $('brand').textContent = '';
+    var dt = thDate(rec.date);
+    $('crumb').textContent = p.name + (dt ? ' · ' + dt.wd + 'ที่ ' + dt.day + ' ' + dt.month + ' ' + dt.year : '');
+    showText($('text'), rec.text);
+    $('share').href = 'https://line.me/R/share?text=' + encodeURIComponent(rec.text);
+    $('toast').textContent = '';
+    show('readv');
+    document.documentElement.classList.add('on-rec');
+  }
+  var curRecord = null;
 
   function openHome() {
     $('brand').textContent = DATA.siteTitle;
@@ -537,6 +656,9 @@
     if (h === 'admin' || h === 'login') return openLogin(h === 'admin' ? 'admin' : 'member');
     if (h === 'pending' && ADMIN) return openPending();
     if (h === 'settings' && ADMIN) return openSettings();
+    var pm = /^p(\d+)-(\d+)(?:r(\d+))?$/.exec(h);
+    document.documentElement.classList.remove('on-rec');
+    if (pm) return pm[3] ? openRecord(+pm[1] - 1, +pm[2] - 1, +pm[3] - 1) : openPerson(+pm[1] - 1, +pm[2] - 1);
     var m = /^r(\d+)(?:n(\d+))?$/.exec(h);
     if (!m) return openHome();
     var ri = +m[1] - 1;
@@ -547,7 +669,10 @@
   $('back').addEventListener('click', function () {
     var h = location.hash;
     var m = /^#r(\d+)n\d+$/.exec(h);
-    if (m) location.hash = 'r' + m[1];
+    var pr = /^#(p\d+-\d+)r\d+$/.exec(h);
+    if (pr) location.hash = pr[1];
+    else if (/^#p\d+-\d+$/.test(h)) { location.hash = ''; setTimeout(function () { var t = document.querySelector('.ratana'); if (t) t.scrollIntoView(); }, 50); }
+    else if (m) location.hash = 'r' + m[1];
     else if (/^#r\d+$/.test(h)) location.hash = 'rooms';
     else if (h === '#settings') location.hash = 'pending';
     else { history.replaceState(null, '', location.pathname); route(); }
@@ -771,6 +896,7 @@
       });
     };
     $('editNote').onclick = function () {
+      if (curRecord && document.documentElement.classList.contains('on-rec')) return recordForm(curRecord.p, curRecord.rec);
       var n = DATA.rooms[curRoom].notes[curNote];
       ask('แก้ไของค์ธรรม', [{ label: 'ข้อความ', value: n.text, multiline: true }], function (v) {
         n.text = v[0]; n.title = firstLine(v[0]);

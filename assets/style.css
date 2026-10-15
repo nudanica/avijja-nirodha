@@ -588,3 +588,43 @@ svg.defs{position:absolute;width:0;height:0}
 /* หน้ารวมห้อง: เรียงตรงกันทุกห้อง ไม่เยื้องแบบขั้นบันได */
 #roomsv .step{margin-left:0!important;box-shadow:0 3px 10px rgba(0,0,0,.05)}
 #roomsv .steps{gap:10px}
+
+/* ท่านอาจารย์ในรัตนะ: แตะเพื่อดูบันทึกการบรรลุธรรม */
+.tap{cursor:pointer}
+.recbadge{display:inline-block;margin-top:4px;font:600 .68rem var(--body);color:#fff;background:var(--thaigold);border-radius:99px;padding:2px 10px;white-space:nowrap}
+.ac .recbadge{align-self:flex-start}
+.ac.tap .acx{position:relative}
+/* หน้าท่านอาจารย์ */
+.perhead{background:var(--sky);color:#fff;border-bottom:3px solid var(--thaigold)}
+.perhead .col{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding-block:4px 22px}
+.perhead .ph{width:96px;height:96px;box-shadow:0 0 0 3px var(--thaigold)}
+.perhead .pname{font-family:var(--display);font-weight:700;font-size:clamp(20px,5.6vw,26px);line-height:1.4}
+.perhead .psub{color:#e8cf95;font-size:.88em;font-weight:600}
+#personv main .col{padding-block:18px 40px}
+.reccard{background:var(--card);border:1.5px solid var(--thaigold);border-radius:20px;padding:16px 14px}
+.reccard h2{margin:0}
+.recs{display:flex;flex-direction:column;gap:10px}
+.rec{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;text-decoration:none;color:inherit;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+.rdate{flex:none;width:76px;display:flex;flex-direction:column;align-items:center;line-height:1.15;padding-right:12px;border-right:1.5px solid color-mix(in srgb,var(--thaigold) 60%,transparent);color:var(--thaigold);text-align:center}
+.rdate b{font:700 2.1em/1 var(--body);color:var(--thaigold)}
+.rdate span{font-size:.8em;font-weight:600;margin-top:2px}
+.rdate .ry{font-size:.78em;color:var(--muted);font-weight:600}
+.rtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.rtx small{color:var(--thaigold);font-weight:700;font-size:.8em}
+.rt{color:var(--readink);font-weight:600;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.rec .arrow{flex:none;color:var(--thaigold);font-size:1.4em}
+#personv .addbtn{margin-top:4px}
+/* หน้าอ่านบันทึก: ไม่มีปุ่มเสนอแก้ไข และไม่มีปุ่มลบแยก */
+.on-rec #propose,.on-rec #delNote{display:none!important}
+.on-rec .reader .actions .col{grid-template-columns:1fr 1fr}
+
+/* แตะท่านอาจารย์: ลูกศรเล็กสีทองมุมขวา แทนป้าย */
+.tap{position:relative}
+.tapgo{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--thaigold);font-size:1.5em;line-height:1}
+.ac.tap{padding-right:30px}
+.person.tap .tapgo{position:static;transform:none;font-size:1.2em;margin-top:2px}
+#personv main .col{display:flex;flex-direction:column;gap:16px}
+.biotext{white-space:pre-wrap;word-break:break-word;color:var(--readink);font-weight:500;line-height:1.8}
+.rt.full{display:block;-webkit-line-clamp:unset;overflow:visible}
+.psub .nw{white-space:nowrap}
+#dlgFields textarea[rows="3"]{min-height:0;height:7.5em}
