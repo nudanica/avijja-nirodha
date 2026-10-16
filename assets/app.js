@@ -1286,6 +1286,16 @@
     window.addEventListener('hashchange', onHash);
     route();
     startAutoUpdate();
+    // check once right after opening too (the phone may have shown a stored copy of the page)
+    setTimeout(checkUpdates, 1500);
+    // ปุ่มอัปเดต: always fetch the newest page, look and content
+    $('reloadBtn').onclick = function () {
+      $('reloadBtn').classList.add('spin');
+      fetch('index.html?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (h) {
+        var m = h.match(/app\.js\?v=([^"&]+)/);
+        location.replace(location.pathname + '?v=' + (m ? m[1] : '') + '&t=' + Date.now() + location.hash);
+      }).catch(function () { location.reload(); });
+    };
   }).catch(function () {
     document.body.insertAdjacentHTML('beforeend', '<p style="padding:24px;text-align:center">โหลดข้อมูลไม่สำเร็จ กรุณาลองเปิดใหม่อีกครั้ง</p>');
   });

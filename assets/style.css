@@ -706,3 +706,10 @@ svg.defs{position:absolute;width:0;height:0}
 .role,.ord{color:#5b4220!important}
 .tnum{background:radial-gradient(circle at 40% 35%,#c79b4a,#7d5a1f)!important;color:#fff!important;border-color:#e3c27e!important;font-weight:700!important}
 }
+
+/* ปุ่มอัปเดต (home, top-left) */
+.reloadbtn{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:calc(12px + env(safe-area-inset-left,0px));z-index:45;display:inline-flex;align-items:center;gap:6px;background:#fff;color:#3a2a16;border:1px solid #d8c49a;border-radius:999px;padding:9px 14px;font:600 .82rem var(--body);box-shadow:0 2px 10px rgba(0,0,0,.12);cursor:pointer}
+.reloadbtn svg{width:16px;height:16px}
+.reloadbtn.spin svg{animation:rb 1s linear infinite}
+@keyframes rb{to{transform:rotate(360deg)}}
+html:not(.on-home) .reloadbtn{display:none}
