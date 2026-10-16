@@ -8,11 +8,12 @@
 <meta property="og:title" content="คลังองค์ธรรมเพราะอวิชชาดับ">
 <meta property="og:description" content="อ่าน คัดลอก และส่งต่อทาง LINE">
 <meta property="og:image" content="images/hero.jpg">
-<meta name="theme-color" content="#24502f">
+<meta name="theme-color" content="#f3e9d4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#173621" media="(prefers-color-scheme: dark)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=Sarabun:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=20261015zl">
+<link rel="stylesheet" href="assets/style.css?v=20261016b">
 </head>
 <body>
 <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
@@ -87,7 +88,7 @@
 </div>
 
 <div id="roomsv" class="view" hidden>
-  <section class="roomshead2"><div class="col pad"><span class="orn" aria-hidden="true"></span><h1 id="roomsHeading"></h1><p id="roomsSub"></p></div></section>
+  <section class="roomshead2 sechead"><div class="col pad"><span id="roomsMed" aria-hidden="true"></span><h1 id="roomsHeading"></h1><p id="roomsSub"></p><div class="cardadmin"><button type="button" class="editlink" id="editRoomsCard" hidden>แก้ไขการ์ดหน้าแรก</button><button type="button" class="editlink" id="roomsCardPhoto" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg>รูปบนการ์ด</button></div></div></section>
   <main><div class="col pad"><section class="sec">
     <div class="steps" id="rooms"></div>
     <button class="addbtn" id="addRoom" type="button" hidden>+ เพิ่มห้อง</button>
@@ -96,7 +97,7 @@
 
 <div id="roomv" class="view" hidden>
   <section class="roomhead roomphoto" id="roomhead"><div class="col pad">
-    <button class="roomcam" id="roomPhotoBtn" type="button" hidden>📷 เปลี่ยนรูปห้อง</button>
+    <button class="roomcam" id="roomPhotoBtn" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg>เปลี่ยนรูปห้อง</button>
     <span class="k" id="rk"></span>
     <h1 id="rh"></h1>
     <button class="editlink" id="editRoom" type="button" hidden>แก้ไข / ลบห้อง</button>
@@ -138,10 +139,24 @@
     <div class="biotext" id="pbioText"></div>
     <button class="addbtn" id="editBio" type="button" hidden></button>
   </section>
-  <section class="sec reccard">
+  <section class="sec reccard" id="precs">
     <h2 id="ptitle"></h2>
     <div class="recs" id="plist2"></div>
     <button class="addbtn" id="addRec" type="button" hidden>+ เพิ่มบันทึกการบรรลุธรรม</button>
+  </section>
+  <button class="linkbtn" id="bioOnlyBtn" type="button" hidden></button></div></main>
+</div>
+
+<div id="sectionv" class="view" hidden>
+  <section class="roomshead2 sechead"><div class="col pad">
+    <span id="secMed"></span>
+    <h1 id="secTitle"></h1><p id="secSub"></p>
+    <div class="cardadmin" id="secAdmin" hidden><button type="button" class="editlink" id="editSec">แก้ไขหมวดนี้</button><button type="button" class="editlink" id="secPhoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg>รูปบนการ์ด</button></div>
+  </div></section>
+  <main><div class="col pad"><section class="sec roomcard">
+    <h2 id="secCount"></h2>
+    <div class="notes" id="slist2"></div>
+    <button class="addbtn" id="addItem" type="button">+ เพิ่มเนื้อหา</button>
   </section></div></main>
 </div>
 
@@ -170,6 +185,6 @@
 </dialog>
 <input type="file" id="picker" accept="image/*" hidden>
 
-<script src="assets/app.js?v=20261015zl"></script>
+<script src="assets/app.js?v=20261016b"></script>
 </body>
 </html>

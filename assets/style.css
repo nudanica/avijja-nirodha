@@ -628,3 +628,49 @@ svg.defs{position:absolute;width:0;height:0}
 .rt.full{display:block;-webkit-line-clamp:unset;overflow:visible}
 .psub .nw{white-space:nowrap}
 #dlgFields textarea[rows="3"]{min-height:0;height:7.5em}
+.linkbtn{align-self:center;background:none;border:0;color:var(--muted);font:500 .85em var(--body);text-decoration:underline;padding:6px;cursor:pointer}
+
+/* หมวดบนหน้าแรก: แอดมินเพิ่ม/แก้ได้ รูปบนการ์ดเปลี่ยนได้ */
+.sec4 .med.pic{overflow:hidden;padding:0}
+.sec4 .med.pic img,.sechead .med.pic img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.sec4.addsec{align-items:center;justify-content:center;border-style:dashed;background:rgba(255,255,255,.12);color:#fff;font:600 1em var(--body);cursor:pointer}
+.sechead .col{display:flex;flex-direction:column;align-items:center}
+.sechead .med{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#2f6a3c,#173621);border:2px solid #d4a94f;display:grid;place-items:center;box-shadow:0 3px 8px rgba(0,0,0,.25),inset 0 0 0 3px rgba(247,227,168,.25);margin-bottom:10px;overflow:hidden}
+.sechead .med svg{width:44px;height:44px}
+.cardadmin{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.cardadmin .editlink{align-self:auto;margin:0}
+.cardadmin:has(> :not([hidden])){display:flex}
+#sectionv .roomcard{margin-top:18px}
+#sectionv #addItem[hidden]{display:none}
+#sectionv .note{align-items:center;gap:6px;border:1px solid var(--line);padding:14px 16px;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+#sectionv .note .nn{width:auto;height:auto;min-width:1.6em;border:0;border-radius:0;background:none;color:var(--thaigold);font:700 1.9em/1 var(--display);padding-right:12px;border-right:1.5px solid color-mix(in srgb,var(--thaigold) 60%,transparent);place-items:center;margin-right:8px}
+#sectionv .note b{flex:1;color:var(--readink);font-weight:600}
+
+/* สัญลักษณ์เปลี่ยนรูป: กล้องลายเส้นในวงกลมทอง (แทนอีโมจิ) */
+.cam{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;display:grid!important;place-items:center;color:#fff!important;background:linear-gradient(145deg,#d4a94f,#9c7330)!important;border:2px solid var(--card);box-shadow:0 2px 6px rgba(0,0,0,.25);font-size:0;opacity:1!important}
+.cam svg{width:17px;height:17px}
+.roomcam,.cardadmin .editlink{display:inline-flex;align-items:center;gap:6px}
+.roomcam svg,.cardadmin .editlink svg{width:16px;height:16px;flex:none}
+
+/* gold line moved to the bottom of photo/symbol headers so it never crosses the picture */
+.on-person .bar::after,.on-section .bar::after{display:none}
+.perhead,.sechead{border-bottom:0!important}
+.perhead .col,.sechead .col{padding-top:18px!important;padding-bottom:26px!important}
+.perhead::after,.sechead::after{content:'';display:block;height:3px;background:linear-gradient(90deg,transparent,#b8914a 22%,#e3c27e 50%,#b8914a 78%,transparent)}
+
+/* rooms page header shows the card's own symbol medallion */
+#roomsMed{display:block}
+#roomsMed .med{margin:0 auto 10px}
+
+/* theme: ivory + gold (light mode) — dark green symbol medallions stand out on the cream */
+@media (prefers-color-scheme: light){
+:root{--sky:#f3e9d4;--sky2:#e9dcbf;--paper:#fbf8f1;--line:#ece2cf}
+.bar,.bar a,.bar button,.hero .inner,.hero h1,.hero h2,.roomshead2,.roomshead2 h1,.sechead h1,.perhead,.perhead .pname,.cap2{color:#3a2a16}
+.bar{border-bottom:1px solid #e2d3b2}
+.roomshead2 p,.sechead p,.perhead .psub{color:#8a6a2e;opacity:1}
+.acct{background:#fff;color:#3a2a16;border:1px solid #d8c49a}
+.size button,.roomshead2 .editlink,.sechead .editlink,.perhead .editlink{border-color:#c9b48a;color:#5b4220}
+.secdots i{background:rgba(91,66,32,.22)}
+.copy,.dlgbtns .primary,.pbtn.yes,.astatus,.adminbar .astatus,.afab,.adminbar .afab{background:#5b4220!important;border-color:#5b4220;color:#fff}
+.reader .ln.title,.adminbar #adminWho,#roomsv .addbtn,.login2 h1,.seg2 button.on,.roomcam{color:#5b4220}
+}
