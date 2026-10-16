@@ -43,11 +43,15 @@
     s.textContent = msg;
     s.className = 'astatus ' + (kind || '');
   }
+  var SAVING = 0, LAST_SAVE = 0;
   function saveData(message) {
     status('กำลังบันทึก…', 'busy');
+    SAVING++;
+    var done = function () { SAVING--; LAST_SAVE = Date.now(); };
     return call('saveData', { adminCode: ADMIN_CODE, data: DATA, message: message })
-      .then(function () { status('บันทึกแล้ว เว็บจะอัปเดตภายใน ๑–๒ นาที', 'ok'); })
+      .then(function () { done(); status('บันทึกแล้ว เว็บจะอัปเดตภายใน ๑–๒ นาที', 'ok'); })
       .catch(function (e) {
+        done();
         status(e.message === 'not_admin' ? 'รหัสแอดมินใช้ไม่ได้แล้ว กรุณาเข้าใหม่' : 'บันทึกไม่สำเร็จ ลองกดอีกครั้ง', 'err');
         throw e;
       });
@@ -1219,8 +1223,19 @@
       var m = h.match(/app\.js\?v=([^"&]+)/);
       if (m && MY_VER && m[1] !== MY_VER && !busy()) location.replace(location.pathname + '?v=' + m[1] + location.hash);
     }).catch(function () {});
-    // new content: admins already work from the backend copy
-    if (ADMIN) return;
+    // new content: admins read the backend copy (so edits made on another device show here too)
+    if (ADMIN) {
+      if (!API || SAVING || Date.now() - LAST_SAVE < 20000) return;
+      call('getData', { adminCode: ADMIN_CODE }).then(function (g) {
+        if (!g || !g.data || SAVING || busy() || Date.now() - LAST_SAVE < 20000) return;
+        if (JSON.stringify(g.data) === JSON.stringify(DATA)) return;
+        DATA = g.data;
+        var y = window.scrollY;
+        renderSections(); renderRatana(); renderRooms(); route();
+        window.scrollTo(0, y);
+      }).catch(function () {});
+      return;
+    }
     fetch(DATA_PATH + '?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (t) {
       if (!t || t === LAST_DATA || busy()) return;
       var d = JSON.parse(t);
