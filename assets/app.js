@@ -550,6 +550,14 @@
       var desc = 0; c.querySelectorAll('.ovtx small').forEach(function (x) { desc = Math.max(desc, x.textContent.length); });
       if (longest > 13 || desc > 20) c.classList.add('full');
     });
+    // a half-width card left without a partner beside it takes the full width too
+    var waiting = null;
+    Array.prototype.forEach.call(box.children, function (c) {
+      var half = c.classList.contains('ovcard') && !c.classList.contains('full');
+      if (half) { if (waiting) waiting = null; else waiting = c; }
+      else if (waiting) { waiting.classList.add('full'); waiting = null; }
+    });
+    if (waiting) waiting.classList.add('full');
     // short lists without descriptions show as compact chips
     box.querySelectorAll('.ovlist').forEach(function (l) { if (!l.querySelector('small') && !l.querySelector('.ovn') && l.textContent.length / l.children.length < 22) l.classList.add('chips'); });
   }
