@@ -882,3 +882,8 @@ a.ovitem .arrow{color:#b8914a;font-size:1.2em}
 .addbtn.suggest{border-style:dashed;color:#8a6a2e;background:#fffaf0}
 
 .sec4.addsec{background:#fffaf0!important;color:#8a6a2e!important;border:1.5px dashed #c9a45a!important}
+
+/* ตัวหนังสือโทนน้ำตาลเข้มเดียวกันทั้งเว็บ · ไม่แสดงป้ายชื่อด้านบนหน้าอ่าน */
+:root{--ink:#3a2a16;--muted:#7a6447}
+.search input{color:#3a2a16}.search input::placeholder{color:#9a8768}
+.reader .crumb{display:none!important}

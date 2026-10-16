@@ -444,6 +444,10 @@
       { label: 'คำอธิบายใต้ชื่อ (ไม่ใส่ก็ได้)', value: s ? s.sub || '' : '' },
       { label: 'สัญลักษณ์บนการ์ด', options: opts, value: cur }
     ];
+    // ตำแหน่งของการ์ดในแถวหน้าแรก (ลำดับที่ ๑ = ซ้ายสุด)
+    var all = sections(), nPos = all.length + (s ? 0 : 1), pos = [];
+    for (var q = 0; q < nPos; q++) pos.push({ value: String(q), label: 'ลำดับที่ ' + th(q + 1) + (q === 0 ? ' (ซ้ายสุด)' : q === nPos - 1 ? ' (ขวาสุด)' : '') });
+    f.push({ label: 'ตำแหน่งการ์ด', options: pos, value: String(s ? all.indexOf(s) : nPos - 1) });
     var canDel = s && s.id !== 'rooms';
     ask(s ? 'แก้ไขหมวด' : 'เพิ่มหมวดใหม่', f, function (v) {
       var list = sections();
@@ -459,7 +463,8 @@
       o.title = v[0].trim();
       if (v[1].trim()) o.sub = v[1].trim(); else delete o.sub;
       if (v[2] !== '__img') { o.icon = v[2]; delete o.image; }
-      if (!s) list.push(o);
+      if (s) list.splice(list.indexOf(s), 1);
+      list.splice(Math.min(+v[3] || 0, list.length), 0, o);
       if (o.id === 'rooms') { DATA.roomsHeading = o.title; DATA.roomsSub = o.sub || ''; $('roomsHeading').textContent = o.title; $('roomsSub').textContent = o.sub || ''; }
       renderSections();
       route();
