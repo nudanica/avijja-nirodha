@@ -791,6 +791,24 @@
     show('readv');
   }
 
+  // remember where each page was scrolled to, so going back returns to the same spot
+  var SCROLLS = {}, STACK = [location.hash];
+  function onHash() {
+    var h = location.hash, top = STACK[STACK.length - 1];
+    if (h === top) return route();
+    SCROLLS[top] = window.scrollY;
+    var back = STACK.length > 1 && STACK[STACK.length - 2] === h;
+    if (back) STACK.pop(); else STACK.push(h);
+    route();
+    if (back && SCROLLS[h] != null) {
+      var y = SCROLLS[h];
+      window.scrollTo(0, y);
+      requestAnimationFrame(function () { window.scrollTo(0, y); });
+      setTimeout(function () { window.scrollTo(0, y); }, 150);
+    }
+  }
+  function saved(h) { return SCROLLS[h] != null && STACK.length > 1 && STACK[STACK.length - 2] === h; }
+
   function route() {
     var h = location.hash.replace('#', '');
     if (h === 'rooms') return openRooms();
@@ -814,14 +832,14 @@
     var m = /^#r(\d+)n\d+$/.exec(h);
     var sr = /^#(s\d+)n\d+$/.exec(h);
     if (sr) { location.hash = sr[1]; return; }
-    if (/^#s\d+$/.test(h)) { location.hash = ''; setTimeout(function () { var t = $('secs'); if (t) t.scrollIntoView({ block: 'center' }); }, 50); return; }
+    if (/^#s\d+$/.test(h)) { if (saved('')) { location.hash = ''; return; } location.hash = ''; setTimeout(function () { var t = $('secs'); if (t) t.scrollIntoView({ block: 'center' }); }, 50); return; }
     var pr = /^#(p\d+-\d+)r\d+$/.exec(h);
     if (pr) location.hash = pr[1];
-    else if (/^#p\d+-\d+$/.test(h)) { location.hash = ''; setTimeout(function () { var t = document.querySelector('.ratana'); if (t) t.scrollIntoView(); }, 50); }
+    else if (/^#p\d+-\d+$/.test(h)) { if (saved('')) { location.hash = ''; return; } location.hash = ''; setTimeout(function () { var t = document.querySelector('.ratana'); if (t) t.scrollIntoView(); }, 50); }
     else if (m) location.hash = 'r' + m[1];
     else if (/^#r\d+$/.test(h)) location.hash = 'rooms';
     else if (h === '#settings') location.hash = 'pending';
-    else { history.replaceState(null, '', location.pathname); route(); }
+    else { history.replaceState(null, '', location.pathname); onHash(); }
   });
 
   $('copy').addEventListener('click', function () {
@@ -1230,7 +1248,7 @@
     drawAccount();
     renderRatana();
     renderRooms();
-    window.addEventListener('hashchange', route);
+    window.addEventListener('hashchange', onHash);
     route();
     startAutoUpdate();
   }).catch(function () {
