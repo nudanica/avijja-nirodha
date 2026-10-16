@@ -8,12 +8,17 @@
 <meta property="og:title" content="คลังองค์ธรรมเพราะอวิชชาดับ">
 <meta property="og:description" content="อ่าน คัดลอก และส่งต่อทาง LINE">
 <meta property="og:image" content="images/hero.jpg">
+<link rel="apple-touch-icon" href="images/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="เพราะอวิชชาดับ">
+<meta name="application-name" content="เพราะอวิชชาดับ">
 <meta name="theme-color" content="#f3e9d4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#173621" media="(prefers-color-scheme: dark)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=Sarabun:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=20261016d">
+<link rel="stylesheet" href="assets/style.css?v=20261016e">
 </head>
 <body>
 <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
@@ -88,7 +93,7 @@
 </div>
 
 <div id="roomsv" class="view" hidden>
-  <section class="roomshead2 sechead"><div class="col pad"><span id="roomsMed" aria-hidden="true"></span><h1 id="roomsHeading"></h1><p id="roomsSub"></p><div class="cardadmin"><button type="button" class="editlink" id="editRoomsCard" hidden>แก้ไขการ์ดหน้าแรก</button><button type="button" class="editlink" id="roomsCardPhoto" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg>รูปบนการ์ด</button></div></div></section>
+  <section class="roomshead2 sechead" id="roomsHead"><div class="col pad"><span id="roomsMed" aria-hidden="true"></span><h1 id="roomsHeading"></h1><p id="roomsSub"></p><div class="cardadmin"><button type="button" class="editlink" id="editRoomsCard" hidden>แก้ไขการ์ดหน้าแรก</button><button type="button" class="editlink" id="roomsCardPhoto" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg>รูปบนการ์ด</button><button type="button" class="editlink" id="roomsCover" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg>รูปพื้นหลังด้านบน</button><button type="button" class="editlink" id="roomsCoverDel" hidden>เอารูปพื้นหลังออก</button></div></div></section>
   <main><div class="col pad"><section class="sec">
     <div class="steps" id="rooms"></div>
     <button class="addbtn" id="addRoom" type="button" hidden>+ เพิ่มห้อง</button>
@@ -149,10 +154,10 @@
 </div>
 
 <div id="sectionv" class="view" hidden>
-  <section class="roomshead2 sechead"><div class="col pad">
+  <section class="roomshead2 sechead" id="secHead"><div class="col pad">
     <span id="secMed"></span>
     <h1 id="secTitle"></h1><p id="secSub"></p>
-    <div class="cardadmin" id="secAdmin" hidden><button type="button" class="editlink" id="editSec">แก้ไขหมวดนี้</button><button type="button" class="editlink" id="secPhoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg>รูปบนการ์ด</button></div>
+    <div class="cardadmin" id="secAdmin" hidden><button type="button" class="editlink" id="editSec">แก้ไขหมวดนี้</button><button type="button" class="editlink" id="secPhoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg>รูปบนการ์ด</button><button type="button" class="editlink" id="secCover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg>รูปพื้นหลังด้านบน</button><button type="button" class="editlink" id="secCoverDel" hidden>เอารูปพื้นหลังออก</button></div>
   </div></section>
   <main><div class="col pad"><section class="sec roomcard">
     <h2 id="secCount"></h2>
@@ -186,6 +191,6 @@
 </dialog>
 <input type="file" id="picker" accept="image/*" hidden>
 
-<script src="assets/app.js?v=20261016d"></script>
+<script src="assets/app.js?v=20261016e"></script>
 </body>
 </html>

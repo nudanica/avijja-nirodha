@@ -461,6 +461,20 @@
       saveData('เปลี่ยนรูปการ์ด ' + s.title);
     });
   }
+  // รูปพื้นหลังด้านบนของหน้าการ์ด (แอดมินตั้งได้ แบบเดียวกับหัวห้องเรียน)
+  function applyCover(node, s) {
+    var on = !!(s && s.cover);
+    node.classList.toggle('hascover', on);
+    node.style.backgroundImage = on ? 'linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.58)),url("' + String(s.cover).replace(/"/g, '%22') + '")' : '';
+  }
+  function coverButtons(s, setId, delId) {
+    $(setId).hidden = !ADMIN;
+    $(delId).hidden = !ADMIN || !s.cover;
+    $(setId).onclick = function () {
+      pickPhoto(function (path, preview) { s.cover = path; route(); var hd = $(setId).closest('.sechead'); applyCover(hd, { cover: preview }); saveData('เปลี่ยนรูปพื้นหลังด้านบน ' + s.title); }, 1200);
+    };
+    $(delId).onclick = function () { delete s.cover; route(); saveData('เอารูปพื้นหลังด้านบนออก ' + s.title); };
+  }
   function openSection(si) {
     var s = sections()[si];
     if (!s || s.href) return openHome();
@@ -486,6 +500,8 @@
     $('addItem').onclick = function () { itemForm(s, null); };
     $('editSec').onclick = function () { sectionForm(s); };
     $('secPhoto').onclick = function () { sectionPhoto(s); };
+    applyCover($('secHead'), s);
+    coverButtons(s, 'secCover', 'secCoverDel');
     show('sectionv');
   }
   function itemForm(s, it) {
@@ -736,6 +752,8 @@
     $('roomsCardPhoto').onclick = function () { var s = sections().filter(function (x) { return x.id === 'rooms'; })[0]; if (s) sectionPhoto(s); };
     var rs = sections().filter(function (x) { return x.id === 'rooms'; })[0];
     var rm = $('roomsMed'); rm.innerHTML = ''; if (rs) rm.appendChild(medal(rs));
+    applyCover($('roomsHead'), rs);
+    if (rs) coverButtons(rs, 'roomsCover', 'roomsCoverDel');
     renderRooms();
     show('roomsv');
   }
