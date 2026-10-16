@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=Sarabun:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=20261016r">
+<link rel="stylesheet" href="assets/style.css?v=20261016u">
 </head>
 <body>
 <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
@@ -99,6 +99,7 @@
   <main><div class="col pad"><section class="sec">
     <div class="steps" id="rooms"></div>
     <button class="addbtn" id="addRoom" type="button" hidden>+ เพิ่มห้อง</button>
+    <button class="addbtn suggest" id="suggestRooms" type="button" hidden>+ เสนอเพิ่มองค์ธรรม</button>
   </section></div></main>
 </div>
 
@@ -115,6 +116,7 @@
     <h2 id="rc"></h2>
     <div class="notes" id="nlist"></div>
     <button class="addbtn" id="addNote" type="button" hidden>+ เพิ่มองค์ธรรม</button>
+    <button class="addbtn suggest" id="suggestNote" type="button" hidden>+ เสนอเพิ่มองค์ธรรมในห้องนี้</button>
   </section></div></main>
 </div>
 
@@ -151,6 +153,7 @@
     <h2 id="ptitle"></h2>
     <div class="recs" id="plist2"></div>
     <button class="addbtn" id="addRec" type="button" hidden>+ เพิ่มบันทึกการบรรลุธรรม</button>
+    <button class="addbtn suggest" id="suggestRec" type="button" hidden>+ เสนอเพิ่มบันทึกการบรรลุธรรม</button>
   </section>
   <button class="linkbtn" id="bioOnlyBtn" type="button" hidden></button></div></main>
 </div>
@@ -165,6 +168,7 @@
     <h2 id="secCount"></h2>
     <div class="steps toplist" id="slist2"></div>
     <button class="addbtn" id="addItem" type="button">+ เพิ่มเนื้อหา</button>
+    <button class="addbtn suggest" id="suggestItem" type="button" hidden>+ เสนอเพิ่มเนื้อหาในหมวดนี้</button>
   </section></div></main>
 </div>
 
@@ -193,6 +197,6 @@
 </dialog>
 <input type="file" id="picker" accept="image/*" hidden>
 
-<script src="assets/app.js?v=20261016r"></script>
+<script src="assets/app.js?v=20261016u"></script>
 </body>
 </html>

@@ -878,3 +878,7 @@ a.ovitem .arrow{color:#b8914a;font-size:1.2em}
 .ov.v .ovedit .ovitem:hover{background:#fbf3df}
 .ov .ovadd{display:block;width:100%;margin:8px 0 4px;padding:9px 10px;border:1.5px dashed #c9a45a;border-radius:12px;background:#fffaf0;color:#8a6a2e;font:600 .85em var(--body);cursor:pointer}
 .ov .ovaddg{grid-column:1/-1;margin:18px 0 0}
+
+.addbtn.suggest{border-style:dashed;color:#8a6a2e;background:#fffaf0}
+
+.sec4.addsec{background:#fffaf0!important;color:#8a6a2e!important;border:1.5px dashed #c9a45a!important}

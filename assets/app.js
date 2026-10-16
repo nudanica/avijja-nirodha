@@ -15,7 +15,7 @@
 
   var DATA = null;
   var current = null;
-  var curRoom = -1, curNote = -1, CTX = { kind: 'room' };
+  var curRoom = -1, curNote = -1, curSec = -1, curPerson = null, CTX = { kind: 'room' };
 
   // ---------- backend (Google Apps Script) ----------
   // The address of the backend lives in config.json as "apiUrl".
@@ -420,6 +420,12 @@
       add.type = 'button';
       add.onclick = function () { sectionForm(null); };
       box.appendChild(add);
+    } else if (API) {
+      // members: suggest a new องค์ธรรม from the last card of the row
+      var sg = el('button', 'sec4 addsec suggestcard', '+ เสนอเพิ่มองค์ธรรม');
+      sg.type = 'button';
+      sg.onclick = function () { curRoom = -1; suggestAdd({ kind: 'room' }); };
+      box.appendChild(sg);
     }
     dots.hidden = list.length < 2;
     box.onscroll = function () {
@@ -605,6 +611,8 @@
     $('secAdmin').hidden = !ADMIN;
     $('addItem').hidden = !ADMIN;
     $('addItem').onclick = function () { itemForm(s, null); };
+    curSec = si;
+    $('suggestItem').hidden = ADMIN || !API;
     $('editSec').onclick = function () { sectionForm(s); };
     $('secPhoto').onclick = function () { sectionPhoto(s); };
     applyCover($('secHead'), s);
@@ -843,6 +851,8 @@
       list.appendChild(a);
     });
     $('addRec').hidden = !ADMIN;
+    curPerson = p;
+    $('suggestRec').hidden = ADMIN || !API;
     $('addRec').onclick = function () { recordForm(p, null); };
     show('personv');
   }
@@ -898,6 +908,7 @@
     applyCover($('roomsHead'), rs);
     if (rs) coverButtons(rs, 'roomsCover', 'roomsCoverDel');
     renderRooms();
+    $('suggestRooms').hidden = ADMIN || !API;
     show('roomsv');
   }
 
@@ -905,6 +916,7 @@
     var r = DATA.rooms[ri];
     if (!r) return openRooms();
     curRoom = ri;
+    $('suggestNote').hidden = ADMIN || !API;
     $('brand').textContent = '';
     $('rk').textContent = 'ห้องที่ ' + r.no;
     $('rh').textContent = r.title;
@@ -1075,20 +1087,30 @@
     return DATA.rooms.map(function (r, i) { return { value: String(i + 1), label: 'ห้องที่ ' + r.no + ' · ' + r.title }; });
   }
   // proposal target: a room (number), a หมวด ("s:<id>") or a teacher's records ("p:<name>")
+  // where a new องค์ธรรม can go: any room or any หมวด (value "r:N" or "s:<id>")
+  function placeOptions() {
+    var o = DATA.rooms.map(function (r, i) { return { value: 'r:' + (i + 1), label: 'ห้องที่ ' + r.no + ' · ' + r.title }; });
+    sections().forEach(function (x) { if (!x.href) o.push({ value: 's:' + x.id, label: 'หมวด ' + x.title }); });
+    return o;
+  }
   function proposeForm(kind) {
-    var f = [], inRoom = CTX.kind === 'room';
-    if (kind === 'add' && inRoom) f.push({ label: 'ห้อง', options: roomOptions(), value: String((curRoom >= 0 ? curRoom : 0) + 1) });
-    var editText = CTX.kind === 'sec' && CTX.it.overview ? CTX.it.overview : current.text;
-    f.push({ label: kind === 'add' ? 'วางข้อความจากโน้ต LINE ทั้งหมด' : 'ข้อความที่เสนอแก้ (แก้ในช่องนี้ได้เลย)', multiline: true, value: kind === 'edit' ? editText : '' });
-    var what = CTX.kind === 'sec' ? 'หัวข้อ' : CTX.kind === 'rec' ? 'บันทึก' : 'องค์ธรรม';
+    var f = [], pick = kind === 'add' && CTX.kind !== 'rec';
+    if (pick) {
+      var def = CTX.kind === 'sec' ? 's:' + CTX.s.id : 'r:' + ((curRoom >= 0 ? curRoom : 0) + 1);
+      f.push({ label: 'เสนอเพิ่มใน', options: placeOptions(), value: def });
+    }
+    var editText = kind !== 'edit' ? '' : (CTX.kind === 'sec' && CTX.it && CTX.it.overview ? CTX.it.overview : (current && current.text) || '');
+    f.push({ label: kind === 'add' ? 'วางข้อความจากโน้ต LINE ทั้งหมด' : 'ข้อความที่เสนอแก้ (แก้ในช่องนี้ได้เลย)', multiline: true, value: editText });
+    var what = CTX.kind === 'rec' ? 'บันทึก' : CTX.kind === 'sec' && kind === 'edit' ? 'หัวข้อ' : 'องค์ธรรม';
     ask(kind === 'add' ? 'เสนอเพิ่ม' + what + 'ใหม่' : 'เสนอแก้ไข' + what + 'นี้', f, function (v, err) {
-      var room = CTX.kind === 'sec' ? 's:' + CTX.s.id : CTX.kind === 'rec' ? 'p:' + CTX.p.name : (kind === 'add' && inRoom ? +v[0] : curRoom + 1);
-      var text = kind === 'add' && inRoom ? v[1] : v[0];
-      var noteNo = CTX.kind === 'sec' || CTX.kind === 'rec' ? CTX.k + 1 : curNote + 1;
+      var text = pick ? v[1] : v[0], room;
+      if (pick) room = v[0].indexOf('r:') === 0 ? +v[0].slice(2) : v[0];
+      else room = CTX.kind === 'sec' ? 's:' + CTX.s.id : CTX.kind === 'rec' ? 'p:' + CTX.p.name : curRoom + 1;
+      var noteNo = kind === 'add' ? 0 : CTX.kind === 'sec' || CTX.kind === 'rec' ? CTX.k + 1 : curNote + 1;
       if (!text.trim()) { err('กรุณาวางข้อความ'); return true; }
       err('กำลังส่ง…');
       call('propose', { teamCode: store('team_code'), type: kind, room: room, note: noteNo, text: text, name: store('member_name') })
-        .then(function () { $('dlg').close(); $('toast').textContent = 'ส่งข้อเสนอแล้ว รอแอดมินอนุมัติก่อนขึ้นเว็บ'; })
+        .then(function () { $('dlg').close(); $('toast').textContent = 'ส่งข้อเสนอแล้ว รอแอดมินอนุมัติก่อนขึ้นเว็บ'; status('ส่งข้อเสนอแล้ว รอแอดมินอนุมัติก่อนขึ้นเว็บ', 'ok'); })
         .catch(function (e) {
           if (e.message === 'bad_team_code') { memberLogout(); err('รหัสสมาชิกเปลี่ยนแล้ว กรุณาเข้าสู่ระบบใหม่'); }
           else err('ส่งไม่สำเร็จ ลองกดอีกครั้ง');
@@ -1096,6 +1118,16 @@
       return true;
     }, 'ส่งข้อเสนอ');
   }
+  // members suggest a new องค์ธรรม / หัวข้อ straight from a room or หมวด page
+  function suggestAdd(ctx) {
+    if (!MEMBER) { store('after_login', location.hash); location.hash = 'login'; return; }
+    CTX = ctx;
+    proposeForm('add');
+  }
+  $('suggestNote').addEventListener('click', function () { suggestAdd({ kind: 'room' }); });
+  $('suggestRooms').addEventListener('click', function () { curRoom = -1; suggestAdd({ kind: 'room' }); });
+  $('suggestRec').addEventListener('click', function () { if (curPerson) suggestAdd({ kind: 'rec', p: curPerson, k: -1 }); });
+  $('suggestItem').addEventListener('click', function () { var s = sections()[curSec]; if (s) suggestAdd({ kind: 'sec', s: s, k: -1 }); });
   $('propose').addEventListener('click', function () {
     if (!MEMBER) { store('after_login', location.hash); location.hash = 'login'; return; }
     var what = CTX.kind === 'sec' ? 'หัวข้อ' : CTX.kind === 'rec' ? 'บันทึก' : 'องค์ธรรม';
