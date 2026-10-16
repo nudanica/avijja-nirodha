@@ -7,13 +7,13 @@ img{max-width:100%}
 [hidden]{display:none!important}
 
 /* Layout: phone-first single column; the group's lotus photo as the opening banner, leaf-green bars, lotus-pink accents on light leaf-tinted paper */
-:root{
+:root{color-scheme:light;
   --sky:#24502f; --sky2:#2f6a3c; --gold:#d6457a; --paper:#f5f9f3; --card:#ffffff;
   --ink:#1d2a20; --muted:#58685c; --line:#dfe8dc; --slot:#fbeef3; --petal:#fde7ef;
   --display:"Noto Serif Thai","Sarabun",serif; --body:"Sarabun","Thonburi",sans-serif; --script:"Charm","Noto Serif Thai",serif;
   --fs:19px;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+@media not all{:root:not([data-theme="light"]){
   --sky:#173621; --sky2:#21492c; --gold:#f07aa5; --paper:#0f1611; --card:#18221a;
   --ink:#ecf3ec; --muted:#a3b5a6; --line:#2a382c; --slot:#2a1d24; --petal:#3a2430; color-scheme:dark}}
 :root[data-theme="dark"]{
@@ -88,7 +88,7 @@ main .col{display:flex;flex-direction:column;gap:36px;padding-block:28px 56px}
 .rn{display:inline-block;background:var(--gold);color:#fff;font-weight:600;font-size:.78em;padding:2px 14px;border-radius:999px;letter-spacing:.02em}
 /* thai ornament: ประจำยาม */
 :root{--prajam:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%2012C12.6%208.6%2015.4%206.8%2018%206C17.2%208.6%2015.4%2011.4%2012%2012Z%22%20transform%3D%22rotate%280%2012%2012%29%22%20opacity%3D%22.7%22/%3E%3Cpath%20d%3D%22M12%2012C12.6%208.6%2015.4%206.8%2018%206C17.2%208.6%2015.4%2011.4%2012%2012Z%22%20transform%3D%22rotate%2890%2012%2012%29%22%20opacity%3D%22.7%22/%3E%3Cpath%20d%3D%22M12%2012C12.6%208.6%2015.4%206.8%2018%206C17.2%208.6%2015.4%2011.4%2012%2012Z%22%20transform%3D%22rotate%28180%2012%2012%29%22%20opacity%3D%22.7%22/%3E%3Cpath%20d%3D%22M12%2012C12.6%208.6%2015.4%206.8%2018%206C17.2%208.6%2015.4%2011.4%2012%2012Z%22%20transform%3D%22rotate%28270%2012%2012%29%22%20opacity%3D%22.7%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/svg%3E");--thaigold:#b8914a}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--thaigold:#d8b46e}}
+@media not all{:root:not([data-theme="light"]){--thaigold:#d8b46e}}
 :root[data-theme="dark"]{--thaigold:#d8b46e}
 .orn{display:inline-block;width:1em;height:1em;background:currentColor;-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
 .sec h2::before{content:"";width:22px;height:22px;transform:none;background:var(--gold);-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
@@ -218,7 +218,7 @@ dialog h3{margin:0;font-family:var(--display);font-size:1.15em}
 
 /* ---------- wide screens: the site sits on a Thai-pattern backdrop like a page ---------- */
 :root{--backdrop:#e6eee3}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--backdrop:#0b100c}}
+@media not all{:root:not([data-theme="light"]){--backdrop:#0b100c}}
 :root[data-theme="dark"]{--backdrop:#0b100c}
 @media (min-width:820px){
   html{background:var(--backdrop) url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cpath%20d%3D%22M32%200L64%2032L32%2064L0%2032Z%22%20fill%3D%22none%22%20stroke%3D%22%23b8914a%22%20stroke-width%3D%22.7%22%20opacity%3D%22.35%22/%3E%3Cg%20fill%3D%22%23b8914a%22%20opacity%3D%22.3%22%3E%3Cg%20transform%3D%22translate%2832%2032%29%20scale%280.8%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%280%200%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2864%200%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%280%2064%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2864%2064%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") center/64px 64px}
@@ -244,12 +244,12 @@ dialog h3{margin:0;font-family:var(--display);font-size:1.15em}
 .reader .ln.subtitle{align-self:flex-start;background:var(--petal);color:var(--gold);font-weight:600;border-radius:999px;padding:4px 16px;margin-top:.9em}
 .reader .pno{display:inline-block;color:var(--gold);font-weight:600;margin-right:2px}
 .reader .ln.ref{margin-top:1.4em;padding:12px 14px;border-radius:12px;background:var(--paper);border-left:4px solid var(--thaigold);color:var(--muted);font-size:.88em}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .reader .ln.title{color:#cfe8d3}}
+@media not all{:root:not([data-theme="light"]) .reader .ln.title{color:#cfe8d3}}
 :root[data-theme="dark"] .reader .ln.title{color:#cfe8d3}
 
 /* ---------- search results ---------- */
 :root{--hl:#ffe08a}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hl:#7a5a12}}
+@media not all{:root:not([data-theme="light"]){--hl:#7a5a12}}
 :root[data-theme="dark"]{--hl:#7a5a12}
 .rsum{margin:-6px 0 0;color:var(--muted);font-size:.88em}
 .res{display:flex;flex-direction:column;gap:6px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;color:inherit;text-decoration:none}
@@ -404,7 +404,7 @@ dialog.pinmode #dlgCancel{border:0;background:none;color:rgba(243,234,214,.75);f
 .adminbar #logout{color:#9a3b2e!important}
 .adminbar .astatus{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--sky);color:#fff;border-radius:999px;padding:8px 16px;font-size:13px;z-index:50;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.2)}
 .adminbar .astatus:empty{display:none}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .adminbar{background:#18221a!important;color:#cfd8d0!important}:root:not([data-theme="light"]) .adminbar button{color:#cfd8d0!important}}
+@media not all{:root:not([data-theme="light"]) .adminbar{background:#18221a!important;color:#cfd8d0!important}:root:not([data-theme="light"]) .adminbar button{color:#cfd8d0!important}}
 :root[data-theme="dark"] .adminbar{background:#18221a!important;color:#cfd8d0!important}
 :root[data-theme="dark"] .adminbar button{color:#cfd8d0!important}
 #roomsv main .col{padding-block:12px 40px}
@@ -537,7 +537,7 @@ svg.defs{position:absolute;width:0;height:0}
 
 /* หน้าอ่าน: ไม่แสดงชื่อห้องด้านบน เนื้อหาเข้มและชัดขึ้น (ตัวอักษรตามต้นฉบับ ไม่เพิ่มสี) */
 :root{--readink:#0f1a13}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--readink:#f4f8f4}}
+@media not all{:root:not([data-theme="light"]){--readink:#f4f8f4}}
 :root[data-theme="dark"]{--readink:#f4f8f4}
 .reader .crumb:empty{display:none}
 .reader .col{padding-top:16px}
@@ -662,7 +662,7 @@ svg.defs{position:absolute;width:0;height:0}
 #roomsMed .med{margin:0 auto 10px}
 
 /* theme: ivory + gold (light mode) — dark green symbol medallions stand out on the cream */
-@media (prefers-color-scheme: light){
+@media all{
 :root{--sky:#f3e9d4;--sky2:#e9dcbf;--paper:#fbf8f1;--line:#ece2cf}
 .bar,.bar a,.bar button,.hero .inner,.hero h1,.hero h2,.roomshead2,.roomshead2 h1,.sechead h1,.perhead,.perhead .pname,.cap2{color:#3a2a16}
 .bar{border-bottom:1px solid #e2d3b2}
@@ -683,7 +683,7 @@ svg.defs{position:absolute;width:0;height:0}
 .sechead.hascover .med{box-shadow:0 4px 14px rgba(0,0,0,.45),inset 0 0 0 3px rgba(247,227,168,.25)}
 
 /* home: faint ราชวัตรดอก pattern behind the top area (light theme) */
-@media (prefers-color-scheme: light){
+@media all{
 .on-home .hero .bwrap,.on-home .cap2,.on-home .secs,.on-home .secdots{background:transparent!important}
 .on-home .hero{position:relative;isolation:isolate}
 .on-home .hero>*{position:relative;z-index:1}
@@ -697,10 +697,10 @@ svg.defs{position:absolute;width:0;height:0}
 .lvl.top.rq .rn{box-shadow:0 0 0 5px #fff,0 2px 10px rgba(184,145,74,.3)!important}
 .lvl.rq .rn::before,.lvl.rq .rn::after{background:#fff3d6!important}
 /* computer screens: original line pattern on cream-gold */
-@media (prefers-color-scheme: light){:root{--backdrop:#e7d8b9}}
+@media all{:root{--backdrop:#e7d8b9}}
 
 /* รัตนะ: no pink accents — cream box, dark brown text (light theme) */
-@media (prefers-color-scheme: light){
+@media all{
 .troot{background:#f8efdc!important;border-color:#c9a45a!important}
 .role,.ord{color:#5b4220!important}
 .tnum{background:radial-gradient(circle at 40% 35%,#c79b4a,#7d5a1f)!important;color:#fff!important;border-color:#e3c27e!important;font-weight:700!important}
@@ -873,7 +873,8 @@ a.ovitem .arrow{color:#b8914a;font-size:1.2em}
 
 
 /* admin editing inside the แผนผัง */
-.ov.v .ovedit .ovitem{cursor:pointer}
+.ov.v .ovedit .ovitem,.ov.v .ovedit .ovnote,.ov.v .ovedit .ovsub{cursor:pointer}
+.ov.v .ovedit .ovnote:hover{background:#fbf3df}
 .ov.v .ovedit .ovitem:hover{background:#fbf3df}
 .ov .ovadd{display:block;width:100%;margin:8px 0 4px;padding:9px 10px;border:1.5px dashed #c9a45a;border-radius:12px;background:#fffaf0;color:#8a6a2e;font:600 .85em var(--body);cursor:pointer}
 .ov .ovaddg{grid-column:1/-1;margin:18px 0 0}

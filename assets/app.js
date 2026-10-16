@@ -516,8 +516,8 @@
         return;
       }
       if (!card) { card = el('div', 'ovcard'); box.appendChild(card); }
-      if (t.indexOf('> ') === 0) { card.appendChild(el('p', 'ovnote', t.slice(2))); return; }
-      if (t.indexOf('## ') === 0) { card.appendChild(el('div', 'ovsub', t.slice(3))); list = null; return; }
+      if (t.indexOf('> ') === 0) { var nt = el('p', 'ovnote', t.slice(2)); nt._line = li; card.appendChild(nt); return; }
+      if (t.indexOf('## ') === 0) { var sb = el('div', 'ovsub', t.slice(3)); sb._line = li; card.appendChild(sb); list = null; return; }
       var link = '', m = /\s*->\s*(#\S+)\s*$/.exec(t);
       if (m) { link = m[1]; t = t.slice(0, m.index); }
       var parts = t.split('|'), row = el(link ? 'a' : 'div', 'ovitem');
@@ -553,6 +553,16 @@
     function joinLine(o) { return (o.num ? o.num + ' ' : '') + o.name + (o.desc ? ' | ' + o.desc : '') + (o.link ? ' -> ' + o.link : ''); }
     cards.forEach(function (c) {
       c.classList.add('ovedit');
+      // the small line under a หมวด name (e.g. หรือสัมมาวายามะ) and the กลุ่มย่อย labels
+      c.querySelectorAll('.ovnote, .ovsub').forEach(function (n) {
+        n.onclick = function () {
+          var note = n.classList.contains('ovnote'), mark = note ? '> ' : '## ';
+          ask(note ? 'แก้ไขข้อความใต้ชื่อหมวด' : 'แก้ไขชื่อกลุ่มย่อย', [{ label: 'ข้อความ', value: L[n._line].trim().slice(mark.length) }], function (v) {
+            if (!v[0].trim()) return;
+            L[n._line] = mark + v[0].trim(); save('แก้ข้อความในแผนผัง');
+          });
+        };
+      });
       c.querySelectorAll('.ovitem').forEach(function (row) {
         row.onclick = function (e) {
           e.preventDefault();
