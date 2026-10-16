@@ -333,7 +333,7 @@
     box.innerHTML = '';
     DATA.ratana.forEach(function (r, i) {
       if (i > 0) box.appendChild(el('div', 'link'));
-      var lvl = el('div', 'lvl' + (r.style === 'feature' ? ' top' : ''));
+      var lvl = el('div', 'lvl' + (r.style === 'feature' ? ' top' : '') + (i < 4 ? ' rq' : ''));
       lvl.appendChild(el('span', 'rn', r.label));
       if (r.style === 'feature') {
         var wrap = el('div', 'person big');
