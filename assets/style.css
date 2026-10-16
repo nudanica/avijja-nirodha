@@ -615,8 +615,7 @@ svg.defs{position:absolute;width:0;height:0}
 .rec .arrow{flex:none;color:var(--thaigold);font-size:1.4em}
 #personv .addbtn{margin-top:4px}
 /* หน้าอ่านบันทึก: ไม่มีปุ่มเสนอแก้ไข และไม่มีปุ่มลบแยก */
-.on-rec #propose,.on-rec #delNote{display:none!important}
-.on-rec .reader .actions .col{grid-template-columns:1fr 1fr}
+.on-rec #delNote{display:none!important}
 
 /* แตะท่านอาจารย์: ลูกศรเล็กสีทองมุมขวา แทนป้าย */
 .tap{position:relative}
@@ -872,3 +871,9 @@ a.ovitem .arrow{color:#b8914a;font-size:1.2em}
 .ov.v::after{content:'';height:30px;opacity:1;width:110px;margin:14px auto 0;background:#b8914a!important;-webkit-mask:var(--prajam) left center/18px 18px no-repeat,var(--prajam) center/28px 28px no-repeat,var(--prajam) right center/18px 18px no-repeat;mask:var(--prajam) left center/18px 18px no-repeat,var(--prajam) center/28px 28px no-repeat,var(--prajam) right center/18px 18px no-repeat;-webkit-mask-composite:source-over;mask-composite:add}
 .ov.v .ovtotal::before,.ov.v .ovtotal::after{display:none!important}
 
+
+/* admin editing inside the แผนผัง */
+.ov.v .ovedit .ovitem{cursor:pointer}
+.ov.v .ovedit .ovitem:hover{background:#fbf3df}
+.ov .ovadd{display:block;width:100%;margin:8px 0 4px;padding:9px 10px;border:1.5px dashed #c9a45a;border-radius:12px;background:#fffaf0;color:#8a6a2e;font:600 .85em var(--body);cursor:pointer}
+.ov .ovaddg{grid-column:1/-1;margin:18px 0 0}

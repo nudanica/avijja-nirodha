@@ -15,7 +15,7 @@
 
   var DATA = null;
   var current = null;
-  var curRoom = -1, curNote = -1;
+  var curRoom = -1, curNote = -1, CTX = { kind: 'room' };
 
   // ---------- backend (Google Apps Script) ----------
   // The address of the backend lives in config.json as "apiUrl".
@@ -497,19 +497,20 @@
       return l.replace(/^(===|==|=|##|#|>)\s?/, '').replace(/\s*->\s*#\S+\s*$/, '').replace(/\s*\|\s*/, ' – ');
     }).join('\n');
   }
-  function renderOverview(box, text) {
+  function renderOverview(box, text, onSave) {
     box.innerHTML = '';
     box.classList.add('v');
-    var card = null, list = null;
-    String(text || '').split('\n').forEach(function (raw) {
+    var card = null, list = null, L = String(text || '').split('\n'), cards = [];
+    L.forEach(function (raw, li) {
       var t = raw.trim();
+      if (card && t && t.indexOf('# ') !== 0 && t.indexOf('=== ') !== 0) card._last = li;
       if (!t) return;
       if (t.indexOf('=== ') === 0) { box.appendChild(el('div', 'ovtotal', t.slice(4))); card = null; return; }
       if (t.indexOf('== ') === 0) { box.appendChild(el('p', 'ovlead', t.slice(3))); return; }
       if (t.indexOf('= ') === 0) { box.appendChild(el('h2', 'ovtitle', t.slice(2))); return; }
       if (t.indexOf('# ') === 0) {
         var gm = /^([๐-๙0-9]+)\.\s*(.*)$/.exec(t.slice(2));
-        card = el('div', 'ovcard'); card.appendChild(el('span', 'ovmed', gm ? gm[1] : ''));
+        card = el('div', 'ovcard'); card._head = li; card._last = li; cards.push(card); card.appendChild(el('span', 'ovmed', gm ? gm[1] : ''));
         var hd = el('h3'); if (gm) hd.appendChild(el('span', 'ovgn', gm[1] + '.')); hd.appendChild(document.createTextNode(gm ? gm[2] : t.slice(2))); card.appendChild(hd); box.appendChild(card); list = null;
         hd.onclick = (function (c) { return function () { c.classList.toggle('open'); }; })(card);
         return;
@@ -527,8 +528,10 @@
       row.appendChild(tx);
       if (link) row.appendChild(el('span', 'arrow', '›'));
       if (!list) { list = el('div', 'ovlist'); card.appendChild(list); }
+      row._line = li;
       list.appendChild(row);
     });
+    if (onSave && ADMIN) ovAdmin(box, L, cards, onSave);
     // groups with short items sit two-by-two; long ones take the full width
     box.querySelectorAll('.ovcard').forEach(function (c) {
       var longest = 0;
@@ -538,6 +541,29 @@
     });
     // short lists without descriptions show as compact chips
     box.querySelectorAll('.ovlist').forEach(function (l) { if (!l.querySelector('small') && !l.querySelector('.ovn') && l.textContent.length / l.children.length < 22) l.classList.add('chips'); });
+  }
+  // admin: tap a ข้อ in the แผนผัง to edit its คำอธิบาย only (the ข้อ and หมวด themselves are fixed)
+  function ovAdmin(box, L, cards, onSave) {
+    function save(msg) { onSave(L.filter(function (x) { return x !== null; }).join('\n'), msg); }
+    function splitLine(t) {
+      var link = '', m = /\s*->\s*(#\S+)\s*$/.exec(t); if (m) { link = m[1]; t = t.slice(0, m.index); }
+      var parts = t.split('|'), head = parts[0].trim(), n = /^([๐-๙0-9]+\.)\s*(.*)$/.exec(head);
+      return { num: n ? n[1] : '', name: n ? n[2] : head, desc: parts.slice(1).join('|').trim(), link: link };
+    }
+    function joinLine(o) { return (o.num ? o.num + ' ' : '') + o.name + (o.desc ? ' | ' + o.desc : '') + (o.link ? ' -> ' + o.link : ''); }
+    cards.forEach(function (c) {
+      c.classList.add('ovedit');
+      c.querySelectorAll('.ovitem').forEach(function (row) {
+        row.onclick = function (e) {
+          e.preventDefault();
+          var o = splitLine(L[row._line].trim());
+          ask((o.num ? o.num + ' ' : '') + o.name, [{ label: 'คำอธิบาย', multiline: true, rows: 4, value: o.desc }], function (v) {
+            o.desc = v[0].trim().replace(/\n+/g, ' ');
+            L[row._line] = joinLine(o); save('แก้คำอธิบาย ' + o.name);
+          });
+        };
+      });
+    });
   }
   function openSection(si) {
     var s = sections()[si];
@@ -587,6 +613,20 @@
     show('sectionv');
   }
   function itemForm(s, it) {
+    if (it && it.overview) {
+      // a แผนผัง topic: title, short line under it, and the diagram text
+      return ask('แก้ไขแผนผัง', [
+        { label: 'ชื่อหัวข้อ', value: it.title || '' },
+        { label: 'คำอธิบายสั้นใต้ชื่อ', value: it.sub || '' },
+        { label: 'ข้อความแผนผัง', multiline: true, value: it.overview }
+      ], function (v) {
+        if (v.del) { s.items.splice(s.items.indexOf(it), 1); history.back(); saveData('ลบหัวข้อใน ' + s.title); return; }
+        if (!v[2].trim()) return;
+        it.title = v[0].trim() || it.title; if (v[1].trim()) it.sub = v[1].trim(); else delete it.sub; it.overview = v[2];
+        route();
+        saveData('แก้แผนผังใน ' + s.title);
+      }, 'บันทึก', 'ลบหัวข้อนี้');
+    }
     ask(it ? 'แก้ไขเนื้อหา' : 'เพิ่มเนื้อหาใน ' + s.title, [{ label: 'วางข้อความจากโน้ต LINE ทั้งหมด', multiline: true, value: it ? it.text : '' }], function (v) {
       if (v.del && it) {
         s.items.splice(s.items.indexOf(it), 1);
@@ -605,15 +645,18 @@
   function openItem(si, k) {
     var s = sections()[si], it = s && s.items && s.items[k];
     if (!it) return openSection(si);
-    curItem = { s: s, it: it };
+    curItem = { s: s, it: it }; CTX = { kind: 'sec', s: s, k: k, it: it };
     $('brand').textContent = '';
     $('crumb').textContent = s.title;
     if (it.overview) {
       // a diagram topic: draw the แผนผัง; copy / LINE get it as plain lines
       current = { text: overviewText(it.overview) };
-      var tb = $('text'); tb.innerHTML = ''; tb.classList.add('hasov'); var ov = el('section', 'ov'); tb.appendChild(ov); renderOverview(ov, it.overview);
+      var tb = $('text'); tb.innerHTML = ''; tb.classList.add('hasov'); var ov = el('section', 'ov'); tb.appendChild(ov);
+      renderOverview(ov, it.overview, function (nt, msg) { it.overview = nt; var y = window.scrollY; route(); window.scrollTo(0, y); saveData(msg + ' · ' + (it.title || s.title)); });
+      $('editNote').textContent = 'แก้ไขข้อความทั้งแผนผัง';
     } else {
       current = it;
+      $('editNote').textContent = 'แก้ไขหัวข้อนี้';
       $('text').classList.remove('hasov');
       showText($('text'), it.text);
     }
@@ -817,7 +860,7 @@
   function openRecord(ri, pi, k) {
     var p = getPerson(ri, pi), rec = p && p.records && p.records[k];
     if (!rec) return openPerson(ri, pi);
-    current = rec; curRecord = { p: p, rec: rec };
+    current = rec; curRecord = { p: p, rec: rec }; CTX = { kind: 'rec', p: p, k: k }; $('editNote').textContent = 'แก้ไขบันทึกนี้';
     $('brand').textContent = '';
     var dt = thDate(rec.date);
     $('crumb').textContent = p.name + (dt ? ' · ' + dt.wd + 'ที่ ' + dt.day + ' ' + dt.month + ' ' + dt.year : '');
@@ -892,7 +935,7 @@
     var r = DATA.rooms[ri];
     var n = r && r.notes[ni];
     if (!n) return openRoom(ri);
-    current = n; curRoom = ri; curNote = ni;
+    current = n; curRoom = ri; curNote = ni; CTX = { kind: 'room' }; $('editNote').textContent = 'แก้ไของค์ธรรมนี้';
     $('brand').textContent = '';
     $('crumb').textContent = 'ห้องที่ ' + r.no + ' · ' + r.title;
     showText($('text'), n.text);
@@ -1021,16 +1064,20 @@
   function roomOptions() {
     return DATA.rooms.map(function (r, i) { return { value: String(i + 1), label: 'ห้องที่ ' + r.no + ' · ' + r.title }; });
   }
+  // proposal target: a room (number), a หมวด ("s:<id>") or a teacher's records ("p:<name>")
   function proposeForm(kind) {
-    var f = [];
-    if (kind === 'add') f.push({ label: 'ห้อง', options: roomOptions(), value: String((curRoom >= 0 ? curRoom : 0) + 1) });
-    f.push({ label: kind === 'add' ? 'วางข้อความจากโน้ต LINE ทั้งหมด' : 'ข้อความที่เสนอแก้ (แก้ในช่องนี้ได้เลย)', multiline: true, value: kind === 'edit' ? current.text : '' });
-    ask(kind === 'add' ? 'เสนอเพิ่มองค์ธรรมใหม่' : 'เสนอแก้ไของค์ธรรมนี้', f, function (v, err) {
-      var room = kind === 'add' ? +v[0] : curRoom + 1;
-      var text = kind === 'add' ? v[1] : v[0];
+    var f = [], inRoom = CTX.kind === 'room';
+    if (kind === 'add' && inRoom) f.push({ label: 'ห้อง', options: roomOptions(), value: String((curRoom >= 0 ? curRoom : 0) + 1) });
+    var editText = CTX.kind === 'sec' && CTX.it.overview ? CTX.it.overview : current.text;
+    f.push({ label: kind === 'add' ? 'วางข้อความจากโน้ต LINE ทั้งหมด' : 'ข้อความที่เสนอแก้ (แก้ในช่องนี้ได้เลย)', multiline: true, value: kind === 'edit' ? editText : '' });
+    var what = CTX.kind === 'sec' ? 'หัวข้อ' : CTX.kind === 'rec' ? 'บันทึก' : 'องค์ธรรม';
+    ask(kind === 'add' ? 'เสนอเพิ่ม' + what + 'ใหม่' : 'เสนอแก้ไข' + what + 'นี้', f, function (v, err) {
+      var room = CTX.kind === 'sec' ? 's:' + CTX.s.id : CTX.kind === 'rec' ? 'p:' + CTX.p.name : (kind === 'add' && inRoom ? +v[0] : curRoom + 1);
+      var text = kind === 'add' && inRoom ? v[1] : v[0];
+      var noteNo = CTX.kind === 'sec' || CTX.kind === 'rec' ? CTX.k + 1 : curNote + 1;
       if (!text.trim()) { err('กรุณาวางข้อความ'); return true; }
       err('กำลังส่ง…');
-      call('propose', { teamCode: store('team_code'), type: kind, room: room, note: curNote + 1, text: text, name: store('member_name') })
+      call('propose', { teamCode: store('team_code'), type: kind, room: room, note: noteNo, text: text, name: store('member_name') })
         .then(function () { $('dlg').close(); $('toast').textContent = 'ส่งข้อเสนอแล้ว รอแอดมินอนุมัติก่อนขึ้นเว็บ'; })
         .catch(function (e) {
           if (e.message === 'bad_team_code') { memberLogout(); err('รหัสสมาชิกเปลี่ยนแล้ว กรุณาเข้าสู่ระบบใหม่'); }
@@ -1041,7 +1088,8 @@
   }
   $('propose').addEventListener('click', function () {
     if (!MEMBER) { store('after_login', location.hash); location.hash = 'login'; return; }
-    ask('ต้องการเสนออะไร', [{ label: 'เลือก', options: [{ value: 'add', label: 'เพิ่มองค์ธรรมใหม่' }, { value: 'edit', label: 'แก้ไของค์ธรรมนี้' }] }], function (v) {
+    var what = CTX.kind === 'sec' ? 'หัวข้อ' : CTX.kind === 'rec' ? 'บันทึก' : 'องค์ธรรม';
+    ask('ต้องการเสนออะไร', [{ label: 'เลือก', options: [{ value: 'add', label: 'เพิ่ม' + what + 'ใหม่' }, { value: 'edit', label: 'แก้ไข' + what + 'นี้' }] }], function (v) {
       setTimeout(function () { proposeForm(v[0]); }, 50);
     }, 'ถัดไป');
   });
@@ -1211,13 +1259,16 @@
       $('pendingBtn').textContent = 'รอตรวจ ' + th(j.items.length);
       if (!j.items.length) box.appendChild(el('div', 'empty', 'ไม่มีข้อเสนอที่รอตรวจ'));
       j.items.forEach(function (it) {
-        var r = DATA.rooms[it.room - 1];
+        var r = typeof it.room === 'number' ? DATA.rooms[it.room - 1] : null;
+        var where = r ? 'ห้องที่ ' + r.no : 'ห้องที่ ' + th(it.room);
+        if (/^s:/.test(it.room)) { var sx = sections().filter(function (x) { return x.id === it.room.slice(2); })[0]; where = 'หมวด ' + (sx ? sx.title : it.room.slice(2)); }
+        if (/^p:/.test(it.room)) where = 'บันทึกการบรรลุธรรม ' + it.room.slice(2);
         var c = el('div', 'pend');
         var h = el('div', 'phd');
         h.appendChild(el('span', 'chip' + (it.type === 'edit' ? ' y' : ''), it.type === 'edit' ? 'แก้ไข' : 'เพิ่มใหม่'));
         h.appendChild(el('span', 'who', 'จาก ' + it.name + ' · ' + timeAgo(it.time)));
         c.appendChild(h);
-        c.appendChild(el('b', null, (r ? 'ห้องที่ ' + r.no : 'ห้องที่ ' + th(it.room)) + (it.type === 'edit' ? ' · องค์ธรรม ' + th(it.note) : '')));
+        c.appendChild(el('b', null, where + (it.type === 'edit' ? ' · ' + (/^s:/.test(it.room) ? 'หัวข้อ ' : /^p:/.test(it.room) ? 'บันทึก ' : 'องค์ธรรม ') + th(it.note) : '')));
         var t = el('div', 'ptext', it.text);
         c.appendChild(t);
         var btns = el('div', 'pbtns');
@@ -1228,7 +1279,7 @@
           status(ok ? 'กำลังอนุมัติ…' : 'กำลังบันทึก…', 'busy');
           call('decide', { adminCode: ADMIN_CODE, id: it.id, approve: ok }).then(function () {
             status(ok ? 'อนุมัติแล้ว เว็บจะอัปเดตภายใน ๑–๒ นาที' : 'ไม่อนุมัติแล้ว', 'ok');
-            if (ok) return call('getData', { adminCode: ADMIN_CODE }).then(function (g) { DATA = g.data; renderRatana(); renderRooms(); });
+            if (ok) return call('getData', { adminCode: ADMIN_CODE }).then(function (g) { DATA = g.data; renderSections(); renderRatana(); renderRooms(); });
           }).then(openPending).catch(function () { status('ทำไม่สำเร็จ ลองอีกครั้ง', 'err'); yes.disabled = no.disabled = false; });
         }
         no.onclick = function () { decide(false); };
