@@ -713,3 +713,74 @@ svg.defs{position:absolute;width:0;height:0}
 .reloadbtn.spin svg{animation:rb 1s linear infinite}
 @keyframes rb{to{transform:rotate(360deg)}}
 html:not(.on-home) .reloadbtn{display:none}
+
+/* ภาพรวมของหมวด (เช่น โพธิปักขิยธรรม ๓๗) */
+.ov{display:grid;gap:14px;margin:6px 0 22px}
+
+.ovtitle{margin:4px 0 2px;text-align:center;font-family:var(--display);font-size:1.15em;line-height:1.5;color:#3a2a16;text-wrap:balance}
+.ovcard{background:var(--card);border:1.5px solid #d9c08a;border-radius:18px;padding:16px 16px 12px;box-shadow:0 3px 10px rgba(120,85,30,.07)}
+.ovcard h3{margin:0 0 8px;font-family:var(--display);font-size:1.12em;color:#3a2a16;display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1.5px solid color-mix(in srgb,#b8914a 45%,transparent)}
+.ovcard h3::before{content:'';width:18px;height:18px;flex:none;background:#b8914a;-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+.ovnote{margin:0 0 6px;color:#8a6a2e;font-size:.85em;font-weight:600}
+.ovsub{margin:10px 0 2px;display:inline-block;background:linear-gradient(180deg,#d9a94f,#a8792c);color:#fff;font-weight:600;font-size:.78em;padding:2px 12px;border-radius:999px}
+.ovlist{display:flex;flex-direction:column}
+.ovitem{display:flex;align-items:center;gap:8px;padding:8px 2px;border-bottom:1px dashed #eadfc8;color:var(--ink);text-decoration:none}
+.ovitem:last-child{border-bottom:0}
+.ovitem::before{content:'';width:7px;height:7px;flex:none;border-radius:50%;background:#c9a45a;margin-top:-2px}
+.ovtx{flex:1;display:flex;flex-direction:column;line-height:1.5}
+.ovtx b{font-weight:600;font-size:.98em}
+.ovtx small{color:var(--muted);font-size:.8em}
+a.ovitem .arrow{color:#b8914a;font-size:1.2em}
+
+.ovlist.chips{flex-direction:row;flex-wrap:wrap;gap:8px;padding-top:4px}
+.ovlist.chips .ovitem{border:1px solid #e3cf9f;border-radius:999px;background:#fbf5e6;padding:6px 14px;border-bottom:1px solid #e3cf9f}
+.ovlist.chips .ovitem::before{display:none}
+.ovlist.chips a.ovitem{background:#fff;border-color:#c9a45a}
+.ovitem{align-items:flex-start}
+.ovitem::before{margin-top:.7em}
+.ovlist.chips .ovitem{align-items:center}
+
+/* แผนผัง: numbered groups with a lotus-gold medallion, title band, total ribbon */
+.ovlead{margin:-4px 0 6px;text-align:center;color:#8a6a2e;font-weight:600;font-size:.92em;display:flex;align-items:center;justify-content:center;gap:8px;grid-column:1/-1}
+.ovlead::before,.ovlead::after{content:'';width:8px;height:8px;flex:none;background:#c9a45a;transform:rotate(45deg)}
+.ovtitle{grid-column:1/-1;font-size:1.3em;padding:10px 18px;border:1.5px solid #c9a45a;border-radius:16px;background:linear-gradient(180deg,#fffaf0,#f5e7c8);box-shadow:0 0 0 4px #fbf8f1,0 0 0 5px #e3cf9f}
+.ovcard{position:relative;margin-top:16px;padding-top:26px;overflow:visible}
+.ovmed{position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#d9b064,#8a6424);box-shadow:0 0 0 3px #fff,0 2px 8px rgba(120,85,30,.3);display:grid;place-items:center}
+.ovmed::after{content:'';width:22px;height:22px;background:#fff8e6;-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+.ovcard h3{justify-content:center;text-align:center;background:#f8efdc;margin:0 -16px 10px;padding:8px 12px;border-bottom:1.5px solid #e3cf9f}
+.ovcard h3::before{display:none}
+.ovn{color:#b8914a;font-weight:700;margin-right:8px;font-variant-numeric:tabular-nums}
+.ovitem::before{display:none}
+.ovitem{padding:7px 4px}
+.ovtotal{grid-column:1/-1;justify-self:center;margin-top:6px;background:linear-gradient(180deg,#d9a94f,#a8792c);color:#fff;font-family:var(--display);font-weight:700;font-size:1.05em;padding:8px 26px;border-radius:999px;box-shadow:0 0 0 4px #fbf8f1,0 0 0 5px #c9a45a,0 4px 12px rgba(120,85,30,.2);text-shadow:0 1px 2px rgba(80,50,10,.4)}
+
+.ov{grid-template-columns:1fr 1fr;column-gap:10px}
+.ov .ovcard.full{grid-column:1/-1}
+.ov .ovcard:not(.full){padding-left:12px;padding-right:12px}
+.ov .ovcard:not(.full) h3{margin-left:-12px;margin-right:-12px;font-size:1em}
+@media (min-width:820px){.ov{column-gap:16px}}
+
+/* ===== แผนผัง (tree): title → gold spine → numbered groups → branches ===== */
+.ov.tree{display:block;position:relative;margin:4px 0 22px}
+.ov.tree .ovtitle{display:block;text-align:center;margin:0 auto 6px;max-width:440px}
+.ov.tree .ovlead{margin:8px 0 18px}
+.ov.tree .ovcard{position:relative;margin:0 0 0 30px;padding:0 0 18px 0;background:none;border:0;box-shadow:none;border-radius:0}
+.ov.tree .ovcard::before{content:'';position:absolute;left:-12px;top:-18px;bottom:0;width:3px;background:linear-gradient(#c9a45a,#b8914a);border-radius:2px}
+.ov.tree .ovmed{left:-30px;top:2px;transform:none;width:40px;height:40px;color:#fff;font:700 1.05em var(--body);text-shadow:0 1px 2px rgba(60,35,5,.4);z-index:1}
+.ov.tree .ovmed::after{display:none}
+.ov.tree .ovcard h3{margin:0 0 6px 18px;padding:8px 14px;background:linear-gradient(180deg,#fffaf0,#f5e7c8);border:1.5px solid #c9a45a;border-radius:14px;justify-content:flex-start;text-align:left;font-size:1.06em;box-shadow:0 2px 8px rgba(120,85,30,.08)}
+.ov.tree .ovnote{margin:2px 0 4px 34px}
+.ov.tree .ovsub{margin:10px 0 4px 34px}
+.ov.tree .ovlist{position:relative;margin-left:34px;padding-left:16px;border-left:2px solid #e3cf9f;flex-direction:column;flex-wrap:nowrap;gap:0}
+.ov.tree .ovitem{position:relative;align-items:flex-start;background:var(--card);border:1px solid #eadfc8;border-radius:12px;padding:8px 12px;margin:6px 0;border-bottom:1px solid #eadfc8}
+.ov.tree .ovitem::before{display:block;content:'';position:absolute;left:-17px;top:20px;width:14px;height:2px;border-radius:0;background:#e3cf9f;margin:0}
+.ov.tree a.ovitem{border-color:#c9a45a}
+.ov.tree .ovtx b{font-size:.98em}
+.ov.tree .ovtx small{font-size:.82em;line-height:1.5;margin-top:2px}
+.ov.tree .ovtotal{display:block;width:max-content;max-width:100%;margin:4px auto 0}
+.ov.tree .ovcard:last-of-type{padding-bottom:22px}
+.ov.tree .ovlist{margin-left:26px;padding-left:12px}
+.ov.tree .ovitem::before{left:-13px;width:11px}
+.ov.tree .ovitem{padding:8px 10px}
+.ov.tree .ovnote,.ov.tree .ovsub{margin-left:26px}
+@media (min-width:820px){.ov.tree .ovlist{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}.ov.tree .ovitem{margin:5px 0}}

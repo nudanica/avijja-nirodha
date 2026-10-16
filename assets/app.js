@@ -58,6 +58,8 @@
   }
 
   // photo: resize on the phone, upload, then point the record at it
+  // a just-uploaded photo takes a minute or two to appear on the site; show the local copy everywhere meanwhile
+  var PREVIEW = {};
   function pickPhoto(onDone, maxSize) {
     var p = $('picker');
     p.value = '';
@@ -73,6 +75,7 @@
         var url = c.toDataURL('image/jpeg', 0.85);
         status('กำลังอัปโหลดรูป…', 'busy');
         call('uploadImage', { adminCode: ADMIN_CODE, b64: url.split(',')[1] }).then(function (j) {
+          PREVIEW[j.path] = url;
           onDone(j.path, url);
         }).catch(function () { status('อัปโหลดรูปไม่สำเร็จ ลองอีกครั้ง', 'err'); });
       };
@@ -175,7 +178,7 @@
     var ph = el('div', 'ph');
     if (src) {
       ph.classList.add('has');
-      ph.style.backgroundImage = 'url("' + src + '")';
+      ph.style.backgroundImage = 'url("' + (PREVIEW[src] || src) + '")';
       ph.setAttribute('role', 'img');
       if (alt) ph.setAttribute('aria-label', alt);
     }
@@ -479,6 +482,55 @@
     };
     $(delId).onclick = function () { delete s.cover; route(); saveData('เอารูปพื้นหลังด้านบนออก ' + s.title); };
   }
+  // ภาพรวมของหมวด: plain text the admin pastes in
+  //   = หัวเรื่องใหญ่      # หัวข้อกลุ่ม      > หมายเหตุใต้หัวข้อ      ## กลุ่มย่อย
+  //   รายการ | คำอธิบาย   (ต่อท้ายด้วย  -> #ลิงก์  เพื่อให้กดไปยังองค์ธรรมนั้นได้)
+  // "๑. ข้อความ" → gold number + text
+  function numbered(node, t) {
+    var m = /^([๐-๙0-9]+\.)\s*(.*)$/.exec(t);
+    if (m) { node.appendChild(el('span', 'ovn', m[1])); node.appendChild(document.createTextNode(m[2])); }
+    else node.textContent = t;
+    return node;
+  }
+  function renderOverview(box, text) {
+    box.innerHTML = '';
+    box.classList.add('tree');
+    var card = null, list = null;
+    String(text || '').split('\n').forEach(function (raw) {
+      var t = raw.trim();
+      if (!t) return;
+      if (t.indexOf('=== ') === 0) { box.appendChild(el('div', 'ovtotal', t.slice(4))); card = null; return; }
+      if (t.indexOf('== ') === 0) { box.appendChild(el('p', 'ovlead', t.slice(3))); return; }
+      if (t.indexOf('= ') === 0) { box.appendChild(el('h2', 'ovtitle', t.slice(2))); return; }
+      if (t.indexOf('# ') === 0) {
+        var gm = /^([๐-๙0-9]+)\.\s*(.*)$/.exec(t.slice(2));
+        card = el('div', 'ovcard'); card.appendChild(el('span', 'ovmed', gm ? gm[1] : ''));
+        card.appendChild(el('h3', null, gm ? gm[2] : t.slice(2))); box.appendChild(card); list = null; return;
+      }
+      if (!card) { card = el('div', 'ovcard'); box.appendChild(card); }
+      if (t.indexOf('> ') === 0) { card.appendChild(el('p', 'ovnote', t.slice(2))); return; }
+      if (t.indexOf('## ') === 0) { card.appendChild(el('div', 'ovsub', t.slice(3))); list = null; return; }
+      var link = '', m = /\s*->\s*(#\S+)\s*$/.exec(t);
+      if (m) { link = m[1]; t = t.slice(0, m.index); }
+      var parts = t.split('|'), row = el(link ? 'a' : 'div', 'ovitem');
+      if (link) row.href = link;
+      var tx = el('span', 'ovtx');
+      tx.appendChild(numbered(el('b'), parts[0].trim()));
+      if (parts[1]) tx.appendChild(el('small', null, parts.slice(1).join('|').trim()));
+      row.appendChild(tx);
+      if (link) row.appendChild(el('span', 'arrow', '›'));
+      if (!list) { list = el('div', 'ovlist'); card.appendChild(list); }
+      list.appendChild(row);
+    });
+    // groups with short items sit two-by-two; long ones take the full width
+    box.querySelectorAll('.ovcard').forEach(function (c) {
+      var longest = 0;
+      c.querySelectorAll('.ovtx').forEach(function (x) { longest = Math.max(longest, x.textContent.length); });
+      if (longest > 13 || c.querySelector('small')) c.classList.add('full');
+    });
+    // short lists without descriptions show as compact chips
+    box.querySelectorAll('.ovlist').forEach(function (l) { if (!l.querySelector('small') && !l.querySelector('.ovn') && l.textContent.length / l.children.length < 22) l.classList.add('chips'); });
+  }
   function openSection(si) {
     var s = sections()[si];
     if (!s || s.href) return openHome();
@@ -505,6 +557,17 @@
     $('editSec').onclick = function () { sectionForm(s); };
     $('secPhoto').onclick = function () { sectionPhoto(s); };
     applyCover($('secHead'), s);
+    $('secOv').hidden = !s.overview;
+    renderOverview($('secOv'), s.overview);
+    $('editOv').hidden = !ADMIN;
+    $('editOv').textContent = s.overview ? 'แก้ไขภาพรวม' : '+ เพิ่มภาพรวม';
+    $('editOv').onclick = function () {
+      ask('ภาพรวมของหมวด', [{ label: 'วางข้อความภาพรวม (= หัวเรื่อง, # หัวข้อ, ## กลุ่มย่อย, รายการ | คำอธิบาย)', multiline: true, value: s.overview || '' }], function (v) {
+        if (v[0].trim()) s.overview = v[0]; else delete s.overview;
+        route();
+        saveData('แก้ภาพรวม ' + s.title);
+      });
+    };
     coverButtons(s, 'secCover', 'secCoverDel');
     show('sectionv');
   }
