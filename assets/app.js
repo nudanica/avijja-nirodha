@@ -623,6 +623,7 @@
   function sortedRecords(p) {
     return (p.records || []).map(function (x, k) { return { x: x, k: k }; }).sort(function (a, b) { return (a.x.date || '') > (b.x.date || '') ? -1 : (a.x.date || '') < (b.x.date || '') ? 1 : b.k - a.k; });
   }
+  function bioOnly(p) { return p.bioOnly != null ? !!p.bioOnly : !!p.role; }
   function openPerson(ri, pi) {
     var p = getPerson(ri, pi);
     if (!p) return openHome();
@@ -637,11 +638,12 @@
       if (p.order) { ps.appendChild(document.createTextNode(' ')); ps.appendChild(el('span', 'nw', p.order)); }
       head.appendChild(ps);
     }
-    // ชีวประวัติย่อ: แสดงเมื่อมีข้อมูล แอดมินเพิ่ม/แก้ได้
+    // ชีวประวัติย่อ: ทุกท่านมีส่วนนี้ แอดมินเพิ่ม/แก้ได้
     var bio = $('pbio');
-    bio.hidden = !p.bio && !ADMIN;
+    bio.hidden = false;
     $('pbioText').textContent = p.bio || '';
     $('pbioText').hidden = !p.bio;
+    $('pbioEmpty').hidden = !!p.bio;
     $('editBio').hidden = !ADMIN;
     $('editBio').textContent = p.bio ? 'แก้ไขชีวประวัติย่อ' : '+ เพิ่มชีวประวัติย่อ';
     $('editBio').onclick = function () {
@@ -651,14 +653,14 @@
         saveData('แก้ชีวประวัติย่อ ' + p.name);
       });
     };
-    // บางท่านมีเฉพาะชีวประวัติ (ตั้งค่า bioOnly ในข้อมูล)
-    $('precs').hidden = !!p.bioOnly;
-    if (p.bioOnly) bio.hidden = false;
+    // ผู้แสดงธรรม (ท่านที่มีตำแหน่ง role) มีเฉพาะชีวประวัติ เว้นแต่แอดมินเปิดส่วนบันทึกไว้
+    var only = bioOnly(p);
+    $('precs').hidden = only;
     var tg = $('bioOnlyBtn');
     tg.hidden = !ADMIN;
-    tg.textContent = p.bioOnly ? 'แสดงส่วนบันทึกการบรรลุธรรมของท่านนี้' : 'ท่านนี้มีเฉพาะชีวประวัติ (ซ่อนบันทึกการบรรลุธรรม)';
+    tg.textContent = only ? 'แสดงส่วนบันทึกการบรรลุธรรมของท่านนี้' : 'ท่านนี้มีเฉพาะชีวประวัติ (ซ่อนบันทึกการบรรลุธรรม)';
     tg.onclick = function () {
-      if (p.bioOnly) delete p.bioOnly; else p.bioOnly = true;
+      p.bioOnly = !only;
       route();
       saveData((p.bioOnly ? 'ตั้งให้มีเฉพาะชีวประวัติ ' : 'แสดงบันทึกการบรรลุธรรม ') + p.name);
     };
