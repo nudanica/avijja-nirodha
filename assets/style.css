@@ -784,3 +784,91 @@ a.ovitem .arrow{color:#b8914a;font-size:1.2em}
 .ov.tree .ovitem{padding:8px 10px}
 .ov.tree .ovnote,.ov.tree .ovsub{margin-left:26px}
 @media (min-width:820px){.ov.tree .ovlist{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}.ov.tree .ovitem{margin:5px 0}}
+
+/* หมวด: topic list styled like the classroom list */
+#sectionv .steps{display:flex;flex-direction:column;gap:10px;padding-left:0}
+#sectionv .steps::before{display:none}
+#sectionv .step{margin:0;border:1.5px solid var(--thaigold);border-radius:16px;background:var(--card);padding:12px 14px;box-shadow:0 3px 10px rgba(0,0,0,.05);text-decoration:none;color:var(--ink)}
+#sectionv .sno{width:54px;height:54px;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#c79b4a,#7d5a1f);display:grid;place-items:center;box-shadow:0 2px 6px rgba(110,78,20,.3)}
+#sectionv .sno span{color:#fff;font-family:var(--body);font-weight:700;font-size:1.35em;line-height:1;text-shadow:0 1px 1px rgba(0,0,0,.35)}
+#sectionv .step .st b{font-family:var(--display);font-weight:700;line-height:1.45}
+#sectionv .step .st small{color:#8a6a2e;font-size:.82em;margin-top:2px}
+#sectionv .sno{flex-direction:row;padding:0}
+#sectionv .sno::before{display:none}
+#sectionv .sno span{font-size:1.6em;margin:0}
+#sectionv .sno span{font-size:26px!important;line-height:1}
+#sectionv .sno span{font-size:32px!important;margin-top:-3px!important}
+
+/* หัวข้อในหมวด: classroom card + gold band on top */
+#sectionv .step{position:relative;overflow:hidden;padding-top:18px}
+#sectionv .step::after{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#d9a94f,#a8792c)}
+
+/* ===== แผนผัง แบบการ์ดเชื่อมเส้น (chain) ===== */
+.ov.chain{display:flex;flex-direction:column;align-items:stretch;gap:0}
+.ov.chain .ovtitle{margin:0 auto 4px}
+.ov.chain .ovcard{margin:34px 0 0;padding:30px 14px 12px;border:1.5px solid #c9a45a;border-radius:18px;background:var(--card);box-shadow:0 3px 10px rgba(120,85,30,.08);position:relative}
+.ov.chain .ovcard::before{content:'';position:absolute;left:50%;top:-36px;height:16px;width:2px;background:#c9a45a;transform:translateX(-50%)}
+.ov.chain .ovmed{top:-22px;width:44px;height:44px;color:#fff;font:700 22px var(--body);text-shadow:0 1px 2px rgba(60,35,5,.45)}
+.ov.chain .ovmed::after{display:none}
+.ov.chain .ovcard h3{margin:0 -14px 8px;justify-content:center;text-align:center;background:#f8efdc;border-bottom:1.5px solid #e3cf9f;padding:8px 10px;font-size:1.1em}
+.ov.chain .ovcard h3::before{display:none}
+.ov.chain .ovnote{text-align:center}
+.ov.chain .ovsub{display:block;width:max-content;margin:12px auto 4px}
+.ov.chain .ovlist{display:flex;flex-direction:column}
+.ov.chain .ovitem{padding:8px 4px;border-bottom:1px dashed #eadfc8}
+.ov.chain .ovitem::before{display:none}
+.ov.chain .ovtotal{margin-top:22px;align-self:center}
+
+/* ===== แผนผัง แบบกดเปิดทีละหมวด (accordion) ===== */
+.ov.acc{display:flex;flex-direction:column;gap:10px}
+.ov.acc .ovtitle{margin:0 auto 2px}
+.ov.acc .ovcard{margin:0;padding:0;border:1.5px solid #c9a45a;border-radius:16px;background:var(--card);overflow:hidden;position:relative}
+.ov.acc .ovmed{position:absolute;left:12px;top:9px;transform:none;width:38px;height:38px;color:#fff;font:700 19px var(--body);box-shadow:none;text-shadow:0 1px 2px rgba(60,35,5,.45)}
+.ov.acc .ovmed::after{display:none}
+.ov.acc .ovcard h3{margin:0;padding:14px 44px 14px 62px;border:0;background:linear-gradient(180deg,#fffaf0,#f5e7c8);justify-content:flex-start;text-align:left;cursor:pointer;font-size:1.08em;min-height:56px;display:flex;align-items:center}
+.ov.acc .ovcard h3::before{display:none}
+.ov.acc .ovcard h3::after{content:'›';position:absolute;right:16px;top:14px;color:#b8914a;font-size:1.4em;transform:rotate(90deg);transition:transform .2s}
+.ov.acc .ovcard.open h3::after{transform:rotate(-90deg)}
+.ov.acc .ovcard>:not(h3):not(.ovmed){display:none}
+.ov.acc .ovcard.open>:not(h3):not(.ovmed){display:block}
+.ov.acc .ovcard.open .ovlist{display:flex;flex-direction:column;padding:4px 14px 10px}
+.ov.acc .ovnote,.ov.acc .ovsub{margin:10px 14px 0}
+.ov.acc .ovsub{width:max-content}
+.ov.acc .ovitem{border-bottom:1px dashed #eadfc8;padding:9px 2px}
+.ov.acc .ovitem::before{display:none}
+.ov.acc .ovtotal{align-self:center;margin-top:10px}
+
+.reader .text.hasov,.text.hasov{background:none!important;border:0!important;box-shadow:none!important;padding:0!important}
+.ov .ovtitle{font-size:1.2em}
+.ov .ovlead{font-size:.85em;flex-wrap:nowrap;white-space:nowrap}
+@media (max-width:360px){.ov .ovlead{white-space:normal}}
+
+.ov.tree .ovgn,.ov.chain .ovgn,.ov.acc .ovgn{display:none}
+.ovgn{color:#b8914a;margin-right:6px}
+
+/* ===== แผนผัง (เลือกแล้ว 16 ต.ค.): กรอบทองทั้งแผ่น การ์ดสองช่อง ชื่อแบบป้ายรัตนะ ป้ายรวมครีมขอบทอง ปิดท้ายประจำยามสามดอก ===== */
+.ov.v{display:grid;grid-template-columns:1fr 1fr;column-gap:10px;padding-bottom:10px}
+.ov.v .ovtitle{grid-column:1/-1;position:relative;margin:6px 30px 4px!important;padding:14px 8px!important;font-size:1.12em!important;white-space:nowrap;color:#4a2f12!important;border-radius:999px!important;border:2px solid #c9a45a!important;background:linear-gradient(180deg,#fffaf0,#f1dfb5)!important;box-shadow:0 0 0 4px #fbf8f1,0 0 0 5.5px #e0c78e,0 6px 16px rgba(120,85,30,.18)!important}
+.ov.v .ovtitle::before,.ov.v .ovtitle::after{content:'';position:absolute;top:50%;width:40px;height:20px;margin-top:-10px;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 32%22%3E%3Cg fill=%22none%22 stroke=%22%23b8914a%22 stroke-width=%222%22 stroke-linecap=%22round%22%3E%3Cpath d=%22M62 16C50 16 44 5 33 6C25 7 24 16 30 16.5C35 17 35 11 31 11%22/%3E%3Cpath d=%22M62 16C50 16 44 27 33 26C25 25 24 16 30 15.5%22/%3E%3Cpath d=%22M48 16C44 12 40 11 37 12.5%22/%3E%3C/g%3E%3Cpath d=%22M1 16C9 9 17 11 23 16C17 21 9 23 1 16Z%22 fill=%22%23b8914a%22/%3E%3Ccircle cx=%2262%22 cy=%2216%22 r=%222.4%22 fill=%22%23b8914a%22/%3E%3C/svg%3E") center/contain no-repeat}
+.ov.v .ovtitle::before{left:-38px;transform:scaleX(-1)}
+.ov.v .ovtitle::after{right:-38px}
+.ov.v .ovlead{grid-column:1/-1;margin:6px 0 14px!important;font-size:.86em!important;color:#6b4a1c!important}
+.ov.v .ovcard{margin-top:26px!important;padding:30px 12px 10px!important;border:1.5px solid #d4b26b!important;border-radius:18px!important;background:#fffdf8!important;box-shadow:0 4px 12px rgba(120,85,30,.08)!important}
+.ov.v .ovmed{top:-24px!important;width:48px!important;height:48px!important;font-size:0!important;background:radial-gradient(circle at 40% 35%,#e2bd6e,#8a6424)!important;box-shadow:0 0 0 3px #fffdf8,0 0 0 4.5px #d4b26b,0 3px 8px rgba(120,85,30,.3)!important}
+.ov.v .ovmed::after{content:''!important;display:block!important;width:30px!important;height:30px!important;background:#fff8e6!important;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cg fill=%22%23000%22%3E%3Cpath d=%22M12 3.5C14.3 8 14.3 12.5 12 17C9.7 12.5 9.7 8 12 3.5Z%22 transform=%22rotate%28-62 12 17%29%22/%3E%3Cpath d=%22M12 3.5C14.3 8 14.3 12.5 12 17C9.7 12.5 9.7 8 12 3.5Z%22 transform=%22rotate%28-32 12 17%29%22/%3E%3Cpath d=%22M12 3.5C14.3 8 14.3 12.5 12 17C9.7 12.5 9.7 8 12 3.5Z%22 transform=%22rotate%280 12 17%29%22/%3E%3Cpath d=%22M12 3.5C14.3 8 14.3 12.5 12 17C9.7 12.5 9.7 8 12 3.5Z%22 transform=%22rotate%2832 12 17%29%22/%3E%3Cpath d=%22M12 3.5C14.3 8 14.3 12.5 12 17C9.7 12.5 9.7 8 12 3.5Z%22 transform=%22rotate%2862 12 17%29%22/%3E%3Cpath d=%22M4 18.2Q12 22.5 20 18.2L20 19.2Q12 23.5 4 19.2Z%22/%3E%3C/g%3E%3C/svg%3E") center/26px no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cg fill=%22%23000%22%3E%3Cpath d=%22M12 3.5C14.3 8 14.3 12.5 12 17C9.7 12.5 9.7 8 12 3.5Z%22 transform=%22rotate%28-62 12 17%29%22/%3E%3Cpath d=%22M12 3.5C14.3 8 14.3 12.5 12 17C9.7 12.5 9.7 8 12 3.5Z%22 transform=%22rotate%28-32 12 17%29%22/%3E%3Cpath d=%22M12 3.5C14.3 8 14.3 12.5 12 17C9.7 12.5 9.7 8 12 3.5Z%22 transform=%22rotate%280 12 17%29%22/%3E%3Cpath d=%22M12 3.5C14.3 8 14.3 12.5 12 17C9.7 12.5 9.7 8 12 3.5Z%22 transform=%22rotate%2832 12 17%29%22/%3E%3Cpath d=%22M12 3.5C14.3 8 14.3 12.5 12 17C9.7 12.5 9.7 8 12 3.5Z%22 transform=%22rotate%2862 12 17%29%22/%3E%3Cpath d=%22M4 18.2Q12 22.5 20 18.2L20 19.2Q12 23.5 4 19.2Z%22/%3E%3C/g%3E%3C/svg%3E") center/26px no-repeat}
+.ov.v .ovcard h3{margin:0 -12px 8px!important;padding:10px 8px!important;border:0!important;border-bottom:1.5px solid rgba(184,145,74,.35)!important;justify-content:center;text-align:center;font-size:1.05em!important;color:#3f2a10}
+.ov.v .ovcard h3::before{display:none!important}
+.ov.v .ovitem{border-bottom:1px dashed #eadfc8!important}
+.ov.v .ovtotal{grid-column:1/-1;position:relative;justify-self:center;margin:26px auto 6px!important;background:linear-gradient(180deg,#fffaf0,#f1dfb5)!important;color:#4a2f12!important;text-shadow:none!important;border:2px solid #c9a45a;box-shadow:0 0 0 4px #fbf8f1,0 0 0 5.5px #e0c78e!important;padding:10px 30px!important}
+.ov.v .ovtotal::before,.ov.v .ovtotal::after{content:'';position:absolute;top:50%;width:34px;height:17px;margin-top:-8px;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 32%22%3E%3Cg fill=%22none%22 stroke=%22%23b8914a%22 stroke-width=%222%22 stroke-linecap=%22round%22%3E%3Cpath d=%22M62 16C50 16 44 5 33 6C25 7 24 16 30 16.5C35 17 35 11 31 11%22/%3E%3Cpath d=%22M62 16C50 16 44 27 33 26C25 25 24 16 30 15.5%22/%3E%3Cpath d=%22M48 16C44 12 40 11 37 12.5%22/%3E%3C/g%3E%3Cpath d=%22M1 16C9 9 17 11 23 16C17 21 9 23 1 16Z%22 fill=%22%23b8914a%22/%3E%3Ccircle cx=%2262%22 cy=%2216%22 r=%222.4%22 fill=%22%23b8914a%22/%3E%3C/svg%3E") center/contain no-repeat}
+.ov.v .ovtotal::before{left:-40px;transform:scaleX(-1)}
+.ov.v .ovtotal::after{right:-40px}
+.ov.v::after{content:'';grid-column:1/-1;height:40px;margin-top:8px;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 40%22%3E%3Cg fill=%22none%22 stroke=%22%23d9c08a%22 stroke-width=%221.4%22%3E%3Cpath d=%22M0 30C20 18 40 18 60 30S100 42 120 30%22/%3E%3Cpath d=%22M60 30C55 20 58 10 60 4C62 10 65 20 60 30Z%22/%3E%3Cpath d=%22M60 30C50 24 44 16 42 10C50 13 56 20 60 30Z%22/%3E%3Cpath d=%22M60 30C70 24 76 16 78 10C70 13 64 20 60 30Z%22/%3E%3C/g%3E%3C/svg%3E") center/120px 40px repeat-x;opacity:.8}
+.ov.v .ovcard h3{background:linear-gradient(180deg,#fbf0d6,#f1dcae)!important}
+.ov.v{border:2px solid #c9a45a;border-radius:24px;padding:16px 10px 6px;background:radial-gradient(ellipse at 50% 0%,#fffaf0,#f6ecd6 70%);box-shadow:inset 0 0 0 5px #fbf8f1,inset 0 0 0 6.5px #e0c78e}
+.ov.v .ovtitle{display:flex!important;align-items:center;justify-content:center;gap:10px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cpath%20d%3D%22M32%200L64%2032L32%2064L0%2032Z%22%20fill%3D%22none%22%20stroke%3D%22%23fff6dc%22%20stroke-width%3D%22.7%22%20opacity%3D%22.55%22/%3E%3Cg%20fill%3D%22%23fff6dc%22%20opacity%3D%22.5%22%3E%3Cg%20transform%3D%22translate%2832%2032%29%20scale%280.8%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%280%200%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2864%200%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%280%2064%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2864%2064%29%20scale%280.5%29%20translate%28-12%20-12%29%22%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%280%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%2890%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28180%2012%2012%29%22/%3E%3Cpath%20d%3D%22M12%201.5C14.8%204.6%2014.8%208.6%2012%2012C9.2%208.6%209.2%204.6%2012%201.5Z%22%20transform%3D%22rotate%28270%2012%2012%29%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221.8%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") center/22px 22px,linear-gradient(180deg,#d9a94f,#a8792c)!important;color:#fff!important;border:1.5px solid #b8914a!important;border-radius:999px!important;text-shadow:0 1px 2px rgba(80,50,10,.45)!important;box-shadow:0 0 0 4px #fbf8f1,0 0 0 5.5px #d9b46a,0 4px 12px rgba(120,85,30,.2)!important;font-size:1.12em!important;padding:12px 18px!important}
+.ov.v .ovtitle::before,.ov.v .ovtitle::after{content:''!important;position:static!important;width:18px!important;height:18px!important;margin:0!important;flex:none;transform:none!important;background:#fff3d6!important;-webkit-mask:var(--prajam) center/contain no-repeat;mask:var(--prajam) center/contain no-repeat}
+.ov.v .ovtitle{margin:8px 8px 4px!important}
+.ov.v::after{content:'';height:30px;opacity:1;width:110px;margin:14px auto 0;background:#b8914a!important;-webkit-mask:var(--prajam) left center/18px 18px no-repeat,var(--prajam) center/28px 28px no-repeat,var(--prajam) right center/18px 18px no-repeat;mask:var(--prajam) left center/18px 18px no-repeat,var(--prajam) center/28px 28px no-repeat,var(--prajam) right center/18px 18px no-repeat;-webkit-mask-composite:source-over;mask-composite:add}
+.ov.v .ovtotal::before,.ov.v .ovtotal::after{display:none!important}
+

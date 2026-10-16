@@ -492,9 +492,14 @@
     else node.textContent = t;
     return node;
   }
+  function overviewText(t) {
+    return String(t || '').split('\n').map(function (l) {
+      return l.replace(/^(===|==|=|##|#|>)\s?/, '').replace(/\s*->\s*#\S+\s*$/, '').replace(/\s*\|\s*/, ' – ');
+    }).join('\n');
+  }
   function renderOverview(box, text) {
     box.innerHTML = '';
-    box.classList.add('tree');
+    box.classList.add('v');
     var card = null, list = null;
     String(text || '').split('\n').forEach(function (raw) {
       var t = raw.trim();
@@ -505,7 +510,9 @@
       if (t.indexOf('# ') === 0) {
         var gm = /^([๐-๙0-9]+)\.\s*(.*)$/.exec(t.slice(2));
         card = el('div', 'ovcard'); card.appendChild(el('span', 'ovmed', gm ? gm[1] : ''));
-        card.appendChild(el('h3', null, gm ? gm[2] : t.slice(2))); box.appendChild(card); list = null; return;
+        var hd = el('h3'); if (gm) hd.appendChild(el('span', 'ovgn', gm[1] + '.')); hd.appendChild(document.createTextNode(gm ? gm[2] : t.slice(2))); card.appendChild(hd); box.appendChild(card); list = null;
+        hd.onclick = (function (c) { return function () { c.classList.toggle('open'); }; })(card);
+        return;
       }
       if (!card) { card = el('div', 'ovcard'); box.appendChild(card); }
       if (t.indexOf('> ') === 0) { card.appendChild(el('p', 'ovnote', t.slice(2))); return; }
@@ -525,8 +532,9 @@
     // groups with short items sit two-by-two; long ones take the full width
     box.querySelectorAll('.ovcard').forEach(function (c) {
       var longest = 0;
-      c.querySelectorAll('.ovtx').forEach(function (x) { longest = Math.max(longest, x.textContent.length); });
-      if (longest > 13 || c.querySelector('small')) c.classList.add('full');
+      c.querySelectorAll('.ovtx b').forEach(function (x) { longest = Math.max(longest, x.textContent.length); });
+      var desc = 0; c.querySelectorAll('.ovtx small').forEach(function (x) { desc = Math.max(desc, x.textContent.length); });
+      if (longest > 13 || desc > 20) c.classList.add('full');
     });
     // short lists without descriptions show as compact chips
     box.querySelectorAll('.ovlist').forEach(function (l) { if (!l.querySelector('small') && !l.querySelector('.ovn') && l.textContent.length / l.children.length < 22) l.classList.add('chips'); });
@@ -542,13 +550,20 @@
     var l = $('slist2');
     l.innerHTML = '';
     var items = s.items || [];
-    $('secCount').textContent = 'เนื้อหาในหมวดนี้ (' + th(items.length) + ')';
+    $('secCount').textContent = 'หัวข้อในหมวดนี้ (' + th(items.length) + ')';
     if (!items.length) l.appendChild(el('div', 'empty', 'ยังไม่มีเนื้อหาในหมวดนี้'));
+    // each topic is a card like the classroom list; tap to open its detail
     items.forEach(function (it, k) {
-      var a = el('a', 'note');
+      var a = el('a', 'step');
       a.href = '#s' + (si + 1) + 'n' + (k + 1);
-      a.appendChild(el('span', 'nn', th(k + 1) + '.'));
-      a.appendChild(el('b', null, it.title || firstLine(it.text)));
+      var n = el('span', 'sno');
+      n.appendChild(el('span', null, th(k + 1)));
+      a.appendChild(n);
+      var st = el('span', 'st');
+      st.appendChild(el('b', null, it.title || firstLine(it.text || '')));
+      if (it.sub) st.appendChild(el('small', null, it.sub));
+      a.appendChild(st);
+      a.appendChild(el('span', 'arrow', '›'));
       l.appendChild(a);
     });
     $('secAdmin').hidden = !ADMIN;
@@ -590,11 +605,19 @@
   function openItem(si, k) {
     var s = sections()[si], it = s && s.items && s.items[k];
     if (!it) return openSection(si);
-    current = it; curItem = { s: s, it: it };
+    curItem = { s: s, it: it };
     $('brand').textContent = '';
     $('crumb').textContent = s.title;
-    showText($('text'), it.text);
-    $('share').href = 'https://line.me/R/share?text=' + encodeURIComponent(it.text);
+    if (it.overview) {
+      // a diagram topic: draw the แผนผัง; copy / LINE get it as plain lines
+      current = { text: overviewText(it.overview) };
+      var tb = $('text'); tb.innerHTML = ''; tb.classList.add('hasov'); var ov = el('section', 'ov'); tb.appendChild(ov); renderOverview(ov, it.overview);
+    } else {
+      current = it;
+      $('text').classList.remove('hasov');
+      showText($('text'), it.text);
+    }
+    $('share').href = 'https://line.me/R/share?text=' + encodeURIComponent(current.text);
     $('toast').textContent = '';
     show('readv');
     document.documentElement.classList.add('on-rec', 'on-sec');
